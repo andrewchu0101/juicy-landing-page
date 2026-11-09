@@ -1,6 +1,11 @@
 // 網站文字（繁體中文）。英文字典在 site/dictionaries.ts；兩份鍵集合必須相同（TC-09）。
 export const COPY = {
   siteName: 'Juicy Calendar',
+  // NFR-08：搜尋與分享用。index.html 的初始 head 必須與這裡的繁中值一致（tests/metadata.test.ts）。
+  meta: {
+    title: 'Juicy Calendar｜離線、無帳號的時間區塊日曆',
+    description: '把球拖進日曆就能建立時間區塊。桌面 App 離線使用、無帳號，資料只存在你的電腦；可先在網頁線上試用。',
+  },
   trial: {
     heading: '線上試用',
     note: '試用內容不會上傳，重新整理頁面就會消失',

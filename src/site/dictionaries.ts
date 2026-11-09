@@ -6,6 +6,7 @@ import type { SiteLanguage } from './webLanguageBackend';
 
 export type SiteDictionary = {
   siteName: string;
+  meta: { title: string; description: string };
   trial: { heading: string; note: string; preview: { label: string; caption: string } };
   download: {
     heading: string;
@@ -20,6 +21,10 @@ export type SiteDictionary = {
 
 const EN: SiteDictionary = {
   siteName: 'Juicy Calendar',
+  meta: {
+    title: 'Juicy Calendar | Offline, no-account time-block calendar',
+    description: 'Drag a ball onto the calendar to create a time block. The desktop app works offline with no account and keeps your data on your computer; try it online first.',
+  },
   trial: {
     heading: 'Try it online',
     note: 'Nothing you do in the trial is uploaded, and it disappears when you reload the page.',

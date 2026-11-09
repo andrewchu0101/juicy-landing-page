@@ -1,6 +1,7 @@
 // UI-06：把網站語言狀態接到 React。元件讀目前語言與字典，不直接碰儲存。
 import { createContext, useContext, useEffect, useSyncExternalStore, type ReactNode } from 'react';
 import { DICTIONARIES, type SiteDictionary } from './dictionaries';
+import { applyPageMetadata } from './pageMetadata';
 import type { SiteLanguageStore } from './siteLanguage';
 import type { SiteLanguage } from './webLanguageBackend';
 
@@ -20,7 +21,7 @@ export function LanguageProvider({ store, children }: { store: SiteLanguageStore
   const language = useSyncExternalStore(store.subscribe, store.get, store.get);
 
   useEffect(() => {
-    document.documentElement.lang = language;
+    applyPageMetadata(language);
   }, [language]);
 
   const value: LanguageValue = {
