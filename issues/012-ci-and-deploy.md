@@ -9,7 +9,7 @@
 - eslint 等套件核准（未核准）。
 - Vercel 不會自動等待 CI，阻擋機制須設計。
 
-**Status:** blocked
+**Status:** partial（已加 `.github/workflows/ci.yml`：typecheck、test、build；尚未在 GitHub 實際執行。lint、INV-11 比對、Vercel、憑證仍 blocked）
 
 **對應 TC：** 無直接 TC；支撐 INV-11、NFR-09
 
