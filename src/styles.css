@@ -1,0 +1,259 @@
+/*
+ * 視覺語彙承襲 Juicy Calendar 的 DESIGN.md（Juicy Minimalism）：暖白底、墨色字、極淡細線，
+ * 純色無漸層，深度只用柔和陰影。球色降飽和成莫蘭迪色，並以日式的留白（間）與細線取代裝飾。
+ * App 的 muted #8C857C 對暖白底只有 3.4:1，不足以當小字，網站改用 --muted-text。
+ */
+:root {
+  --canvas: #fbf8f3;
+  --surface: #ffffff;
+  --ink: #2e2a26;
+  --muted-text: #6b655c;
+  --line: #ece6dc;
+
+  /* 莫蘭迪球色：由 App 的 Coral／Sage／Sky／Lavender／Peach 降飽和而來，只做小面積裝飾 */
+  --rose: #cfaaa5;
+  --sage: #a9b8a3;
+  --mist: #a3b4bf;
+  --lilac: #b0a8c0;
+  --clay: #cdb592;
+  --sage-deep: #55664f;
+
+  --font-sans: 'Noto Sans TC', 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic UI', 'Microsoft JhengHei', system-ui, sans-serif;
+  --font-serif: 'Noto Serif TC', 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', 'PMingLiU', serif;
+  --measure: 40rem;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--canvas);
+  scrollbar-color: var(--line) var(--canvas);
+}
+
+body {
+  margin: 0;
+  padding: 0 1.25rem;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--rose);
+  color: var(--ink);
+}
+
+header,
+main,
+footer {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+/* 頁首：字標加三顆小球（呼應 App 的範本球），只當標記，不是圖示系統 */
+header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding-block: 3.5rem 2.5rem;
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+.balls {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.balls span {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.balls span:nth-child(1) { background: var(--rose); }
+.balls span:nth-child(2) { background: var(--sage); }
+.balls span:nth-child(3) { background: var(--mist); }
+
+main {
+  display: grid;
+  gap: 5rem;
+  padding-bottom: 5rem;
+}
+
+/* 區段標題：標題後接一條細線，取代邊框與卡片 */
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+h2::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+h3 {
+  margin: 2.5rem 0 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--muted-text);
+}
+
+p {
+  margin: 0;
+}
+
+/* 試用區容器：日曆之後會放在這裡，現在只保留一塊安靜的留白 */
+#trial > p {
+  color: var(--muted-text);
+  font-size: 0.9rem;
+}
+
+#trial {
+  outline: none;
+}
+
+#trial::after {
+  content: '';
+  display: block;
+  min-height: 16rem;
+  margin-top: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 24px -12px rgb(46 42 38 / 0.12);
+}
+
+/* 連結 */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: var(--muted-text);
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+
+a:hover {
+  text-decoration-color: var(--ink);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* 主按鈕：深鼠尾草綠純色，不用漸層 */
+#download > p:first-of-type a {
+  display: inline-block;
+  padding: 0.85rem 2.25rem;
+  background: var(--sage-deep);
+  color: var(--canvas);
+  border-radius: 10px;
+  text-decoration: none;
+  letter-spacing: 0.14em;
+  box-shadow: 0 6px 16px -8px rgb(85 102 79 / 0.55);
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+
+#download > p:first-of-type a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -8px rgb(85 102 79 / 0.55);
+}
+
+#download > p:first-of-type a:focus-visible {
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* 次要連結排成一列 */
+#download > ul:first-of-type {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.75rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  color: var(--muted-text);
+}
+
+/* 須知清單：細線分隔，行首用不同莫蘭迪色的小球，不用卡片 */
+#download > ul:last-of-type {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: fact;
+}
+
+#download > ul:last-of-type li {
+  position: relative;
+  padding: 0.9rem 0 0.9rem 1.75rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.95rem;
+}
+
+#download > ul:last-of-type li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+#download > ul:last-of-type li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.55rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--rose);
+}
+
+#download > ul:last-of-type li:nth-child(2)::before { background: var(--sage); }
+#download > ul:last-of-type li:nth-child(3)::before { background: var(--clay); }
+#download > ul:last-of-type li:nth-child(4)::before { background: var(--mist); }
+#download > ul:last-of-type li:nth-child(5)::before { background: var(--lilac); }
+
+footer {
+  padding-block: 2rem 3.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted-text);
+  font-size: 0.85rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  #download > p:first-of-type a:hover {
+    transform: none;
+  }
+}
