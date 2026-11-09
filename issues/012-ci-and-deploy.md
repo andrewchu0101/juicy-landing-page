@@ -9,7 +9,7 @@
 - eslint 等套件核准（未核准）。
 - Vercel 不會自動等待 CI，阻擋機制須設計。
 
-**Status:** partial（已加 `.github/workflows/ci.yml`：typecheck、test、build；尚未在 GitHub 實際執行。lint、INV-11 比對、Vercel、憑證仍 blocked）
+**Status:** partial（已加 `.github/workflows/ci.yml`：typecheck、test、build；2026-11-10 已在 PR #3 實際執行並通過（run 42661882621，typecheck／test／build 皆過，19 秒）。lint、INV-11 比對、Vercel、憑證仍 blocked）
 
 **對應 TC：** 無直接 TC；支撐 INV-11、NFR-09
 
@@ -25,7 +25,7 @@ npm run typecheck && npm run lint && npm test && npm run build
 
 ## 驗收條件
 
-- [ ] CI 在 PR 上實際執行並回報
+- [x] CI 在 PR 上實際執行並回報（PR #3；僅 typecheck、test、build，不含 lint 與一致性案例）
 - [ ] 鎖定檔版本與登記表基準不一致時 CI 失敗
 - [ ] 預覽部署的保護設定已確認
 - [ ] 回退演練：把鎖定版本改回上一版並重新建置；Vercel 還原部署的可用性標「未驗證」直到演練
