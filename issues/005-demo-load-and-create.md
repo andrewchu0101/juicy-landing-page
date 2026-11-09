@@ -38,3 +38,17 @@ npm run test:e2e    # TC-01a/e/f、TC-06a～6d
 - [ ] 重新整理後日曆為空、歷史清空、球仍在；第二個分頁看不到
 - [ ] `hydrate` 整個頁面生命週期只呼叫一次
 - [ ] 實際執行測試並貼出；未完成者維持「未執行」
+
+## 實作紀錄（2026-11-10，未 commit）
+
+票仍為 blocked；只完成不依賴共用模組的部分。`npm test`：15 檔 96 通過、1 todo；`npm run typecheck` 通過。
+
+| 項目 | 狀態 | 證據 |
+|---|---|---|
+| `buildTrialWorkspace`（DATA-01～03）設定、種子、meta | 單元通過（TC-01a） | `tests/buildTrialWorkspace.test.ts` |
+| `ensureReady` 只 hydrate 一次、失敗可重試（INV-02） | 單元通過（store 為注入替身） | `tests/trialRuntime.test.ts` |
+| 隱私監看夾具與初始化不寫不送（INV-01，TC-06a 單元層） | 單元通過；真實瀏覽器未執行 | `tests/fixtures/privacyWatch.ts`、`tests/privacy.test.ts` |
+| TC-02 磁吸表 | 常數已備；引擎比對 `todo`，未執行 | `tests/fixtures/magnetTable.ts` |
+| 其餘（拖曳建立、排除控制項、重新整理、雙分頁、TrialShell、INV-07 `templateSchema`、`schemaVersion`、INV-10 語言步驟） | 未執行，等 016／017／Playwright | — |
+
+偏差：本地暫定 `TrialWorkspace` 型別；種子名稱色碼為占位；`ensureReady` 少 MOD-03 步驟 2。
