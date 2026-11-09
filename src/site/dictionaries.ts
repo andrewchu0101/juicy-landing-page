@@ -6,7 +6,7 @@ import type { SiteLanguage } from './webLanguageBackend';
 
 export type SiteDictionary = {
   siteName: string;
-  trial: { heading: string; note: string };
+  trial: { heading: string; note: string; preview: { label: string; caption: string } };
   download: {
     heading: string;
     primary: string;
@@ -23,6 +23,11 @@ const EN: SiteDictionary = {
   trial: {
     heading: 'Try it online',
     note: 'Nothing you do in the trial is uploaded, and it disappears when you reload the page.',
+    preview: {
+      label: 'Product preview',
+      // 暫定英文（UI-03：英文版圖下說明文字待定，需專案擁有者確認）。
+      caption: 'Drag a ball onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
+    },
   },
   download: {
     heading: 'Download',

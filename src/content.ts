@@ -4,6 +4,10 @@ export const COPY = {
   trial: {
     heading: '線上試用',
     note: '試用內容不會上傳，重新整理頁面就會消失',
+    preview: {
+      label: '產品預覽',
+      caption: '將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
+    },
   },
   download: {
     heading: '下載',
