@@ -1,24 +1,25 @@
-import { COPY } from '../content';
+import { useSiteLanguage } from '../site/LanguageContext';
 import { DOWNLOAD_LINKS } from '../config/links';
 
 export function DownloadSection() {
+  const { copy } = useSiteLanguage();
   return (
     <section id="download" aria-labelledby="download-heading" data-links-verification={DOWNLOAD_LINKS.verification}>
-      <h2 id="download-heading">{COPY.download.heading}</h2>
+      <h2 id="download-heading">{copy.download.heading}</h2>
       <p>
-        <a href={DOWNLOAD_LINKS.primary}>{COPY.download.primary}</a>
+        <a href={DOWNLOAD_LINKS.primary}>{copy.download.primary}</a>
       </p>
       <ul>
         <li>
-          <a href={DOWNLOAD_LINKS.portableZip}>{COPY.download.portableZip}</a>
+          <a href={DOWNLOAD_LINKS.portableZip}>{copy.download.portableZip}</a>
         </li>
         <li>
-          <a href={DOWNLOAD_LINKS.source}>{COPY.download.source}</a>
+          <a href={DOWNLOAD_LINKS.source}>{copy.download.source}</a>
         </li>
       </ul>
-      <h3>{COPY.download.factsHeading}</h3>
+      <h3>{copy.download.factsHeading}</h3>
       <ul>
-        {COPY.download.facts.map((fact) => (
+        {copy.download.facts.map((fact) => (
           <li key={fact.id}>{fact.text}</li>
         ))}
       </ul>

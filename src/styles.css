@@ -76,6 +76,34 @@ h1 {
   letter-spacing: 0.18em;
 }
 
+/* 語言切換：最小可用樣式，視覺細修由專案擁有者另行呼叫 impeccable */
+.language-switch {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-inline-start: auto;
+}
+
+.language-switch button {
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.language-switch button[aria-pressed='true'] {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.language-switch button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
 .balls {
   display: inline-flex;
   gap: 0.35rem;

@@ -1,10 +1,11 @@
 import { LEGAL_LINKS } from '../config/links';
-import { COPY } from '../content';
+import { useSiteLanguage } from '../site/LanguageContext';
 
 export function Footer() {
+  const { copy } = useSiteLanguage();
   return (
     <footer>
-      <a href={LEGAL_LINKS.license}>{COPY.footer.license}</a> <a href={LEGAL_LINKS.trademarks}>{COPY.footer.trademarks}</a>
+      <a href={LEGAL_LINKS.license}>{copy.footer.license}</a> <a href={LEGAL_LINKS.trademarks}>{copy.footer.trademarks}</a>
     </footer>
   );
 }
