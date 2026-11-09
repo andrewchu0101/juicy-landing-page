@@ -12,7 +12,11 @@
 ## 怎麼跑
 
 ```bash
-# 待確認：技術棧決定後填入安裝、測試、啟動指令
+npm install --cache /d/DevCache/npm-juicy-landing-page   # 依 package-lock.json 安裝（快取以程序層級覆寫放 D 槽）
+npm run typecheck   # tsc --noEmit
+npm test            # vitest run（含 health smoke test：實際建置並啟動預覽，首頁回 200）
+npm run build       # 型別檢查加 vite build
+npm run preview     # http://127.0.0.1:4173/
 ```
 
 說「完成」之前，必須跑過測試指令，並把結果貼出來。
