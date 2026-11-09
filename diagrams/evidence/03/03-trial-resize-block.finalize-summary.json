@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\03-trial-resize-block.workflow.json",
+    "sha256": "5a81992439c649a6df33adacbfcbb6f6df3e55e0014d80aa6e36c50572b44e11",
+    "bytes": 3451
+  },
+  "artifact": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\03-trial-resize-block.html",
+    "sha256": "c3029dc3c6de6d72d85740203ed84fe38ffdcfd81dff29abef7cd38618eec572",
+    "bytes": 818561
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\03\\03-trial-resize-block.finalize.json",
+    "summaryReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\03\\03-trial-resize-block.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\03\\03-trial-resize-block.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-09T06:19:44.793Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2580,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

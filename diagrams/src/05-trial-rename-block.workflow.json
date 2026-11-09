@@ -1,0 +1,60 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "試用：雙擊命名區塊（FR-05）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/05-trial-rename-block.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入" },
+        "security": { "label": "SRS 已定義的規則判定" },
+        "backend": { "label": "頁面內的處理（瀏覽器內，無後端）" },
+        "frontend": { "label": "使用者看到的畫面" },
+        "messagebus": { "label": "狀態文字區的錯誤回饋" },
+        "cloud": { "label": "待決（SRS 未定，不補結果）" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "flow", "label": "訪客操作與規則判定" },
+    { "id": "invalid", "label": "無效操作（不生效）", "variant": "exception" },
+    { "id": "pending", "label": "待決（SRS 未定）" }
+  ],
+  "mainPath": ["start", "check", "limit", "apply", "seen"],
+  "semanticChecks": {
+    "allowedRoots": ["start"],
+    "allowedTerminals": ["seen", "p13"],
+    "requiredEdges": [{ "from": "check", "to": "reject" }]
+  },
+  "nodes": [
+    { "id": "start", "lane": "flow", "col": 0, "type": "external", "icon": "start", "label": "FR-05 雙擊並輸入名稱", "sublabel": "按 Enter 送出" },
+    { "id": "check", "lane": "flow", "col": 1, "type": "security", "icon": "decision", "label": "FR-05 名稱不空白？", "sublabel": "去除空白後判斷" },
+    { "id": "limit", "lane": "flow", "col": 2, "type": "cloud", "icon": "waiting", "label": "OR-05 名稱規則", "sublabel": "字數上限・初始名稱" },
+    { "id": "apply", "lane": "flow", "col": 3, "type": "backend", "label": "FR-05 儲存名稱", "sublabel": "顯示在區塊上" },
+    { "id": "seen", "lane": "flow", "col": 4, "type": "frontend", "icon": "success", "label": "AC-01.1 區塊顯示名稱", "sublabel": "例：寫 PRD" },
+    { "id": "reject", "lane": "invalid", "col": 1, "type": "backend", "icon": "failure", "label": "AC-01.3e 不生效", "sublabel": "保持原名稱" },
+    { "id": "msg", "lane": "invalid", "col": 2, "type": "messagebus", "label": "FR-05 狀態文字區", "sublabel": "顯示具體原因" },
+    { "id": "p13", "lane": "pending", "col": 2, "type": "cloud", "icon": "waiting", "label": "OR-13 訊息文案時機", "sublabel": "中英文字・何時清除" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "start", "to": "check", "variant": "default" },
+    { "id": "e2", "from": "check", "to": "limit", "label": "不空白", "variant": "emphasis" },
+    { "id": "e3", "from": "limit", "to": "apply", "variant": "default" },
+    { "id": "e4", "from": "apply", "to": "seen", "variant": "emphasis" },
+    { "id": "e5", "from": "check", "to": "reject", "label": "空白", "variant": "security", "role": "error" },
+    { "id": "e6", "from": "reject", "to": "msg", "variant": "security", "role": "error" },
+    { "id": "e7", "from": "msg", "to": "p13", "variant": "dashed", "role": "branch" }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "SRS 邊界例子",
+      "items": [
+        "「寫 PRD」的區塊清空名稱，或只剩空白後按 Enter：保持原名稱「寫 PRD」，顯示原因（AC-01.3e）",
+        "SRS 沒有定義命名時按 Escape 或點到別處的行為，圖中不畫"
+      ]
+    }
+  ]
+}

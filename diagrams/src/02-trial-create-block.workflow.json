@@ -1,0 +1,70 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "試用：拖球建立區塊與取消（FR-02、FR-06）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/02-trial-create-block.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入" },
+        "security": { "label": "SRS 已定義的規則判定" },
+        "backend": { "label": "頁面內的處理（瀏覽器內，無後端）" },
+        "frontend": { "label": "使用者看到的畫面" },
+        "messagebus": { "label": "狀態文字區的錯誤回饋" },
+        "cloud": { "label": "待決（SRS 未定，不補結果）" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "flow", "label": "訪客操作與規則判定" },
+    { "id": "invalid", "label": "取消與無效操作（不生效）", "variant": "exception" },
+    { "id": "pending", "label": "待決（SRS 未定）" }
+  ],
+  "mainPath": ["start", "drop", "round", "check", "create", "seen"],
+  "semanticChecks": {
+    "allowedRoots": ["start"],
+    "allowedTerminals": ["seen", "p15", "p13"],
+    "requiredEdges": [
+      { "from": "drop", "to": "cancel" },
+      { "from": "check", "to": "reject" }
+    ]
+  },
+  "nodes": [
+    { "id": "start", "lane": "flow", "col": 0, "type": "external", "icon": "start", "label": "FR-01 拖曳一顆球", "sublabel": "專注／休息／雜事" },
+    { "id": "drop", "lane": "flow", "col": 1, "type": "security", "icon": "decision", "label": "FR-06 放開位置？", "sublabel": "日曆內或日曆外" },
+    { "id": "round", "lane": "flow", "col": 2, "type": "cloud", "icon": "waiting", "label": "OR-01 取整到 30 分", "sublabel": "規則待決" },
+    { "id": "check", "lane": "flow", "col": 3, "type": "security", "icon": "decision", "label": "FR-02 起點合法？", "sublabel": "10:00–13:00" },
+    { "id": "create", "lane": "flow", "col": 4, "type": "backend", "label": "FR-02 建立區塊", "sublabel": "120 分鐘・球色" },
+    { "id": "seen", "lane": "flow", "col": 5, "type": "frontend", "icon": "success", "label": "AC-01.1 日曆出現區塊", "sublabel": "球仍可再拖" },
+    { "id": "cancel", "lane": "invalid", "col": 1, "type": "backend", "icon": "stop", "label": "FR-06 不建立區塊", "sublabel": "區塊數不變" },
+    { "id": "reject", "lane": "invalid", "col": 3, "type": "backend", "icon": "failure", "label": "AC-01.3a 不生效", "sublabel": "不建立・不修正" },
+    { "id": "msg", "lane": "invalid", "col": 4, "type": "messagebus", "label": "FR-02 狀態文字區", "sublabel": "顯示具體原因" },
+    { "id": "p15", "lane": "pending", "col": 1, "type": "cloud", "icon": "waiting", "label": "OR-15 取消要說明？", "sublabel": "是否顯示原因" },
+    { "id": "p13", "lane": "pending", "col": 4, "type": "cloud", "icon": "waiting", "label": "OR-13 訊息文案時機", "sublabel": "中英文字・何時清除" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "start", "to": "drop", "variant": "default" },
+    { "id": "e2", "from": "drop", "to": "round", "label": "日曆內", "variant": "emphasis" },
+    { "id": "e3", "from": "drop", "to": "cancel", "label": "日曆外／Esc", "variant": "dashed", "role": "branch" },
+    { "id": "e4", "from": "round", "to": "check", "variant": "default" },
+    { "id": "e5", "from": "check", "to": "create", "label": "合法", "variant": "emphasis" },
+    { "id": "e6", "from": "create", "to": "seen", "variant": "emphasis" },
+    { "id": "e7", "from": "check", "to": "reject", "label": "無效", "variant": "security", "role": "error" },
+    { "id": "e8", "from": "reject", "to": "msg", "variant": "security", "role": "error" },
+    { "id": "e9", "from": "cancel", "to": "p15", "variant": "dashed", "role": "branch" },
+    { "id": "e10", "from": "msg", "to": "p13", "variant": "dashed", "role": "branch" }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "SRS 邊界例子",
+      "items": [
+        "13:00 起的新區塊（13:00–15:00）合法（最晚起點）",
+        "13:30 放開，會到 15:30：無效，不建立，顯示原因（AC-01.3a）",
+        "放開在日曆外或按 Escape：不建立，區塊數不變（AC-01.2）"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\05-trial-rename-block.workflow.json",
+    "sha256": "ab533806ae50b8a2cd2b960cb15bce45f336c54c8b589e52d953317e47a4ec6c",
+    "bytes": 3339
+  },
+  "artifact": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\05-trial-rename-block.html",
+    "sha256": "2f8fafc67ec889820eb3fd7c331b73ff0cffdf0dbaf1bf082914efd96b289ad2",
+    "bytes": 818527
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\05\\05-trial-rename-block.finalize.json",
+    "summaryReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\05\\05-trial-rename-block.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\05\\05-trial-rename-block.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-09T06:19:44.793Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2612,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

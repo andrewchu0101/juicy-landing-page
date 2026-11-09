@@ -1,0 +1,64 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "進入首頁：互動判定與下載（FR-01、FR-08、FR-09）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/01-trial-entry-and-download.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入或外部頁面" },
+        "security": { "label": "SRS 已定義的規則判定" },
+        "backend": { "label": "頁面內的處理（瀏覽器內，無後端）" },
+        "frontend": { "label": "使用者看到的畫面" },
+        "messagebus": { "label": "狀態文字區的錯誤回饋" },
+        "cloud": { "label": "待決（SRS 未定，不補結果）" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "flow", "label": "訪客流程" },
+    { "id": "alt", "label": "不可互動的環境" },
+    { "id": "pending", "label": "待決（SRS 未定）" }
+  ],
+  "mainPath": ["visit", "judge", "inter", "dl", "click", "rel"],
+  "semanticChecks": {
+    "allowedRoots": ["visit"],
+    "allowedTerminals": ["rel", "p04", "p14"],
+    "requiredEdges": [{ "from": "judge", "to": "static" }]
+  },
+  "nodes": [
+    { "id": "visit", "lane": "flow", "col": 0, "type": "external", "icon": "start", "label": "開啟首頁", "sublabel": "任何作業系統" },
+    { "id": "judge", "lane": "flow", "col": 1, "type": "security", "icon": "decision", "label": "FR-08 可互動？", "sublabel": "精細指標且可懸停" },
+    { "id": "inter", "lane": "flow", "col": 2, "type": "frontend", "label": "FR-01 互動試用區", "sublabel": "10:00–15:00・三顆球" },
+    { "id": "static", "lane": "alt", "col": 2, "type": "frontend", "label": "FR-08 靜態預覽圖", "sublabel": "中英兩版・不可操作" },
+    { "id": "dl", "lane": "flow", "col": 3, "type": "frontend", "label": "FR-09 下載區", "sublabel": "所有訪客相同" },
+    { "id": "click", "lane": "flow", "col": 4, "type": "external", "label": "AC-02.1 點下載", "sublabel": "Windows 版" },
+    { "id": "rel", "lane": "flow", "col": 5, "type": "external", "icon": "success", "label": "FR-09 Releases 頁", "sublabel": "GitHub 最新版本" },
+    { "id": "p04", "lane": "pending", "col": 1, "type": "cloud", "icon": "waiting", "label": "OR-04 換輸入裝置", "sublabel": "是否重新判定" },
+    { "id": "p14", "lane": "pending", "col": 2, "type": "cloud", "icon": "waiting", "label": "OR-14 試用 UI 範圍", "sublabel": "預覽圖製作前提" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "visit", "to": "judge", "variant": "default" },
+    { "id": "e2", "from": "judge", "to": "inter", "label": "是", "variant": "emphasis" },
+    { "id": "e3", "from": "judge", "to": "static", "label": "否", "variant": "dashed", "role": "branch" },
+    { "id": "e4", "from": "inter", "to": "dl", "variant": "emphasis" },
+    { "id": "e5", "from": "static", "to": "dl", "variant": "default" },
+    { "id": "e6", "from": "dl", "to": "click", "variant": "emphasis" },
+    { "id": "e7", "from": "click", "to": "rel", "variant": "emphasis" },
+    { "id": "e8", "from": "judge", "to": "p04", "variant": "dashed", "role": "branch" },
+    { "id": "e9", "from": "static", "to": "p14", "variant": "dashed", "role": "branch" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "對照 SRS",
+      "items": [
+        "FR-08：判定只看 pointer: fine 與 hover: hover，不看裝置名稱、作業系統或螢幕寬度",
+        "不符合（含瀏覽器不支援這兩項查詢）即顯示靜態預覽，不建立區塊、不產生資料",
+        "FR-09：下載區在試用區下方，內容見 AC-02.2；Windows 下載區在兩條路徑下都照常顯示"
+      ]
+    }
+  ]
+}

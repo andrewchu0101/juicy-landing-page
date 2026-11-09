@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "18743637-8d1d-4bd0-903d-e9bc2f6c26a7",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\03-trial-resize-block.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\03-trial-resize-block.html",
+  "specification": {
+    "sha256": "5a81992439c649a6df33adacbfcbb6f6df3e55e0014d80aa6e36c50572b44e11",
+    "bytes": 3451
+  },
+  "artifact": {
+    "sha256": "c3029dc3c6de6d72d85740203ed84fe38ffdcfd81dff29abef7cd38618eec572",
+    "bytes": 818561
+  }
+}

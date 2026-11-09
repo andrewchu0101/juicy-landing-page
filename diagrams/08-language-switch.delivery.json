@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "e040159a-5554-4579-9886-6058645235e6",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\08-language-switch.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\08-language-switch.html",
+  "specification": {
+    "sha256": "c96f554d7127aaf1544b379446b1f52e3fb8487053a08a6bf804780234aae4e3",
+    "bytes": 2792
+  },
+  "artifact": {
+    "sha256": "f0157b5e27cb34b83b50feff93b27ed514a9b52601a4d6e711aeca3597faf8d7",
+    "bytes": 815216
+  }
+}

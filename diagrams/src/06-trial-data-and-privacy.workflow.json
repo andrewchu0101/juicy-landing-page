@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "試用資料的去向與全站隱私（FR-07）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/06-trial-data-and-privacy.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入" },
+        "security": { "label": "SRS 已定義的規則判定" },
+        "backend": { "label": "頁面內的處理（瀏覽器內，無後端）" },
+        "frontend": { "label": "使用者看到的結果" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "trial", "label": "試用資料（目前分頁）" },
+    { "id": "tab", "label": "另一個分頁" },
+    { "id": "net", "label": "網路面板檢查" },
+    { "id": "site", "label": "全站載入" }
+  ],
+  "semanticChecks": {
+    "allowedRoots": ["ops", "load"],
+    "allowedTerminals": ["clear", "iso", "net_ok", "disc"],
+    "requiredEdges": [
+      { "from": "mem", "to": "clear" },
+      { "from": "chk", "to": "disc" }
+    ]
+  },
+  "nodes": [
+    { "id": "ops", "lane": "trial", "col": 0, "type": "external", "icon": "start", "label": "FR-07 操作試用", "sublabel": "編輯區塊" },
+    { "id": "mem", "lane": "trial", "col": 1, "type": "backend", "label": "AC-01.4 分頁記憶體", "sublabel": "不保存・不上傳" },
+    { "id": "clear", "lane": "trial", "col": 3, "type": "frontend", "icon": "success", "label": "AC-01.4 日曆清空", "sublabel": "球仍可用" },
+    { "id": "iso", "lane": "tab", "col": 3, "type": "frontend", "icon": "success", "label": "AC-01.4 看不到區塊", "sublabel": "分頁之間不共享" },
+    { "id": "net_ok", "lane": "net", "col": 3, "type": "frontend", "icon": "success", "label": "AC-01.4 無請求帶內容", "sublabel": "沒有名稱或時間" },
+    { "id": "load", "lane": "site", "col": 0, "type": "external", "icon": "start", "label": "FR-07 載入網站", "sublabel": "任何頁面" },
+    { "id": "chk", "lane": "site", "col": 1, "type": "security", "icon": "decision", "label": "AC-03.2 無追蹤？", "sublabel": "跨站・識別・廣告" },
+    { "id": "disc", "lane": "site", "col": 3, "type": "frontend", "icon": "success", "label": "AC-03.2 頁面說明統計", "sublabel": "收集項目・App 無遙測" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "ops", "to": "mem", "variant": "emphasis" },
+    { "id": "e2", "from": "mem", "to": "clear", "label": "重新整理", "variant": "emphasis" },
+    { "id": "e3", "from": "mem", "to": "iso", "label": "另開分頁", "variant": "default" },
+    { "id": "e4", "from": "mem", "to": "net_ok", "label": "檢查網路面板", "variant": "security" },
+    { "id": "e5", "from": "load", "to": "chk", "variant": "default" },
+    { "id": "e6", "from": "chk", "to": "disc", "label": "符合", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "對照 SRS",
+      "items": [
+        "FR-07：試用區附近要顯示「試用內容不會上傳，重新整理頁面就會消失」",
+        "語言偏好是另一份資料，與試用資料互相獨立（見圖 07、08）",
+        "SRS 沒有定義全站隱私檢查不通過時的處理；那是上線前的驗證準則（NFR-01），不是執行期流程，圖中只畫符合時的結果"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "試用：拖曳邊緣調整區塊長度（FR-03）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/03-trial-resize-block.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入" },
+        "security": { "label": "SRS 已定義的規則判定" },
+        "backend": { "label": "頁面內的處理（瀏覽器內，無後端）" },
+        "frontend": { "label": "使用者看到的畫面" },
+        "messagebus": { "label": "狀態文字區的錯誤回饋" },
+        "cloud": { "label": "待決（SRS 未定，不補結果）" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "flow", "label": "訪客操作與規則判定" },
+    { "id": "invalid", "label": "無效操作（不生效）", "variant": "exception" },
+    { "id": "pending", "label": "待決（SRS 未定）" }
+  ],
+  "mainPath": ["start", "round", "check", "apply", "seen"],
+  "semanticChecks": {
+    "allowedRoots": ["start"],
+    "allowedTerminals": ["seen", "p13"],
+    "requiredEdges": [{ "from": "check", "to": "reject" }]
+  },
+  "nodes": [
+    { "id": "start", "lane": "flow", "col": 0, "type": "external", "icon": "start", "label": "FR-03 拖曳區塊邊緣", "sublabel": "30 分鐘為單位" },
+    { "id": "round", "lane": "flow", "col": 1, "type": "cloud", "icon": "waiting", "label": "OR-01 取整到 30 分", "sublabel": "規則待決" },
+    { "id": "check", "lane": "flow", "col": 2, "type": "security", "icon": "decision", "label": "FR-03 新範圍合法？", "sublabel": "≥30 分・在窗內" },
+    { "id": "apply", "lane": "flow", "col": 3, "type": "backend", "label": "FR-03 套用新長度", "sublabel": "終點晚於起點" },
+    { "id": "seen", "lane": "flow", "col": 4, "type": "frontend", "icon": "success", "label": "AC-01.1 區塊顯示新長度", "sublabel": "仍在 10:00–15:00" },
+    { "id": "reject", "lane": "invalid", "col": 2, "type": "backend", "icon": "failure", "label": "AC-01.3b,c 不生效", "sublabel": "恢復原位與長度" },
+    { "id": "msg", "lane": "invalid", "col": 3, "type": "messagebus", "label": "FR-03 狀態文字區", "sublabel": "顯示具體原因" },
+    { "id": "p13", "lane": "pending", "col": 3, "type": "cloud", "icon": "waiting", "label": "OR-13 訊息文案時機", "sublabel": "中英文字・何時清除" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "start", "to": "round", "variant": "default" },
+    { "id": "e2", "from": "round", "to": "check", "variant": "default" },
+    { "id": "e3", "from": "check", "to": "apply", "label": "合法", "variant": "emphasis" },
+    { "id": "e4", "from": "apply", "to": "seen", "variant": "emphasis" },
+    { "id": "e5", "from": "check", "to": "reject", "label": "無效", "variant": "security", "role": "error" },
+    { "id": "e6", "from": "reject", "to": "msg", "variant": "security", "role": "error" },
+    { "id": "e7", "from": "msg", "to": "p13", "variant": "dashed", "role": "branch" }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "SRS 邊界例子",
+      "items": [
+        "10:30–13:00：合法（AC-01.1）",
+        "10:30 起的區塊下緣拖到 15:30：無效，超出 15:00，恢復原狀（AC-01.3b）",
+        "10:00–10:30 的區塊下緣拖到 10:00：終點不晚於起點，長度不足，恢復（AC-01.3c）",
+        "起點拖到 09:30：早於 10:00，無效"
+      ]
+    }
+  ]
+}

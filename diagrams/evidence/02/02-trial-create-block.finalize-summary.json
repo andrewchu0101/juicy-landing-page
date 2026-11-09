@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\02-trial-create-block.workflow.json",
+    "sha256": "7c1675efdba367e69f967785d38cbeb2cb6e3b6b602429462e62d670d93ff9eb",
+    "bytes": 4226
+  },
+  "artifact": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\02-trial-create-block.html",
+    "sha256": "836d3f0b8a604e2379df5d662be18fc81e4ab85d903454588cd84453e29baaf3",
+    "bytes": 824213
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\02\\02-trial-create-block.finalize.json",
+    "summaryReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\02\\02-trial-create-block.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\02\\02-trial-create-block.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-09T06:19:44.793Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2657,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

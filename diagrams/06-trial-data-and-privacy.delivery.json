@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "f7d0d34e-f9a2-4d42-919c-738792fddc57",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\06-trial-data-and-privacy.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\06-trial-data-and-privacy.html",
+  "specification": {
+    "sha256": "f5021e0dc212108a4fb6c307022c836f0d24820398d95836714e018b794c926f",
+    "bytes": 3291
+  },
+  "artifact": {
+    "sha256": "e1114ff142a4e1a8b24bceacfc84fcd50f77bf3d3b69ffab68389b18cd057792",
+    "bytes": 817922
+  }
+}

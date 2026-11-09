@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "語言：開啟首頁時如何決定（FR-10）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/07-language-initial.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入" },
+        "security": { "label": "SRS 已定義的規則判定" },
+        "frontend": { "label": "使用者看到的畫面" },
+        "cloud": { "label": "待決（SRS 未定，不補結果）" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "flow", "label": "訪客與規則判定" },
+    { "id": "seen", "label": "使用者看到的語言" }
+  ],
+  "mainPath": ["open", "saved", "cand", "bl", "zh"],
+  "semanticChecks": {
+    "allowedRoots": ["open"],
+    "allowedTerminals": ["sel", "zh", "en"],
+    "requiredEdges": [
+      { "from": "saved", "to": "sel" },
+      { "from": "bl", "to": "en" }
+    ]
+  },
+  "nodes": [
+    { "id": "open", "lane": "flow", "col": 0, "type": "external", "icon": "start", "label": "開啟首頁", "sublabel": "首次或再次進入" },
+    { "id": "saved", "lane": "flow", "col": 1, "type": "security", "icon": "decision", "label": "FR-10 有手動選擇？", "sublabel": "含清除網站資料後" },
+    { "id": "cand", "lane": "flow", "col": 2, "type": "cloud", "icon": "waiting", "label": "OR-08 多個語言候選", "sublabel": "取哪一個" },
+    { "id": "bl", "lane": "flow", "col": 3, "type": "security", "icon": "decision", "label": "FR-10 是中文？", "sublabel": "任何中文地區" },
+    { "id": "sel", "lane": "seen", "col": 1, "type": "frontend", "label": "FR-10 所選語言", "sublabel": "整頁含試用區" },
+    { "id": "zh", "lane": "seen", "col": 3, "type": "frontend", "icon": "success", "label": "FR-10 繁體中文", "sublabel": "整頁含試用區" },
+    { "id": "en", "lane": "seen", "col": 4, "type": "frontend", "icon": "success", "label": "FR-10 英文", "sublabel": "不支援的語言" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "open", "to": "saved", "variant": "default" },
+    { "id": "e2", "from": "saved", "to": "sel", "label": "有", "variant": "emphasis" },
+    { "id": "e3", "from": "saved", "to": "cand", "label": "沒有", "variant": "default" },
+    { "id": "e4", "from": "cand", "to": "bl", "variant": "dashed", "role": "branch" },
+    { "id": "e5", "from": "bl", "to": "zh", "label": "是", "variant": "emphasis" },
+    { "id": "e6", "from": "bl", "to": "en", "label": "否", "variant": "default" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "對照 SRS",
+      "items": [
+        "FR-10：繁體或簡體中文（任何中文地區）顯示繁體中文，其他語言顯示英文",
+        "整頁含試用區介面文字、狀態文字區訊息、靜態預覽圖與說明",
+        "SRS 沒有定義瀏覽器語言有多個候選（例如先 fr 再 zh-TW）時取哪一個，所以圖中標為待決（OR-08）"
+      ]
+    }
+  ]
+}

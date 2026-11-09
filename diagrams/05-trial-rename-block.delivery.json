@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "9fd7cb45-734e-477a-9f0e-d5f8e25248b9",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\05-trial-rename-block.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\05-trial-rename-block.html",
+  "specification": {
+    "sha256": "ab533806ae50b8a2cd2b960cb15bce45f336c54c8b589e52d953317e47a4ec6c",
+    "bytes": 3339
+  },
+  "artifact": {
+    "sha256": "2f8fafc67ec889820eb3fd7c331b73ff0cffdf0dbaf1bf082914efd96b289ad2",
+    "bytes": 818527
+  }
+}

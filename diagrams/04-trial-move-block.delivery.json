@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "68bbd026-1c1c-436b-943b-93a0d2bb442a",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\04-trial-move-block.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\04-trial-move-block.html",
+  "specification": {
+    "sha256": "bba0e095fbea4847f32e80e0d6f51de3d24d2b78c869546659b6644e078c4e68",
+    "bytes": 3462
+  },
+  "artifact": {
+    "sha256": "e63fff722538457a52c0e30122848cd168e931537a30c95aec85aec671d5b585",
+    "bytes": 818500
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\07-language-initial.workflow.json",
+    "sha256": "5cc6eb2a00e63c4d946e78a9318c96ea444c0df77d11a096fdaca95575c561e6",
+    "bytes": 2963
+  },
+  "artifact": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\07-language-initial.html",
+    "sha256": "387955ffa568756591461ab5383b5aec0d2682b34e45851ea3833fcb71fc701c",
+    "bytes": 815819
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\07\\07-language-initial.finalize.json",
+    "summaryReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\07\\07-language-initial.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\07\\07-language-initial.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-09T06:19:44.793Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2287,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

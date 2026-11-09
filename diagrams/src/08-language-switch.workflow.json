@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "語言：手動切換、保留與清除（FR-10）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/08-language-switch.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入" },
+        "backend": { "label": "頁面內的處理（瀏覽器內，無後端）" },
+        "frontend": { "label": "使用者看到的畫面" },
+        "cloud": { "label": "待決（SRS 未定，不補結果）" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "visitor", "label": "訪客的操作" },
+    { "id": "seen", "label": "頁面與使用者看到的結果" },
+    { "id": "pending", "label": "待決（SRS 未定）" }
+  ],
+  "mainPath": ["switch", "apply", "reload", "kept", "clear", "back"],
+  "semanticChecks": {
+    "allowedRoots": ["switch"],
+    "allowedTerminals": ["back", "p09"]
+  },
+  "nodes": [
+    { "id": "switch", "lane": "visitor", "col": 0, "type": "external", "icon": "start", "label": "FR-10 手動切換語言", "sublabel": "中文或英文" },
+    { "id": "apply", "lane": "seen", "col": 1, "type": "backend", "label": "AC-03.1 整頁立即切換", "sublabel": "含試用區與預覽圖" },
+    { "id": "reload", "lane": "visitor", "col": 2, "type": "external", "label": "FR-10 重新整理", "sublabel": "同一個瀏覽器" },
+    { "id": "kept", "lane": "seen", "col": 3, "type": "frontend", "icon": "success", "label": "FR-10 維持所選語言", "sublabel": "試用資料不保留" },
+    { "id": "clear", "lane": "visitor", "col": 4, "type": "external", "label": "FR-10 清除網站資料", "sublabel": "再次開啟首頁" },
+    { "id": "back", "lane": "seen", "col": 5, "type": "frontend", "label": "FR-10 依瀏覽器語言", "sublabel": "規則見圖 07" },
+    { "id": "p09", "lane": "pending", "col": 1, "type": "cloud", "icon": "waiting", "label": "OR-09 保存機制期限", "sublabel": "存在哪裡・多久" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "switch", "to": "apply", "variant": "emphasis" },
+    { "id": "e2", "from": "apply", "to": "reload", "variant": "default" },
+    { "id": "e3", "from": "reload", "to": "kept", "variant": "emphasis" },
+    { "id": "e4", "from": "kept", "to": "clear", "variant": "default" },
+    { "id": "e5", "from": "clear", "to": "back", "variant": "emphasis" },
+    { "id": "e6", "from": "apply", "to": "p09", "variant": "dashed", "role": "branch" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "對照 SRS",
+      "items": [
+        "FR-10：手動選擇在目前瀏覽器重新整理後保留；清除網站資料後回到依瀏覽器語言決定",
+        "語言偏好不含任何試用內容，也不影響試用資料（資料隔離）"
+      ]
+    }
+  ]
+}

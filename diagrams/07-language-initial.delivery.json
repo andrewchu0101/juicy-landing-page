@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "67850990-ca51-4454-81fd-84a85aa3920d",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\07-language-initial.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\07-language-initial.html",
+  "specification": {
+    "sha256": "5cc6eb2a00e63c4d946e78a9318c96ea444c0df77d11a096fdaca95575c561e6",
+    "bytes": 2963
+  },
+  "artifact": {
+    "sha256": "387955ffa568756591461ab5383b5aec0d2682b34e45851ea3833fcb71fc701c",
+    "bytes": 815819
+  }
+}

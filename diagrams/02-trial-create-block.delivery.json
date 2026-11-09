@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "b0b7a2e9-4964-419a-91b9-ffc6f2c3af22",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\02-trial-create-block.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\02-trial-create-block.html",
+  "specification": {
+    "sha256": "7c1675efdba367e69f967785d38cbeb2cb6e3b6b602429462e62d670d93ff9eb",
+    "bytes": 4226
+  },
+  "artifact": {
+    "sha256": "836d3f0b8a604e2379df5d662be18fc81e4ab85d903454588cd84453e29baaf3",
+    "bytes": 824213
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "試用：拖曳移動既有區塊（FR-04）",
+    "locale": "zh-TW",
+    "quality_profile": "showcase",
+    "output": "diagrams/04-trial-move-block.html",
+    "legend": {
+      "entries": {
+        "external": { "label": "訪客的輸入" },
+        "security": { "label": "SRS 已定義的規則判定" },
+        "backend": { "label": "頁面內的處理（瀏覽器內，無後端）" },
+        "frontend": { "label": "使用者看到的畫面" },
+        "messagebus": { "label": "狀態文字區的錯誤回饋" },
+        "cloud": { "label": "待決（SRS 未定，不補結果）" }
+      }
+    }
+  },
+  "lanes": [
+    { "id": "flow", "label": "訪客操作與規則判定" },
+    { "id": "invalid", "label": "無效操作（不生效）", "variant": "exception" },
+    { "id": "pending", "label": "待決（SRS 未定）" }
+  ],
+  "mainPath": ["start", "round", "check", "apply", "seen"],
+  "semanticChecks": {
+    "allowedRoots": ["start"],
+    "allowedTerminals": ["seen", "p13"],
+    "requiredEdges": [{ "from": "check", "to": "reject" }]
+  },
+  "nodes": [
+    { "id": "start", "lane": "flow", "col": 0, "type": "external", "icon": "start", "label": "FR-04 拖曳區塊本體", "sublabel": "長度不變" },
+    { "id": "round", "lane": "flow", "col": 1, "type": "cloud", "icon": "waiting", "label": "OR-01 取整到 30 分", "sublabel": "規則待決" },
+    { "id": "check", "lane": "flow", "col": 2, "type": "security", "icon": "decision", "label": "FR-04 新位置合法？", "sublabel": "完整在 10:00–15:00" },
+    { "id": "apply", "lane": "flow", "col": 3, "type": "backend", "label": "AC-01.7 套用新位置", "sublabel": "13:00 限制不適用" },
+    { "id": "seen", "lane": "flow", "col": 4, "type": "frontend", "icon": "success", "label": "AC-01.7 區塊在新位置", "sublabel": "長度不變" },
+    { "id": "reject", "lane": "invalid", "col": 2, "type": "backend", "icon": "failure", "label": "AC-01.3d 不生效", "sublabel": "恢復原位" },
+    { "id": "msg", "lane": "invalid", "col": 3, "type": "messagebus", "label": "FR-04 狀態文字區", "sublabel": "顯示具體原因" },
+    { "id": "p13", "lane": "pending", "col": 3, "type": "cloud", "icon": "waiting", "label": "OR-13 訊息文案時機", "sublabel": "中英文字・何時清除" }
+  ],
+  "edges": [
+    { "id": "e1", "from": "start", "to": "round", "variant": "default" },
+    { "id": "e2", "from": "round", "to": "check", "variant": "default" },
+    { "id": "e3", "from": "check", "to": "apply", "label": "合法", "variant": "emphasis" },
+    { "id": "e4", "from": "apply", "to": "seen", "variant": "emphasis" },
+    { "id": "e5", "from": "check", "to": "reject", "label": "無效", "variant": "security", "role": "error" },
+    { "id": "e6", "from": "reject", "to": "msg", "variant": "security", "role": "error" },
+    { "id": "e7", "from": "msg", "to": "p13", "variant": "dashed", "role": "branch" }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "SRS 邊界例子",
+      "items": [
+        "10:00–12:00 移到 13:00–15:00：合法，貼齊 15:00",
+        "10:00–12:00 移到 13:30–15:30：無效，超出 15:00，恢復原位（AC-01.3d）",
+        "縮短後的 10:00–10:30 移到 14:30–15:00：合法（AC-01.7）；最晚起始 13:00 只適用新建",
+        "10:00–10:30 移到 15:00–15:30：無效，超出 15:00"
+      ]
+    }
+  ]
+}

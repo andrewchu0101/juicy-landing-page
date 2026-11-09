@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# 同一對 Bash guard，Claude Code 登記在 .claude/settings.json，Codex 登記在 .codex/hooks.json。
+# Codex 不讀 settings.json，兩邊不同步不會噴錯，只會讓其中一個工具少了護欄 —— 所以由這支擋。
+#
+# 無輸出 = 接上了。有輸出時 exit 1。
+
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+found=0
+source .maintain/python.sh || exit 1
+
+for f in .claude/settings.json .codex/hooks.json; do
+  "$COURSE_PYTHON" -c 'import json,sys; json.load(open(sys.argv[1],encoding="utf-8"))' "$f" 2>/dev/null || { echo "$f 不是合法 UTF-8 JSON"; found=1; }
+done
+
+for s in guard-git.sh guard-secrets.sh; do
+  [ -f ".claude/hooks/$s" ] || { echo "缺腳本  .claude/hooks/$s"; found=1; }
+  [ -f ".claude/hooks/test-$s" ] || { echo "缺回歸規格  .claude/hooks/test-$s"; found=1; }
+  grep -q "$s" .claude/settings.json || { echo "Claude 沒登記  $s"; found=1; }
+  grep -q "$s" .codex/hooks.json || { echo "Codex 沒登記  $s"; found=1; }
+done
+
+# git pre-commit（控制字元檢查，AGENTS.md 第 16 條）：檔案要在，且這個 clone 要啟用。
+# core.hooksPath 存在本機 .git/config，不會隨 repo 版控，每個 clone 要設一次。
+[ -f .githooks/pre-commit ] || { echo "缺腳本  .githooks/pre-commit"; found=1; }
+[ -f .githooks/test-pre-commit.sh ] || { echo "缺回歸規格  .githooks/test-pre-commit.sh"; found=1; }
+[ "$(git config --get core.hooksPath)" = ".githooks" ] || { echo "pre-commit 沒啟用：執行  git config core.hooksPath .githooks"; found=1; }
+
+exit $found

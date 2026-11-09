@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\08-language-switch.workflow.json",
+    "sha256": "c96f554d7127aaf1544b379446b1f52e3fb8487053a08a6bf804780234aae4e3",
+    "bytes": 2792
+  },
+  "artifact": {
+    "path": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\08-language-switch.html",
+    "sha256": "f0157b5e27cb34b83b50feff93b27ed514a9b52601a4d6e711aeca3597faf8d7",
+    "bytes": 815216
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\08\\08-language-switch.finalize.json",
+    "summaryReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\08\\08-language-switch.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\evidence\\08\\08-language-switch.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-09T06:19:44.793Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2305,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

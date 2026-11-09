@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "e300383a-9cc3-4206-861a-4f5f8392260f",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\src\\01-trial-entry-and-download.workflow.json",
+  "output": "C:\\Users\\student\\Project\\juicy-landing-page\\diagrams\\01-trial-entry-and-download.html",
+  "specification": {
+    "sha256": "d211210aadf3539575414ac91922797438f330ef1c48a69433d89b0ed113b72f",
+    "bytes": 3689
+  },
+  "artifact": {
+    "sha256": "da7d070b4f77f47c99dbd9e4a1db21b1d791a9433410aa02d9e456258fa77748",
+    "bytes": 819275
+  }
+}
