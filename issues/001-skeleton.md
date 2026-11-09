@@ -6,7 +6,7 @@
 
 **Blocked by:** 套件最小集核准（尚未核准）：`react`、`react-dom`、`vite`、`@vitejs/plugin-react`、`typescript`、`vitest`。其餘套件由各票自行申請。
 
-**Status:** blocked（等套件核准）
+**Status:** 實作完成並已合併（`d9e7dac`、`c27da76`）；套件最小集的核准紀錄未查到，故「只使用已核准的套件」維持未勾
 
 **對應 TC：** 無（smoke test 不在 TC-01～TC-12 內）
 

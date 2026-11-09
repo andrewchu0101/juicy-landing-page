@@ -12,7 +12,7 @@
 - 套件核准（Playwright 等，未核准）
 - 可先做：測試與夾具；真實接入須等契約。
 
-**Status:** blocked
+**Status:** partial（種子、`ensureReady`、隱私監看夾具已合併：`fd83f51`；真實接入仍 blocked，等 016、017、ADR-03、開發期取得方式、套件核准）
 
 **對應 TC：** TC-01a、TC-01e、TC-01f；TC-02；TC-06a～6d（TC-06e 等流量統計工具決定）
 
@@ -39,7 +39,7 @@ npm run test:e2e    # TC-01a/e/f、TC-06a～6d
 - [ ] `hydrate` 整個頁面生命週期只呼叫一次
 - [ ] 實際執行測試並貼出；未完成者維持「未執行」
 
-## 實作紀錄（2026-11-10，未 commit）
+## 實作紀錄（2026-11-10；已合併 `fd83f51`）
 
 票仍為 blocked；只完成不依賴共用模組的部分。`npm test`：15 檔 96 通過、1 todo；`npm run typecheck` 通過。
 

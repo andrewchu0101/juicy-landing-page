@@ -6,10 +6,10 @@
 
 **Blocked by:** 001。
 - 發布管道的憑證（D-11，**尚未核准**；建議方案 P1 私有 npm，需 CI 與 Vercel 各一個讀取憑證）。**本票不得自行設定憑證。**
-- eslint 等套件核准（未核准）。
+- eslint 等套件：專案擁有者 2026-11-10 已核准安裝（lint 部分已實作）。注意 typescript-eslint 8.72.2 不支援 TS 7，已改用官方建議的並存方式：`typescript` 別名指向 `@typescript/typescript6@6.0.2`（供 typescript-eslint），`@typescript/native` 別名指向 `typescript@7.0.2`（`tsc` 仍是 7.0.2）。
 - Vercel 不會自動等待 CI，阻擋機制須設計。
 
-**Status:** blocked
+**Status:** partial（已加 `.github/workflows/ci.yml`：typecheck、lint、test、build；lint 於 2026-11-10 本機通過，CI 實跑待推送後確認；2026-11-10 已在 PR #3 實際執行並通過（run 42661882621，typecheck／test／build 皆過，19 秒）。INV-11 比對、Vercel、憑證仍 blocked）
 
 **對應 TC：** 無直接 TC；支撐 INV-11、NFR-09
 
@@ -25,7 +25,7 @@ npm run typecheck && npm run lint && npm test && npm run build
 
 ## 驗收條件
 
-- [ ] CI 在 PR 上實際執行並回報
+- [x] CI 在 PR 上實際執行並回報（PR #3；僅 typecheck、test、build 的紀錄；加入 lint 後尚待 CI 實跑，一致性案例未含）
 - [ ] 鎖定檔版本與登記表基準不一致時 CI 失敗
 - [ ] 預覽部署的保護設定已確認
 - [ ] 回退演練：把鎖定版本改回上一版並重新建置；Vercel 還原部署的可用性標「未驗證」直到演練

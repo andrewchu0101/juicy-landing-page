@@ -6,7 +6,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** 清單已建立並合併（`dff9238`，`docs/07-release-checklist.md`）；驗收條件待專案擁有者確認後再勾
 
 **對應 TC：** 無
 
