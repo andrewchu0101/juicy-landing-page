@@ -257,13 +257,17 @@ stateDiagram-v2
 
 ### ADR-03 網站如何組裝共用元件
 
-決定（待確認）：Calendar 匯出 `CalendarWorkbench`（S4），桌面與網站共用，組裝順序只有一份。
+**專案擁有者 2026-11-11 決定：B（網站自己拼，加冒煙案例），且不修改 Calendar。** 試用區的組裝在 `src/trial/ui/TrialApp.tsx`，行為與規則沿用 Calendar 固定 commit 的純函式，由網站自己實作在 `src/trial/engine/`（不 import Calendar、不新增套件）；Calendar 日後改了規則，網站不會自動跟上，靠 `tests/trialEngine.test.ts` 的人工算例與 `npm run check:calendar-release` 發現新版後人工比對。S4 因此不再需要。
+
+原提案（已被取代）：Calendar 匯出 `CalendarWorkbench`（S4），桌面與網站共用，組裝順序只有一份。
 
 考慮過：網站自組 `TrialShell`，約抄 `AppShell` 的 30 行。優點是 Calendar 端不用重構 `AppShell`；缺點是 App 日後改了組裝（新增 hook、修正順序），網站不會同步，與「App 修改後網站同步」的目標衝突。若不接受 Calendar 端重構，以此為後備，並在一致性案例中加入 UI 層冒煙案例偵測漂移。
 
 ### ADR-04 快捷鍵攔截範圍（OR-26）
 
-決定（待確認）：Calendar 端新增選用的 `scope`（S6），預設行為不變；網站把範圍限縮在試用容器，且容器內有焦點時才處理。
+**專案擁有者 2026-11-11 決定：B（滑鼠進試用區才啟用）。** 試用區目前沒有任何全域鍵盤快捷鍵：Escape 只在拖曳進行中才被接住，其餘按鍵交還給頁面，所以不會攔截 Ctrl+C。之後若加入快捷鍵（復原、刪除等），必須只在滑鼠進入試用區時才掛載，且不得攔截頁面文字的複製。S6 因此不再需要。
+
+原提案（已被取代）：Calendar 端新增選用的 `scope`（S6），預設行為不變；網站把範圍限縮在試用容器，且容器內有焦點時才處理。
 
 考慮過：(a) 網站只在滑鼠進入試用區時才掛載該 hook：不改 Calendar，但仍是 `window` 層級，訪客停留在試用區時 Ctrl+C 仍被攔截，且掛載頻繁。(b) 接受限制並在頁面說明：不需要改動，但影響整頁複製文字。選 `scope` 是因為它不新增日曆功能、預設不變、可用元件測試驗證。這個決定**不在 PRD／SRS 的需求內**，來自網站環境無法直接支援 App 的全域攔截（OR-26）。
 

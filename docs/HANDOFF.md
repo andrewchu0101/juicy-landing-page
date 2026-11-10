@@ -14,6 +14,12 @@
 | 工作樹 | （以下為先前一輪的記錄）本文件更新前乾淨。`issues/001-guard-secrets-false-positives.md` 與 `.claude/hooks/test-guard-secrets.sh` 已隨 PR #4 提交。`diagrams/0*.html`（8 個）不在任何遠端分支，只在另一台電腦的工作區，依 SRS v0.2 繪製已過期；專案擁有者 2026-11-10 決定守衛票中該項為「不適用」。注意 `issues/001-skeleton.md` 與守衛票同編號 001，是兩件事 |
 | 部署 | Vercel：`https://juicy-landing-page-tau.vercel.app/`（專案擁有者 2026-11-10 陳述；同日 curl 首頁回 200、初始 HTML 含 M1 metadata）。`/LICENSE`、`/TRADEMARKS.md` 回 404（檔案本來就不存在）。專案擁有者表示網站功能尚未開放不構成問題，依其開發節奏逐步補上；預覽保護是否啟用未查證 |
 
+### 2026-11-11 試用區功能（分支 `feat/005-trial-gestures`，**未 push**）
+- 專案擁有者決定：ADR-03 B、ADR-04 B、OR-20 新增／編輯球排除與圓形選單保留；**不修改 Calendar、不新增套件**；試用由網站自己照 Calendar 固定 commit 實作，要「做得一模一樣」；本輪只做長按出球、拖球放置、拖移區塊。
+- 已實作：`src/trial/`（engine、gestures、store、ui、trial.css）。本機 `npm run typecheck`、`lint`、`test`（30 檔 295 通過、1 todo）、`build` 通過；Playwright 實測見 `issues/005` 實作紀錄（不是人工驗收）。
+- 未做：調整長度、命名、刪除、復原、右鍵選單、框選、剪貼簿（留到下載後體驗）；觸控、其他瀏覽器、日光節約與跨午夜未測；M-1～M-10 仍 Manual Pending；`issues/006` 的 TC-03 等對應案例「暫不開放」。
+- 注意：試用是網站自己的一份實作，Calendar 日後改了規則不會自動跟上；以 `tests/trialEngine.test.ts` 與 `npm run check:calendar-release` 發現後人工比對。`docs/03-srs.md` 仍寫「共用模組」的段落是舊方向，尚未改寫，待你審閱。
+
 ### 已完成（依 issue 檔記載，本機尚未重跑）
 - 文件：Brief、PRD v0.5.1、SRS v0.4、SAD v0.1、SDS v0.1、`06-test-plan.md` v0.2、`07-release-checklist.md`、`LESSONS.md`、`issues/001`～`018`
 - 001 骨架（`d9e7dac`）、002 首頁與下載區（`6db7530`；`href` 與授權連結目標未驗證）、003 網站語言（`68a7624`；待 M-5）、004 互動閘門與預覽殼（`ca8741b`；單元測試通過，e2e 與 M-4 未執行）
