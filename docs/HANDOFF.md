@@ -21,6 +21,7 @@
 - 012 部分：`.github/workflows/ci.yml`（typecheck、lint、test、build）；issue 檔記 PR #3 的 run 42661882621 全過（19 秒）
 - 013 部分：metadata M1（`e4df3af`），`og:url`、`og:image` 未完成
 - 下載連結固定版本的漂移檢查：`scripts/calendarRelease.ts`（純函式，8 個單元測試）、`scripts/checkCalendarRelease.ts`、`.github/workflows/calendar-release-check.yml`（每日排程，Actions 上尚未實跑）
+- 004 e2e：`e2e/interactiveGate.e2e.ts` 的 TC-07b／07c／07d 在本機 Chromium 3 項通過（2026-11-11）；`ci.yml` 尚未納入 e2e（需在 CI 安裝瀏覽器）；M-4 實機未做
 - 014 清單已建立，三個驗收條件 2026-11-11 前已核對並勾選（`docs/07-release-checklist.md` 20 列皆有歸屬；清單上的待決項目仍待決）
 - 001 守衛票（`issues/001-guard-secrets-false-positives.md`）：修復隨 PR #4 合併；2026-11-10 實跑 `test-guard-secrets.sh` 32 項全過、`.maintain/check.sh` 6 項全 ✓（啟用 pre-commit 後）；「取捨」第 1 點專案擁有者確認維持現狀
 

@@ -31,7 +31,7 @@ npm run test:e2e      # TC-07b、07c、07d；需要 Playwright（尚未核准）
 - [x] 桌機接滑鼠、視窗縮到 W2 寬度，仍判定為互動（單元：查詢字串不含寬度；臨時實測：390×844 滑鼠環境仍請求 trialModule、不顯示預覽）
 - [x] 載入中變成不符合 → 不掛載、不初始化（tests/trialLoader.test.ts、tests/connectGate.test.ts 的 TC-08d）
 - [x] 測試夾具可被 005～009 重用（tests/fixtures/fakeMatchMedia.ts、fakeTrialModule.ts）
-- [ ] 測試實際執行並貼出結果；M-4 未做前維持「未執行」（2026-11-10：typecheck 通過、12 檔 87 測試通過、build 成功；M-4 與 Playwright e2e 未執行，故不勾）
+- [ ] 測試實際執行並貼出結果；M-4 未做前維持「未執行」（2026-11-11：專案擁有者核准 Playwright，`@playwright/test` 1.65.0；`npm run test:e2e`（`PLAYWRIGHT_BROWSERS_PATH=D:DevCacheplaywright-browsers`）在 Chromium 跑 TC-07b／07c／07d，3 項通過（3.7 秒）；只有 Chromium，Playwright 模擬 pointer／hover 的能力仍未獨立驗證，M-4 實機未做，故不勾。CI 尚未跑 e2e。2026-11-10：typecheck 通過、12 檔 87 測試通過、build 成功；M-4 與 Playwright e2e 未執行，故不勾）
 
 ## 實作紀錄與偏差（2026-11-10）
 
