@@ -28,16 +28,17 @@ git rev-parse --git-dir >/dev/null 2>&1 || exit 0
 added=$(git diff --cached -U0 -- . \
           ':(exclude)hooks/guard-secrets.sh' \
           ':(exclude)hooks/test-guard-secrets.sh' \
-          ':(exclude).claude/hooks/guard-secrets.sh' 2>/dev/null \
+          ':(exclude).claude/hooks/guard-secrets.sh' \
+          ':(exclude).claude/hooks/test-guard-secrets.sh' 2>/dev/null \
         | grep -E '^\+' | grep -vE '^\+\+\+')
 [ -z "$added" ] && exit 0
 
 # Two shapes, both requiring a quoted value with real content:
 #   assignment  TEST_PW = "UatTest#2026"      (name unquoted, '=' )
 #   json        "password": "UatTest#2026"    (name quoted, ':' — keeps prose out)
-NAME='(PASS(WORD|WD)?|SECRET|TOKEN|API_?KEY|CREDENTIAL|[A-Za-z0-9]_PW)'
+NAME='((PASSWORD|PASSWD|PASSCODE|PASSPHRASE|SECRET|TOKEN|API_?KEY|CREDENTIAL|[A-Za-z0-9]_PW)[A-Za-z0-9_]*|PASS(_[A-Za-z0-9_]*)?)'
 hits=$(printf '%s\n' "$added" \
-  | grep -iE "[A-Za-z0-9_]*${NAME}[A-Za-z0-9_]*[[:space:]]*=[[:space:]]*[\"'][^\"']{4,}[\"']|\"[A-Za-z0-9_]*${NAME}[A-Za-z0-9_]*\"[[:space:]]*:[[:space:]]*\"[^\"]{4,}\"" \
+  | grep -iE "[A-Za-z0-9_]*${NAME}[[:space:]]*=[[:space:]]*[\"'][^\"']{4,}[\"']|\"[A-Za-z0-9_]*${NAME}\"[[:space:]]*:[[:space:]]*\"[^\"]{4,}\"" \
   | grep -vE '\$\{|\{\{|<[A-Za-z_-]+>|os\.environ|getenv|process\.env|ENV\[|REDACTED|\*\*\*|xxxx|your[-_]|example\.com' \
   | head -5)
 
