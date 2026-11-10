@@ -33,13 +33,13 @@
 | 13 | 鎖定檔的共用模組版本與 SRS 登記表基準一致（INV-11） | 012（檢查方式由實作票決定） | 受阻：同上 | SDS INV-11；NFR-09 | 不使用 `latest` 或範圍版本 |
 | 14 | CI 阻擋機制（Vercel 不會自動等待 CI） | 012 | 部分完成：`.github/workflows/ci.yml` 已含 typecheck、lint、test、build（eslint 於 2026-11-10 核准，見 `issues/012`）；阻擋機制本身仍受阻於憑證決策（D-11） | Brief「部署前檢查」；SAD | 012 不得自行設定憑證 |
 | 15 | Vercel 預覽保護（連線前確認預覽是否公開） | 012；連線前由專案擁有者確認 | 已部署到 Vercel：`https://juicy-landing-page-tau.vercel.app/`（專案擁有者 2026-11-10 陳述；同日 curl 首頁回 200，公開可連，未見預覽保護）。專案擁有者表示網站功能尚未開放不構成問題，依其開發節奏逐步補上 | Brief R-11 | 預覽保護是否啟用未查證；此列的「公開上線」條件（D-10、D-04）仍照第 1～3、7 項各自的狀態，不因已部署而視為完成 |
-| 16 | 安全標頭（CSP 等） | 012 | 未開始；SAD 註明尚未設計 | SAD「運作、風險與未決」 | |
+| 16 | 安全標頭（CSP 等） | 012、022 | 部分完成（2026-11-11）：`vercel.json` 已加 CSP 等五個標頭，測試與本機模擬通過；**部署後 `curl -I` 驗證未做**；005 接入與統計工具（D-03）可能需要調整 CSP | SAD「運作、風險與未決」 | |
 | 17 | 網站建置產物不含 Tauri 呼叫、不含桌面 backend | 016（套件邊界）、012（CI 檢查） | 受阻：等 016 | SAD S2；NFR-09 | 驗證方式由 SAD 提案 |
 | 18 | 效能基線已記錄；門檻由專案擁有者看過基線後訂 | 011 | 未執行；門檻待定 | NFR-05；Test Plan | 不預先假設數字 |
-| 19 | 共用模組取得方式與憑證（P1～P5 擇一；誰持有、誰可輪替） | D-11／OR-21，專案擁有者 | 待決 | Brief D-11；SRS OR-21 | 建議 P1 私有 npm 僅供參考，未核准；018 依此 |
+| 19 | 共用模組取得方式與鎖定（P1～P5 擇一；是否仍需任何憑證） | D-11／OR-21，專案擁有者 | 待決 | Brief D-11；SRS OR-21 | 2026-11-11 Calendar 已公開，P1～P3 的「需要憑證」前提已變（見 SAD「前提變更」），P2 另需 016 套件邊界；原「建議 P1 私有 npm」不再有依據；018 依最終選擇 |
 | 20 | 種子球正式名稱與色碼 | OR-12，專案擁有者 | 待決 | SRS OR-12 | 目前為占位；阻擋種子內容的驗收與發布 |
 
-| 21 | 下載連結固定版本，Calendar 發新版時更新 `CALENDAR_RELEASE`（tag 與檔名） | 002；每次 Calendar 發版 | 已加排程檢查（2026-11-11）：`.github/workflows/calendar-release-check.yml` 每日跑 `npm run check:calendar-release`，Calendar 有較新 release 或固定資產失效時失敗並通知；本機實跑通過；排程在 Actions 上尚未實跑 | SDS EXT-01 | 更新時要同步改 `src/config/links.ts` 的 `CALENDAR_RELEASE`、`tests/links.test.ts` 與 `tests/calendarRelease.test.ts` 的字面常數；它不擋 PR |
+| 21 | 下載連結固定版本，Calendar 發新版時更新 `CALENDAR_RELEASE`（tag 與檔名） | 002；每次 Calendar 發版 | 已加排程檢查（2026-11-11）：`.github/workflows/calendar-release-check.yml` 每日跑 `npm run check:calendar-release`，Calendar 有較新 release 或固定資產失效時失敗並通知；本機實跑通過；排程在 Actions 上尚未實跑 | SDS EXT-01 | 更新時要同步改 `src/config/links.ts` 的 `CALENDAR_RELEASE`（tag、檔名、`sha256`）、`tests/links.test.ts` 與 `tests/calendarRelease.test.ts` 的字面常數；它不擋 PR。2026-11-11（issue 021）起還會比對資產 digest 與釘選的 SHA-256，附件被替換時失敗 |
 
 ## 逐項歸屬核對
 

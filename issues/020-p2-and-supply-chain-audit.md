@@ -47,7 +47,7 @@ git rev-list --all | while read c; do git grep -I -n -E -i "<pattern>" $c; done
 - 2FA：API 查不到，**未驗證**。
 
 **建議（皆需專案擁有者決定，本票不執行）**
-1. 兩個 repository 的 `main` 啟用保護或 ruleset（要求 PR、禁止 force push）。
+1. 兩個 repository 的 `main` 啟用保護或 ruleset（要求 PR、禁止 force push）。**〔已於 2026-11-11 經專案擁有者授權啟用，設定見 `docs/04-sad.md`「前提變更」〕**
 2. 確認 GitHub 帳號 2FA。
 3. Calendar 的 Release 評估啟用 immutable releases（是否可用未查證）。
 4. 若要更強的歷史掃描，核准在 `D:\DevTools` 安裝 gitleaks。

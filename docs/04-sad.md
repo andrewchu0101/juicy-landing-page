@@ -142,7 +142,7 @@ flowchart LR
 **前提變更（2026-11-11）：** Calendar 與本站 repository 都已公開（`gh repo view` 的 visibility 皆為 PUBLIC）。「讀取需要憑證」不再是 P2、P3 的代價；公開沒有消除供應鏈風險，只是把風險從「憑證外洩」換成「來源被替換」：
 
 - git tag 與 Release 附件都能被 repository 擁有者（或盜用其帳號者）事後移動或替換。鎖定要用完整 commit SHA 或內容雜湊。
-- 2026-11-11 查證兩個 repository 的 `main` 都**沒有**分支保護與 ruleset（`gh api .../branches/main/protection` 回 404，rulesets 數量 0）；Calendar 沒有 `.github/`，沒有 CI。帳號是否開 2FA 無法由 API 查證，未驗證。
+- 2026-11-11 查證時兩個 repository 的 `main` 都沒有分支保護與 ruleset（`gh api .../branches/main/protection` 回 404，rulesets 數量 0）；Calendar 沒有 `.github/`，沒有 CI。同日專案擁有者授權後已啟用：本站 `main` 要求 PR（核准數 0）與狀態檢查 `check`、禁止 force push 與刪除、對話需解決；Calendar `main` 禁止 force push 與刪除（沒有 CI，未要求 PR）。兩者 `enforce_admins` 為 false，擁有者可繞過。帳號是否開 2FA 無法由 API 查證，未驗證。
 - 建議的選擇依據改為：Calendar 端要做多少事（016 套件邊界）、鎖定方式是否抗替換，而不是憑證管理。**仍待專案擁有者在 D-11 決定。**
 
 ### 升級 PR 是否自動建立（SAD 提案）
