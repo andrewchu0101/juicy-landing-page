@@ -21,7 +21,7 @@
 - 012 部分：`.github/workflows/ci.yml`（typecheck、lint、test、build）；issue 檔記 PR #3 的 run 42661882621 全過（19 秒）
 - 013 部分：metadata M1（`e4df3af`），`og:url`、`og:image` 未完成
 - 下載連結固定版本的漂移檢查：`scripts/calendarRelease.ts`（純函式，8 個單元測試）、`scripts/checkCalendarRelease.ts`、`.github/workflows/calendar-release-check.yml`（每日排程，Actions 上尚未實跑）
-- D-10 部分：`LICENSE`（MIT，CHU YI AN，2026）與 `TRADEMARKS.md` 已新增（2026-11-11），待專案擁有者審閱；repository 仍為 private，頁尾連結對公開訪客仍不通
+- D-10 部分：`LICENSE`（MIT，CHU YI AN，2026）與 `TRADEMARKS.md` 已新增（2026-11-11），待專案擁有者審閱；兩個 repository 已於 2026-11-11 公開（未登入 curl 確認 repo 頁與 releases 回 200）；本 PR 合併進 `main` 前，頁尾 `blob/main/LICENSE`、`blob/main/TRADEMARKS.md` 對訪客仍是 404
 - 014 清單已建立，三個驗收條件 2026-11-11 前已核對並勾選（`docs/07-release-checklist.md` 20 列皆有歸屬；清單上的待決項目仍待決）
 - 001 守衛票（`issues/001-guard-secrets-false-positives.md`）：修復隨 PR #4 合併；2026-11-10 實跑 `test-guard-secrets.sh` 32 項全過、`.maintain/check.sh` 6 項全 ✓（啟用 pre-commit 後）；「取捨」第 1 點專案擁有者確認維持現狀
 

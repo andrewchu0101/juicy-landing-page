@@ -18,9 +18,9 @@
 
 | # | 項目 | 負責票／待決人 | 狀態 | 規格依據 | 備註 |
 |---|---|---|---|---|---|
-| 1 | `LICENSE`（MIT 版權人與年份） | D-10，專案擁有者 | 部分完成：根目錄已新增 `LICENSE`（MIT，版權人 CHU YI AN，2026；版權人由專案擁有者 2026-11-11 提供，年份 2026 為依專案起始年所填，待確認）。未經律師審閱，法律效果由專案擁有者自行確認 | Brief D-01、D-10、R-04；AC-02.3 | 頁尾連結指向 GitHub `blob/main/LICENSE`；repository 為 private 時公開訪客仍打不開 |
-| 2 | `TRADEMARKS.md`（保留權利範圍與聲明文字） | D-10，專案擁有者 | 部分完成：根目錄已新增 `TRADEMARKS.md`，保留名稱與品牌、LOGO 與識別、畫面設計的專屬權利（範圍由專案擁有者 2026-11-11 指定；文字為草稿，未經律師審閱） | Brief D-10；AC-02.3 | 頁尾連結（`src/config/links.ts` 的 `LEGAL_LINKS`）已指向這兩個檔，檔案不存在前連結打不開；repo 若為私有，連結也打不開 |
-| 3 | Calendar 來源授權（Calendar repo 無 LICENSE 且為私有） | D-10、R-14，專案擁有者 | 待決 | Brief D-10、R-14 | 在 Calendar 專案內處理，不在本專案範圍 |
+| 1 | `LICENSE`（MIT 版權人與年份） | D-10，專案擁有者 | 部分完成：根目錄已新增 `LICENSE`（MIT，版權人 CHU YI AN，2026；版權人由專案擁有者 2026-11-11 提供，年份 2026 為依專案起始年所填，待確認）。未經律師審閱，法律效果由專案擁有者自行確認 | Brief D-01、D-10、R-04；AC-02.3 | 頁尾連結指向 GitHub `blob/main/LICENSE`；repository 已公開（2026-11-11），檔案合併進 `main` 前連結仍是 404 |
+| 2 | `TRADEMARKS.md`（保留權利範圍與聲明文字） | D-10，專案擁有者 | 部分完成：根目錄已新增 `TRADEMARKS.md`，保留名稱與品牌、LOGO 與識別、畫面設計的專屬權利（範圍由專案擁有者 2026-11-11 指定；文字為草稿，未經律師審閱） | Brief D-10；AC-02.3 | 頁尾連結（`src/config/links.ts` 的 `LEGAL_LINKS`）已指向這兩個檔，檔案不存在前連結打不開；2026-11-11 起 repository 已公開，檔案合併進 `main` 後連結即可打開 |
+| 3 | Calendar 來源授權（Calendar repo 無 LICENSE；2026-11-11 起已公開，原記載「私有」已過期） | D-10、R-14，專案擁有者 | 待決 | Brief D-10、R-14 | 在 Calendar 專案內處理，不在本專案範圍。2026-11-11 查證：`gh api` 的 license 欄位為空，GitHub 未偵測到授權 |
 | 4 | 網域 | D-02，專案擁有者 | 待決（目前使用 Vercel 預設網域 `juicy-landing-page-tau.vercel.app`，2026-11-10） | Brief D-02 | 專案擁有者表示尚不確定是否使用自己的網域；D-10 完成前不綁定正式網域（R-11）。`og:url` 是否用預設網域待專案擁有者決定 |
 | 5 | 流量統計工具與「開始試用」事件定義 | D-03／OR-10，專案擁有者 | 待決 | Brief D-03；SRS OR-10；G-04 | 須不跨站追蹤、不寫識別 cookie、無廣告 |
 | 6 | TC-06e（統計請求不含試用內容） | 005（TC-06）；等 #5 | 受阻：等 D-03 工具決定 | Test Plan TC-06 | 工具未定，無法寫測試 |
