@@ -2,7 +2,7 @@
 
 | 項目 | 內容 |
 |---|---|
-| 狀態 | **待確認**（只有方案，尚未修改任何守衛檔案） |
+| 狀態 | **修復已合併（PR #4，`b65fad7`），收尾核對於 2026-11-10 完成**：`test-guard-secrets.sh` 32 項全過；`.maintain/check.sh` 6 項全 ✓；`diagrams/*.html` 項目判為不適用（見「完成條件」）。「取捨」第 1 點已由專案擁有者確認維持現狀（不明列 `passkey`），2026-11-10 |
 | 日期 | 2026-11-09 |
 | 負責人／審查者 | 專案擁有者 |
 | 影響檔案 | `.claude/hooks/guard-secrets.sh`、`.claude/hooks/test-guard-secrets.sh` |
@@ -120,9 +120,9 @@
 
 ## 完成條件
 
-- [ ] 專案擁有者確認方案（尤其是上面「取捨」第 1 點）。
-- [ ] 修改 `guard-secrets.sh` 與 `test-guard-secrets.sh`，只動本票列出的內容。
-- [ ] `bash .claude/hooks/test-guard-secrets.sh` 全部通過（預期 32 項）。
-- [ ] `.maintain/check.sh` 全綠（需要 `jq`；pre-commit 需已啟用）。
-- [ ] 8 張 `diagrams/0*.html` 與 `.claude/hooks/test-guard-secrets.sh` 可以 commit，守衛不需要被繞過。
+- [x] 專案擁有者確認方案（尤其是上面「取捨」第 1 點）：2026-11-10 確認維持現狀，不明列 `passkey`。
+- [x] 修改 `guard-secrets.sh` 與 `test-guard-secrets.sh`，只動本票列出的內容（PR #4 合併；2026-11-10 未逐行重審差異）。
+- [x] `bash .claude/hooks/test-guard-secrets.sh` 全部通過（2026-11-10 實跑，32 項 ✓，jq 在 `/d/DevTools/jq/jq`）。
+- [x] `.maintain/check.sh` 全綠：2026-11-10 專案擁有者自行執行 `git config core.hooksPath .githooks` 後實跑，6 項全 ✓，exit 0（啟用前 exit 1，唯一失敗是 `check-hooks.sh`）。
+- [x] 8 張 `diagrams/0*.html` 可以 commit：**不適用**（專案擁有者 2026-11-10 決定）。這 8 個檔案不在遠端任何分支，只存在於另一台電腦的工作區，且依 SRS v0.2 繪製已過期；`data-passport` 的 HTML 誤判已由測試案例覆蓋（32 項全過）。`.claude/hooks/test-guard-secrets.sh` 已隨 PR #4 提交，守衛未被繞過（未逐 commit 查證）。
 - [ ] 沒有新增套件，沒有整類排除 `diagrams/` 或 `.html`。
