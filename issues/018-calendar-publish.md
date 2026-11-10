@@ -8,7 +8,7 @@
 
 **What to build:** 依選定的管道發布共用模組的確切版本，發布說明標示 `[behavior]`／`[api]`／`[fix]`，附完整性雜湊，網站以鎖定檔取得；不使用 `latest` 或範圍版本。
 
-**Blocked by:** 016、017；發布管道決策（D-11，**尚未核准**）。建議 P1 私有 npm（GitHub Packages），代價是 CI 與 Vercel 各需一個讀取憑證；P2～P5 為其他選項，P4 需先完成授權（D-10）。
+**Blocked by:** 016、017；發布管道決策（D-11，**尚未核准**）。原建議 P1 私有 npm（GitHub Packages），代價是 CI 與 Vercel 各需一個讀取憑證；2026-11-11 Calendar 已公開，P1～P3 的憑證前提已變（見 SAD「前提變更」），P2 需先有 016 的套件邊界；P4 需先完成授權（D-10）。
 
 **Status:** blocked（待授權與決策）
 

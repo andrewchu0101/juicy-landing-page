@@ -5,7 +5,7 @@
 **What to build:** 每次變更自動跑型別檢查、lint、單元測試、建置與一致性案例，並比對鎖定檔版本與 SRS 沿用登記表基準（INV-11）；Vercel 連線與預覽部署、預覽保護、安全標頭。**此票不阻塞任何功能票**，功能票在本地即可測。
 
 **Blocked by:** 001。
-- 發布管道的憑證（D-11，**尚未核准**；建議方案 P1 私有 npm，需 CI 與 Vercel 各一個讀取憑證）。**本票不得自行設定憑證。**
+- 發布管道的憑證（D-11，**尚未核准**；原建議 P1 私有 npm 需 CI 與 Vercel 各一個讀取憑證，但 2026-11-11 Calendar 已公開，該前提已變，見 SAD「前提變更」）。**本票不得自行設定憑證。**
 - eslint 等套件：專案擁有者 2026-11-10 已核准安裝（lint 部分已實作）。注意 typescript-eslint 8.72.2 不支援 TS 7，已改用官方建議的並存方式：`typescript` 別名指向 `@typescript/typescript6@6.0.2`（供 typescript-eslint），`@typescript/native` 別名指向 `typescript@7.0.2`（`tsc` 仍是 7.0.2）。
 - Vercel 不會自動等待 CI，阻擋機制須設計。
 
