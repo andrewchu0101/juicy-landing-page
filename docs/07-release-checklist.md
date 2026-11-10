@@ -25,7 +25,7 @@
 | 5 | 流量統計工具與「開始試用」事件定義 | D-03／OR-10，專案擁有者 | 待決 | Brief D-03；SRS OR-10；G-04 | 須不跨站追蹤、不寫識別 cookie、無廣告 |
 | 6 | TC-06e（統計請求不含試用內容） | 005（TC-06）；等 #5 | 受阻：等 D-03 工具決定 | Test Plan TC-06 | 工具未定，無法寫測試 |
 | 7 | Windows 版乾淨電腦驗證 | D-04，專案擁有者 | 待決 | Brief D-04；NFR-03 | 完成前下載區只做版面，不放「已驗證」字樣或真實截圖 |
-| 8 | 實際下載驗證（`href` 與實際可下載分開記錄） | 011（M-10）；Releases owner／repo 待決（EXT-01） | 受阻：`CALENDAR_REPO` 2026-11-11 起指向 `andrewchu0101/juicy-landing-page`（專案擁有者指定），但該 repository 為 private 且尚無 release，未登入開 `/releases` 回 404；`verification` 仍為 `unverified`。「原始碼」連結目前指向本網站 repo，是否正確待決 | SDS EXT-01；AC-02.1 | 未人工確認前不得宣稱下載已驗收 |
+| 8 | 實際下載驗證（`href` 與實際可下載分開記錄） | 011（M-10）；Releases owner／repo 待決（EXT-01） | 受阻：`CALENDAR_REPO` 2026-11-11 起指向 `andrewchu0101/juicy-calendar`（專案擁有者指定）；該 repository 公開、`/releases` 回 200，但只有預發行版（最新 v0.2.0-beta.3，無安裝檔），`/releases/latest` 轉到清單頁；`verification` 仍為 `unverified`，實際下載待 M-10 人工確認 | SDS EXT-01；AC-02.1 | 未人工確認前不得宣稱下載已驗收 |
 | 9 | 靜態預覽圖（中英兩版） | 010 | 受阻：等 005、006、007（須截自實際互動版）、最終種子內容、英文說明文字 | SRS OR-14；AC-01.6 | 不放占位或仿真圖 |
 | 10 | 搜尋與分享 metadata、分享圖 | 013 | 部分完成：OR-18 M1 已於 2026-11-10 由專案擁有者核准並實作（見 `issues/013`）；`og:url` 等網域 D-02，`og:image` 等互動版完成 | SRS OR-18；NFR-08；TC-10e | 互動版完成前不放占位或仿真圖 |
 | 11 | 跨瀏覽器實測：Chrome、Edge、Firefox、Safari 最新兩個穩定版，含 Safari 實機 | 011（M-2） | 未執行；環境缺口須在 011 明列 | NFR-06 | 不在範圍的瀏覽器不宣稱已驗證 |

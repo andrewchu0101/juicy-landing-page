@@ -26,7 +26,7 @@ npm run build
 
 ## 驗收條件
 
-- [x] 主按鈕的 `href` 等於設定常數；設定值是否為真正的 Releases 最新版本頁，標明「未驗證」直到 011（2026-11-11 專案擁有者指定 `andrewchu0101/juicy-landing-page`，取代占位值；查證該 repository 為 private、尚無 release、未登入開 `/releases` 回 404，故 `verification: 'unverified'` 維持；另注意「原始碼」連結現在指向本網站 repo，不是 Calendar 原始碼）
+- [x] 主按鈕的 `href` 等於設定常數；設定值是否為真正的 Releases 最新版本頁，標明「未驗證」直到 011（2026-11-11 專案擁有者指定 `andrewchu0101/juicy-calendar`，取代占位值；同日查證該 repository 公開、`/releases` 回 200，只有預發行版（最新 v0.2.0-beta.3，資產為免安裝 zip 與 SHA256SUMS.txt，無安裝檔），`/releases/latest` 302 轉到 `/releases`；實際下載未人工驗證，故 `verification: 'unverified'` 維持）
 - [x] 下載區列出：僅支援 Windows 10 1803 以上 64 位元、需要 WebView2、安裝檔未簽章與 SmartScreen 處理、網頁試用為瀏覽器版、桌面 App 離線無帳號；每項附 Calendar 文件來源（人工對照，NFR-03）（來源已寫在 `src/content.ts` 的 `source` 欄；**人工對照 NFR-03 尚未做**）
 - [x] 從開啟首頁到抵達 Releases 頁，點擊不超過 2 次（主按鈕為首頁上的直接連結，1 次）
 - [x] 頁尾有 `LICENSE`、`TRADEMARKS.md` 連結，文字目前以中文呈現（語言切換在 003）（目標檔案尚不存在，D-10）
