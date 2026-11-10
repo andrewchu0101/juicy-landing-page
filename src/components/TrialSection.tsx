@@ -18,7 +18,7 @@ export function TrialSection({ loader: injected }: { loader?: TrialLoader }) {
   const Shell = phase === 'active' ? loader.getModule()?.TrialShell : undefined;
 
   return (
-    <section id="trial" aria-labelledby="trial-heading" tabIndex={-1}>
+    <section id="trial" aria-labelledby="trial-heading" tabIndex={-1} data-trial-active={Shell ? '' : undefined}>
       <h2 id="trial-heading">{copy.trial.heading}</h2>
       <p>{copy.trial.note}</p>
       {Shell ? (

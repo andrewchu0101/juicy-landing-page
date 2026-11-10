@@ -17,6 +17,11 @@ export function DownloadSection() {
           <a href={DOWNLOAD_LINKS.source}>{copy.download.source}</a>
         </li>
       </ul>
+      <h3>{copy.download.checksum.heading}</h3>
+      <p>
+        {copy.download.checksum.label}: <code>{DOWNLOAD_LINKS.sha256}</code>
+      </p>
+      <p>{copy.download.checksum.howTo}</p>
       <h3>{copy.download.factsHeading}</h3>
       <ul>
         {copy.download.facts.map((fact) => (

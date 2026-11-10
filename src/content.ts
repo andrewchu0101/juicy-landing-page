@@ -13,12 +13,24 @@ export const COPY = {
       label: '產品預覽',
       caption: '將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
     },
+    // 試用區內的 App 介面文字（沿用 Calendar 的字典用語：palette.dragAria、radial.aria、grid.hiddenOne／Many）。
+    app: {
+      ballAria: '將 {name} 拖到日曆上',
+      radialAria: '按住球並拖到日曆上',
+      hiddenOne: '有 1 個事件在可見時段之外',
+      hiddenMany: '有 {count} 個事件在可見時段之外',
+    },
   },
   download: {
     heading: '下載',
     primary: '下載 Windows 版',
     portableZip: '免安裝 .zip',
     source: '原始碼',
+    checksum: {
+      heading: '驗證下載',
+      label: 'SHA-256',
+      howTo: '下載後在 PowerShell 執行 Get-FileHash <檔案路徑>，結果應與上面的雜湊完全相同；不同就不要執行。',
+    },
     factsHeading: '下載前請先知道',
     facts: [
       { id: 'platform', text: '僅支援 Windows 10 1803 以上的 64 位元；更舊的系統與 32 位元不支援。' },

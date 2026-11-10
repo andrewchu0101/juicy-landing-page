@@ -76,6 +76,8 @@ flowchart LR
 
 ## 共用模組（calendar-kit）
 
+> **（已更改決定，2026-11-11）：** 專案擁有者決定不修改 Calendar、不新增套件，試用由網站自己實作（`src/trial/`）。本節的共用模組、S1～S7 接縫與 P1～P5 發布管道不再採用，保留作為決策紀錄；對應的 issues 015～018、007 已標「已更改決定」。
+
 名稱是占位，**待命名**。
 
 ### 邊界：什麼共用、什麼不共用
@@ -131,13 +133,19 @@ flowchart LR
 
 | 選項 | 取得共用模組的方式 | 需要的權限 | 優點 | 代價與風險 |
 |---|---|---|---|---|
-| P1 | 私有的 npm 套件庫（例如 GitHub Packages） | CI 與 Vercel 各需一個可讀取套件的憑證 | 版本、完整性雜湊、鎖定檔流程標準 | 憑證管理；Calendar 端要建立發布流程。依我所知，讀取私有套件需要憑證【未】 |
-| P2 | 以 git 標籤依賴 Calendar 私有 repository | 讀取該 repository 的部署金鑰或權杖 | 不需要套件庫 | 套件須在 repository 根目錄或有預建產物；npm 對子目錄套件的支援待實測【未】 |
-| P3 | Calendar 的 Release 附上套件壓縮檔，網站以網址加完整性雜湊依賴 | 讀取私有 Release 的權杖 | 版本與產物明確 | 下載需權杖；流程自訂 |
+| P1 | npm 套件庫（例如 GitHub Packages） | 原假設：私有，CI 與 Vercel 各需一個讀取憑證。**前提已變**：Calendar 已公開，但 GitHub Packages 的 npm 套件即使來自公開 repository，安裝時仍需要驗證，依我所知【未】 | 版本、完整性雜湊、鎖定檔流程標準 | Calendar 端要建立發布流程（需另案授權）；是否仍需憑證待查，查證前不假設可免憑證 |
+| P2 | 以 git 依賴 Calendar repository（鎖定**完整 commit SHA**，不只用可移動的 tag） | 原假設：私有，需部署金鑰或權杖。**前提已變**：Calendar 已公開，讀取不需要憑證 | 不需要套件庫、不需要憑證 | 套件須在 repository 根目錄或有預建產物；2026-11-11 查證 Calendar 根目錄是 `private: true` 的 Tauri App，沒有 `main`／`exports`，目前**不能直接當依賴**，需先完成 016 的套件邊界（Calendar 端改動）。無 `prepare`／`postinstall` 腳本。安裝時是否執行依賴的腳本需用 `--ignore-scripts` 或實測【未】 |
+| P3 | Calendar 的 Release 附上套件壓縮檔，網站以網址加完整性雜湊依賴 | 原假設：私有，需讀取權杖。**前提已變**：Release 已公開，下載不需要憑證 | 版本與產物明確 | 流程自訂；Release 附件目前**可被事後替換**（`immutable: false`），完整性靠網站端鎖定的雜湊，不靠 Release 本身 |
 | P4 | 公開的 npm 套件 | 無（讀取）；發布需帳號 | 網站建置無需憑證 | 公開 Calendar 程式碼，須先完成 LICENSE 與授權（D-10、R-14） |
 | P5（後備） | 唯讀的快照同步腳本（原 D-08 複製方案的自動化版） | 無額外權限 | 最少依賴 | 要用 Vite alias 蓋掉 backend，脆弱；仍是兩份程式碼 |
 
 **本 SAD 不核准任何一項，也不設定憑證。** 無論選哪一項，網站都以確切版本與完整性雜湊鎖定。選項差異影響的是 Calendar 端工作量與 Vercel 設定，不影響其餘設計。
+
+**前提變更（2026-11-11）：** Calendar 與本站 repository 都已公開（`gh repo view` 的 visibility 皆為 PUBLIC）。「讀取需要憑證」不再是 P2、P3 的代價；公開沒有消除供應鏈風險，只是把風險從「憑證外洩」換成「來源被替換」：
+
+- git tag 與 Release 附件都能被 repository 擁有者（或盜用其帳號者）事後移動或替換。鎖定要用完整 commit SHA 或內容雜湊。
+- 2026-11-11 查證時兩個 repository 的 `main` 都沒有分支保護與 ruleset（`gh api .../branches/main/protection` 回 404，rulesets 數量 0）；Calendar 沒有 `.github/`，沒有 CI。同日專案擁有者授權後已啟用：本站 `main` 要求 PR（核准數 0）與狀態檢查 `check`、禁止 force push 與刪除、對話需解決；Calendar `main` 禁止 force push 與刪除（沒有 CI，未要求 PR）。兩者 `enforce_admins` 為 false，擁有者可繞過。帳號是否開 2FA 無法由 API 查證，未驗證。
+- 建議的選擇依據改為：Calendar 端要做多少事（016 套件邊界）、鎖定方式是否抗替換，而不是憑證管理。**仍待專案擁有者在 D-11 決定。**
 
 ### 升級 PR 是否自動建立（SAD 提案）
 
@@ -251,13 +259,17 @@ stateDiagram-v2
 
 ### ADR-03 網站如何組裝共用元件
 
-決定（待確認）：Calendar 匯出 `CalendarWorkbench`（S4），桌面與網站共用，組裝順序只有一份。
+**專案擁有者 2026-11-11 決定：B（網站自己拼，加冒煙案例），且不修改 Calendar。** 試用區的組裝在 `src/trial/ui/TrialApp.tsx`，行為與規則沿用 Calendar 固定 commit 的純函式，由網站自己實作在 `src/trial/engine/`（不 import Calendar、不新增套件）；Calendar 日後改了規則，網站不會自動跟上，靠 `tests/trialEngine.test.ts` 的人工算例與 `npm run check:calendar-release` 發現新版後人工比對。S4 因此不再需要。
+
+原提案（已被取代）：Calendar 匯出 `CalendarWorkbench`（S4），桌面與網站共用，組裝順序只有一份。
 
 考慮過：網站自組 `TrialShell`，約抄 `AppShell` 的 30 行。優點是 Calendar 端不用重構 `AppShell`；缺點是 App 日後改了組裝（新增 hook、修正順序），網站不會同步，與「App 修改後網站同步」的目標衝突。若不接受 Calendar 端重構，以此為後備，並在一致性案例中加入 UI 層冒煙案例偵測漂移。
 
 ### ADR-04 快捷鍵攔截範圍（OR-26）
 
-決定（待確認）：Calendar 端新增選用的 `scope`（S6），預設行為不變；網站把範圍限縮在試用容器，且容器內有焦點時才處理。
+**專案擁有者 2026-11-11 決定：B（滑鼠進試用區才啟用）。** 試用區目前沒有任何全域鍵盤快捷鍵：Escape 只在拖曳進行中才被接住，其餘按鍵交還給頁面，所以不會攔截 Ctrl+C。之後若加入快捷鍵（復原、刪除等），必須只在滑鼠進入試用區時才掛載，且不得攔截頁面文字的複製。S6 因此不再需要。
+
+原提案（已被取代）：Calendar 端新增選用的 `scope`（S6），預設行為不變；網站把範圍限縮在試用容器，且容器內有焦點時才處理。
 
 考慮過：(a) 網站只在滑鼠進入試用區時才掛載該 hook：不改 Calendar，但仍是 `window` 層級，訪客停留在試用區時 Ctrl+C 仍被攔截，且掛載頻繁。(b) 接受限制並在頁面說明：不需要改動，但影響整頁複製文字。選 `scope` 是因為它不新增日曆功能、預設不變、可用元件測試驗證。這個決定**不在 PRD／SRS 的需求內**，來自網站環境無法直接支援 App 的全域攔截（OR-26）。
 
@@ -277,7 +289,7 @@ stateDiagram-v2
 |---|---|---|
 | Vercel 連線與預覽保護 | 連線前確認預覽是否公開 | Brief R-11 |
 | 授權 | `LICENSE`、`TRADEMARKS.md`、版權人與聲明文字；Calendar 來源授權 | D-10、R-14 |
-| 共用模組取得方式與憑證 | P1～P5 擇一，憑證放哪裡、誰可輪替 | D-11、OR-21 |
+| 共用模組取得方式與鎖定 | P1～P5 擇一；Calendar 公開後多數選項不需讀取憑證（2026-11-11），改為決定鎖定方式（commit SHA／雜湊）與是否仍需任何憑證 | D-11、OR-21 |
 | 網域 | 未定 | D-02 |
 | 流量統計 | 工具與「開始試用」定義 | D-03、OR-10 |
 | Windows 版驗證 | 影響下載區敘述 | D-04 |
@@ -343,5 +355,7 @@ stateDiagram-v2
 | 9 | **已解決（2026-11-09）**：PRD v0.5.1 已把 AC-01.7 改為明確算例（10:00–12:00 的區塊、抓取偏移 20 分鐘、指標放開於 12:50 → 12:30–14:30，長度不變），不新增磁吸規則。原問題：PRD AC-01.7 的磁吸描述（同 AC-01.1 的精確度）尚未更新，本輪僅限 AC-01.1 | 已解除 |
 
 ## 變更紀錄
+
+- **v0.1（2026-11-11，文件修正，issue 019）**：Calendar 與本站已公開，更新 P1～P3 的前提與代價、新增「前提變更」段落、改寫缺口表的 D-11 列；不核准任何選項，不改其餘設計。
 
 - **v0.1（2026-11-09，文件修正）**：待確認決策第 9 項標為已解決（PRD v0.5.1 對齊 AC-01.7）；其餘內容未變，仍為草稿。

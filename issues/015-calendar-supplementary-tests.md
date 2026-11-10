@@ -1,4 +1,6 @@
-# 015: [Calendar 外部依賴] 補測（原 X-1）
+# 015: [Calendar 外部依賴] 補測（原 X-1）（已更改決定）
+
+> **（已更改決定，2026-11-11）：** 2026-11-11 專案擁有者決定不修改 Calendar、不新增套件，試用改由網站自己實作（ADR-03 選 B、ADR-04 選 B；見 `docs/04-sad.md`、`AGENTS.md`「已決定的設計」）。網站不再依賴 Calendar 的共用層，這張票不再是網站的前置條件，也不會由本專案動工。若專案擁有者日後想替 Calendar 自己補測，請在 Calendar 專案另案處理。
 
 **所屬 repository：** `juicy-calendar`（不是本 repository）
 
@@ -10,7 +12,7 @@
 
 **Blocked by:** 另案授權。其餘無。
 
-**Status:** blocked（待授權）
+**Status:** 已更改決定（2026-11-11，不再需要）
 
 **阻塞對象：** 007 的 TC-05d、009 的 CONF-06；不阻塞網站端 TC-03d。
 

@@ -7,12 +7,18 @@ import type { SiteLanguage } from './webLanguageBackend';
 export type SiteDictionary = {
   siteName: string;
   meta: { title: string; description: string };
-  trial: { heading: string; note: string; preview: { label: string; caption: string } };
+  trial: {
+    heading: string;
+    note: string;
+    preview: { label: string; caption: string };
+    app: { ballAria: string; radialAria: string; hiddenOne: string; hiddenMany: string };
+  };
   download: {
     heading: string;
     primary: string;
     portableZip: string;
     source: string;
+    checksum: { heading: string; label: string; howTo: string };
     factsHeading: string;
     facts: readonly { id: string; text: string }[];
   };
@@ -33,12 +39,23 @@ const EN: SiteDictionary = {
       // 暫定英文（UI-03：英文版圖下說明文字待定，需專案擁有者確認）。
       caption: 'Drag a ball onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
     },
+    app: {
+      ballAria: 'Drag {name} onto the calendar',
+      radialAria: 'Hold and drag a ball onto the calendar',
+      hiddenOne: '1 event outside the visible hours',
+      hiddenMany: '{count} events outside the visible hours',
+    },
   },
   download: {
     heading: 'Download',
     primary: 'Download for Windows',
     portableZip: 'Portable .zip',
     source: 'Source code',
+    checksum: {
+      heading: 'Verify the download',
+      label: 'SHA-256',
+      howTo: 'After downloading, run Get-FileHash <path-to-file> in PowerShell; the result must match the hash above exactly. If it differs, do not run the file.',
+    },
     factsHeading: 'Before you download',
     facts: [
       { id: 'platform', text: 'Windows 10 version 1803 or later, 64-bit only. Older systems and 32-bit are not supported.' },

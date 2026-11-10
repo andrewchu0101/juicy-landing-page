@@ -12,7 +12,15 @@
 - 套件核准（Playwright 等，未核准）
 - 可先做：測試與夾具；真實接入須等契約。
 
-**Status:** partial（種子、`ensureReady`、隱私監看夾具已合併：`fd83f51`；真實接入仍 blocked，等 016、017、ADR-03、開發期取得方式、套件核准）
+**Status:** partial（種子、`ensureReady`、隱私監看夾具已合併：`fd83f51`）。**2026-11-11 專案擁有者決定不修改 Calendar、不新增套件，試用改由網站自己實作**（ADR-03 選 B、ADR-04 選 B、OR-20 新增／編輯球排除、圓形選單保留；見 `docs/04-sad.md`）。長按出球、拖球放置、球的 hover 與落下動畫已實作（未提交前的工作樹，見 HANDOFF）；因此原本的 016、017、開發期取得方式、套件核准不再阻塞本票，只剩人工驗收（M-1 等）。
+
+### 實作紀錄（2026-11-11，網站自有實作）
+
+- 行為與樣式逐項沿用 Calendar 固定 commit `102ae19…`：建立長度 120 分鐘、磁吸（離半點 8 像素內）、長按 250ms 叫出三顆球（移動超過 6 像素取消）、hover 只標示、離開判定圓才選中、拖出去的球跟著指標並依速度拉伸、日曆上顯示落點預覽、放下時水珠、放在日曆外時球裂成粒子、Escape 取消。樣式的數值（顏色、間距、圓角、動畫曲線與時間、radial-wobble 關鍵影格）對應 Calendar 的 `index.css` 與各元件的 Tailwind 類別，並限定在 `.trial-root` 內。
+- 檔案：`src/trial/engine/`（純函式）、`src/trial/gestures/`（不依賴 DOM 的手勢狀態機）、`src/trial/store.ts`、`src/trial/ui/`、`src/trial/trial.css`。試用的 JS 與 CSS 在動態載入的 chunk 內（約 21 kB＋13 kB），主 bundle 不變。
+- 測試（先寫測試、看它失敗、再實作）：`tests/trialEngine.test.ts`、`trialStore.test.ts`、`trialGestures.test.ts`（含 AC-01.7 算例與 Escape／離開視窗）、`trialApp.test.tsx`；`trialFormat.test.ts` 與 `trialColor.test.ts` 的測試與實作在同一步寫出，沒有單獨看過它失敗。預期值來自 REUSE 規則與人工算例。
+- 瀏覽器實測（Playwright，Chromium 1280×900，2026-11-11，**不是人工驗收**）：長按 150ms 沒有選單、400ms 出現三顆球；hover 球 `transform` 為 `matrix(1.1,…)`；輪廓晃動；拖到 11:00 附近放開得到「專注 Focus 上午 11:00–下午 1:00」；單擊球不建立；放在日曆外出現 18 個粒子；重新整理後區塊清空；`localStorage` 在操作後仍是空的；沒有跨來源請求；英文切換後標籤變成 `10:00 AM`。
+- 沒有做、也沒有測：觸控環境（互動資格擋掉）、不同瀏覽器與縮放、鍵盤操作、日光節約切換日、跨午夜。M-1～M-10 仍 Manual Pending。
 
 **對應 TC：** TC-01a、TC-01e、TC-01f；TC-02；TC-06a～6d（TC-06e 等流量統計工具決定）
 
