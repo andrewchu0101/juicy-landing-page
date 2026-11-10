@@ -39,7 +39,7 @@
 | 19 | 共用模組取得方式與憑證（P1～P5 擇一；誰持有、誰可輪替） | D-11／OR-21，專案擁有者 | 待決 | Brief D-11；SRS OR-21 | 建議 P1 私有 npm 僅供參考，未核准；018 依此 |
 | 20 | 種子球正式名稱與色碼 | OR-12，專案擁有者 | 待決 | SRS OR-12 | 目前為占位；阻擋種子內容的驗收與發布 |
 
-| 21 | 下載連結固定版本，Calendar 發新版時更新 `CALENDAR_RELEASE`（tag 與檔名） | 002；每次 Calendar 發版 | 未開始；目前無自動提醒或檢查 | SDS EXT-01 | GitHub 的 latest 不含預發行版，無法自動取得最新；是否加 CI 檢查待決 |
+| 21 | 下載連結固定版本，Calendar 發新版時更新 `CALENDAR_RELEASE`（tag 與檔名） | 002；每次 Calendar 發版 | 已加排程檢查（2026-11-11）：`.github/workflows/calendar-release-check.yml` 每日跑 `npm run check:calendar-release`，Calendar 有較新 release 或固定資產失效時失敗並通知；本機實跑通過；排程在 Actions 上尚未實跑 | SDS EXT-01 | 更新時要同步改 `src/config/links.ts` 的 `CALENDAR_RELEASE`、`tests/links.test.ts` 與 `tests/calendarRelease.test.ts` 的字面常數；它不擋 PR |
 
 ## 逐項歸屬核對
 
