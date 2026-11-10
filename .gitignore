@@ -15,5 +15,12 @@ playwright-report
 .claude/settings.local.json
 *.log
 
+# credentials and private keys
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa*
+
 # test build output
 dist-test
