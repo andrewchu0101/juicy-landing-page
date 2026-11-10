@@ -13,6 +13,13 @@ export const COPY = {
       label: '產品預覽',
       caption: '將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
     },
+    // 試用區內的 App 介面文字（沿用 Calendar 的字典用語：palette.dragAria、radial.aria、grid.hiddenOne／Many）。
+    app: {
+      ballAria: '將 {name} 拖到日曆上',
+      radialAria: '按住球並拖到日曆上',
+      hiddenOne: '有 1 個事件在可見時段之外',
+      hiddenMany: '有 {count} 個事件在可見時段之外',
+    },
   },
   download: {
     heading: '下載',

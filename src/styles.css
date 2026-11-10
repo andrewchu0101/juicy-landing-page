@@ -167,6 +167,15 @@ p {
   outline: none;
 }
 
+/* 互動試用載入後，試用區自己就是那塊容器，不再顯示下面的留白 */
+#trial[data-trial-active]::after {
+  display: none;
+}
+
+#trial[data-trial-active] > p {
+  margin-bottom: 1.25rem;
+}
+
 #trial::after {
   content: '';
   display: block;

@@ -7,7 +7,12 @@ import type { SiteLanguage } from './webLanguageBackend';
 export type SiteDictionary = {
   siteName: string;
   meta: { title: string; description: string };
-  trial: { heading: string; note: string; preview: { label: string; caption: string } };
+  trial: {
+    heading: string;
+    note: string;
+    preview: { label: string; caption: string };
+    app: { ballAria: string; radialAria: string; hiddenOne: string; hiddenMany: string };
+  };
   download: {
     heading: string;
     primary: string;
@@ -33,6 +38,12 @@ const EN: SiteDictionary = {
       label: 'Product preview',
       // 暫定英文（UI-03：英文版圖下說明文字待定，需專案擁有者確認）。
       caption: 'Drag a ball onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
+    },
+    app: {
+      ballAria: 'Drag {name} onto the calendar',
+      radialAria: 'Hold and drag a ball onto the calendar',
+      hiddenOne: '1 event outside the visible hours',
+      hiddenMany: '{count} events outside the visible hours',
     },
   },
   download: {
