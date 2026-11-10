@@ -29,7 +29,7 @@
 ### 阻塞
 - 005 真實接入、006～011、015～018 皆 blocked：等 Calendar 端授權（015～018 只是依賴，不是授權）與 ADR-03、ADR-04／OR-26、OR-20、D-11（共用模組發布管道與憑證）、套件清單核准
 - 公開上線前：D-10（LICENSE、TRADEMARKS.md、Calendar 來源授權；根目錄目前查無這兩個檔）、D-02 網域、D-03 統計工具、D-04 Windows 版驗證；完整清單見 `docs/07-release-checklist.md`
-- `CALENDAR_REPO` 2026-11-11 起為 `andrewchu0101/juicy-calendar`（專案擁有者指定，EXT-01；先前一度誤給本站 repo，已更正）；該 repository 公開，只有預發行版（v0.2.0-beta.3，無安裝檔），下載 `href` 仍待 M-10 人工驗收
+- `CALENDAR_REPO` 2026-11-11 起為 `andrewchu0101/juicy-calendar`（專案擁有者指定，EXT-01；先前一度誤給本站 repo，已更正）；該 repository 公開，只有預發行版（v0.2.0-beta.3，無安裝檔），主按鈕 2026-11-11 起直接下載 `v0.2.0-beta.3` 免安裝 zip（固定 tag，Calendar 發新版須更新 `CALENDAR_RELEASE`）；curl 下載雜湊一致，M-10 人工驗收未做
 - 已部署的公開網址上，頁尾 `LICENSE`／`TRADEMARKS.md` 連結與下載按鈕目前都打不開（檔案不存在、`CALENDAR_REPO` 為占位）；專案擁有者已表示依其節奏補上，不視為阻塞
 
 ### 下一步（最多三項）

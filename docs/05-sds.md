@@ -68,7 +68,7 @@
 
 ### EXT-01｜GitHub Releases 連結（FR-09）
 
-下載主按鈕與次要連結是**純連結導向**，不呼叫 API、不傳資料。主按鈕：Calendar 的 GitHub Releases「最新版本」頁，網址形如 `https://github.com/<owner>/<repo>/releases/latest`（擁有者與 repo 名稱**待確認**）；免安裝 .zip 與原始碼為同頁或同 repo 的連結。失敗：外部頁面不可用不在本站控制；頁面不顯示連結失效偵測。
+下載主按鈕與次要連結是**純連結導向**，不呼叫 API、不傳資料。主按鈕（2026-11-11 專案擁有者決定改為直接下載）：Calendar GitHub Release 固定 tag 的資產，網址形如 `https://github.com/andrewchu0101/juicy-calendar/releases/download/<tag>/<檔名>`；GitHub 的 `/releases/latest` 不含預發行版且檔名帶版本號，無法直連「最新」，所以 tag 與檔名是兩個設定常數，Calendar 發新版時須更新。免安裝 .zip 目前是同一個檔案；原始碼為 repo 首頁連結。失敗：外部頁面不可用不在本站控制；頁面不顯示連結失效偵測。
 
 ### EXT-02｜流量統計（D-03、OR-10 未決）
 
@@ -274,7 +274,7 @@ type ConformanceCase = {
 | `TemplateBall` 的 `onEdit` 可省略（S3）；新增／編輯球保留或排除（OR-20） | 待確認；暫定排除 |
 | radial 選單保留或排除（OR-20） | 待確認；暫定保留 |
 | 種子球名稱與色碼（OR-12） | 待確認 |
-| EXT-01 的 owner／repo | 待確認 |
+| EXT-01 的 owner／repo | 已確認：`andrewchu0101/juicy-calendar`（2026-11-11）；下載版本固定 tag，新版須更新 |
 | EXT-03 發布管道（OR-21、D-11） | 未核准 |
 | DATA-05 鍵名；MOD-04 儲存失敗降級（OR-09） | 提案，待確認 |
 | 失敗文案（TrialLoader） | 無需求依據，待確認 |

@@ -223,7 +223,7 @@
 
 層級：靜態檢查加人工。**分開記錄兩種結論，未確認前不得宣稱下載已驗收。**
 
-- **10a `href` 正確（可離線自動化）**：主按鈕「下載 Windows 版」的 `href` 等於 Calendar 的 GitHub Releases「最新版本」頁；免安裝 .zip 與原始碼連結存在；從開啟首頁到抵達該頁，點擊不超過 2 次。**owner 與 repo 名稱未定（SDS EXT-01），確定前不可執行。**
+- **10a `href` 正確（可離線自動化）**：主按鈕「下載 Windows 版」的 `href` 等於 Calendar 的 GitHub Release 固定 tag 的資產直連網址（預期值為字面常數：`https://github.com/andrewchu0101/juicy-calendar/releases/download/v0.2.0-beta.3/juicy-calendar_0.2.0-beta.3_x64-portable.zip`，2026-11-11 對照實際 release 資產）；免安裝 .zip 與原始碼連結存在；從開啟首頁到開始下載，點擊不超過 2 次。實際可下載分開記錄：2026-11-11 以 curl 下載該檔，SHA-256 與 `SHA256SUMS.txt` 一致（自動化證據，非人工驗收，M-10 仍未執行）。
 - **10b 實際下載入口可用（交付前人工，見 M-10）**：實際開啟 Releases 頁可達；預期的目標檔案（Windows 安裝檔、免安裝 .zip）存在於最新版本；實際能下載。Windows 版在乾淨電腦上的驗證狀態未知（D-04）。
 - **10c 下載區敘述**：Windows 10 1803 以上 64 位元、WebView2、未簽章與 SmartScreen 處理方式、網頁試用為瀏覽器版、桌面 App 離線無帳號，每項逐條對到 Calendar 文件來源（NFR-03，人工）。
 - **10d 頁尾**：`LICENSE` 與 `TRADEMARKS.md` 兩個連結存在，文字隨語言。連結目標取決於 D-10，**公開上線前才能完整驗收**。
