@@ -29,13 +29,13 @@
 ### 阻塞
 - 005 真實接入、006～011、015～018 皆 blocked：等 Calendar 端授權（015～018 只是依賴，不是授權）與 ADR-03、ADR-04／OR-26、OR-20、D-11（共用模組發布管道與憑證）、套件清單核准
 - 公開上線前：D-10（LICENSE、TRADEMARKS.md、Calendar 來源授權；根目錄目前查無這兩個檔）、D-02 網域、D-03 統計工具、D-04 Windows 版驗證；完整清單見 `docs/07-release-checklist.md`
-- `CALENDAR_REPO` 仍是占位 `OWNER-TBD`／`REPO-TBD`（EXT-01），下載 `href` 無法驗收
+- `CALENDAR_REPO` 2026-11-11 起為 `andrewchu0101/juicy-landing-page`（專案擁有者指定，EXT-01）；該 repository 為 private、尚無 release，下載 `href` 仍無法驗收
 - 已部署的公開網址上，頁尾 `LICENSE`／`TRADEMARKS.md` 連結與下載按鈕目前都打不開（檔案不存在、`CALENDAR_REPO` 為占位）；專案擁有者已表示依其節奏補上，不視為阻塞
 
 ### 下一步（最多三項）
 1. 專案擁有者回答 `docs/04-sad.md`「Gate」決策表：ADR-03、ADR-04、OR-20、D-11、套件清單。
 2. 專案擁有者決定是否授權 Calendar 端工作（015～018）；未授權前不修改 Calendar、不發布套件、不設憑證。
-3. 不依賴上述決策的小票（需專案擁有者提供資料或決定）：填入 `CALENDAR_REPO` 真實 owner／repo（EXT-01，002）；`og:url` 是否採用 Vercel 預設網域（013、D-02）；009 的人工算例預期值檔（可先做）。
+3. 專案擁有者確認 2026-11-11 的三項暫定處理是否正確：`CALENDAR_REPO` 指向本網站 repo（private、無 release，「原始碼」連結也跟著指向本站）；`og:url` 暫用 Vercel 預設網域；009 的 `openQuestion`（CONF-07 夾住、CONF-10 貼上位置）。
 
 相關 issue／PR：PR #1～#4 已合併（`gh pr list --state all` 確認）；本輪（001／014 收尾與本 HANDOFF）的 PR 見 `gh pr list --head feat/012-ci-workflow`。
 

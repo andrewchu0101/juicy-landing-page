@@ -22,8 +22,11 @@ describe('TC-10e initial HTML metadata (NFR-08, OR-18 M1)', () => {
     expect(content('property="og:locale:alternate"')).toBe('en_US');
   });
 
-  it('does not ship a placeholder og:url or og:image (domain D-02 and share image pending)', () => {
-    expect(html).not.toContain('property="og:url"');
+  it('has og:url on the Vercel default domain (D-02 own domain still pending)', () => {
+    expect(content('property="og:url"')).toBe('https://juicy-landing-page-tau.vercel.app/');
+  });
+
+  it('does not ship a placeholder og:image (share image waits for the interactive version)', () => {
     expect(html).not.toContain('property="og:image"');
   });
 });

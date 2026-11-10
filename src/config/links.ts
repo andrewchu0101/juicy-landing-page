@@ -1,9 +1,11 @@
 // 下載與授權連結的單一設定來源（SDS EXT-01、FR-09、FR-15）。
-// Calendar 的 GitHub owner／repo 尚未定案（EXT-01「待確認」）：下列是占位值，不是真正的連結。
-// 確認並由 011 實際驗證前，verification 必須維持 'unverified'，頁面不得宣稱下載已可用。
+// Releases 位置由專案擁有者 2026-11-11 指定：https://github.com/andrewchu0101/juicy-landing-page/releases
+// （與本網站同一個 repository）。2026-11-11 查證：該 repository 為 private，尚無任何 release，
+// 未登入訪客開 /releases 會得到 404。因此在 011 實際驗證下載（M-10）前，
+// verification 必須維持 'unverified'，頁面不得宣稱下載已可用。
 export type LinkVerification = 'unverified' | 'verified';
 
-export const CALENDAR_REPO = { owner: 'OWNER-TBD', repo: 'REPO-TBD' } as const;
+export const CALENDAR_REPO = { owner: 'andrewchu0101', repo: 'juicy-landing-page' } as const;
 
 const repoUrl = `https://github.com/${CALENDAR_REPO.owner}/${CALENDAR_REPO.repo}`;
 const releasesLatestUrl = `${repoUrl}/releases/latest`;
