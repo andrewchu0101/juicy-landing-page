@@ -7,11 +7,12 @@
 
 | 項目 | 內容 |
 |---|---|
-| 更新時間 | 2026-11-10（接手另一台電腦的進度後同步） |
-| 目前目標 | 網站骨架與不依賴共用模組的部分已實作並合併；試用接入（005 起）受阻於專案擁有者決策與 Calendar 端授權；等專案擁有者回答 Gate 決策 |
-| 工作目錄 | `C:\Users\student\Project\juicy-landing-page` |
-| 分支／HEAD | 本文件所在分支 `docs/handoff-sync-2026-11-10`，由 `main`／`origin/main` 的 `6ea06fe`（PR #3 合併）切出。PR #1（文件）、#2（005 partial＋014）、#3（012 partial）皆已合併 |
-| 工作樹 | 未追蹤且**刻意未提交**：`diagrams/*.html`（8 個，依 SRS v0.2 繪製，已過期，只作參考）、`issues/001-guard-secrets-false-positives.md`、`.claude/hooks/test-guard-secrets.sh`（守衛修復票，待專案擁有者確認，不要修改或繞過守衛）。注意 `issues/001-skeleton.md` 與守衛票同編號 001，是兩件事 |
+| 更新時間 | 2026-11-11（關閉 001 守衛票與 014 檢查清單票後同步） |
+| 目前目標 | 網站骨架與不依賴共用模組的部分已實作並合併，網站已部署到 Vercel；試用接入（005 起）受阻於專案擁有者決策與 Calendar 端授權；等專案擁有者回答 Gate 決策 |
+| 工作目錄 | `D:\Project\Fun\juicy-landing-page`（2026-11-11 這一輪；先前記錄的 `C:\Users\student\...` 是另一台電腦） |
+| 分支／HEAD | 分支 `feat/012-ci-workflow`；`0a28a72` 之後再加本次 HANDOFF 更新的 commit，以 `git log -1` 為準。PR #1（文件）、#2（005 partial＋014）、#3（012 partial）、#4（HANDOFF 同步與守衛修復）皆已合併；本分支的新 PR 見下方「相關 issue／PR」 |
+| 工作樹 | 本文件更新前乾淨。`issues/001-guard-secrets-false-positives.md` 與 `.claude/hooks/test-guard-secrets.sh` 已隨 PR #4 提交。`diagrams/0*.html`（8 個）不在任何遠端分支，只在另一台電腦的工作區，依 SRS v0.2 繪製已過期；專案擁有者 2026-11-10 決定守衛票中該項為「不適用」。注意 `issues/001-skeleton.md` 與守衛票同編號 001，是兩件事 |
+| 部署 | Vercel：`https://juicy-landing-page-tau.vercel.app/`（專案擁有者 2026-11-10 陳述；同日 curl 首頁回 200、初始 HTML 含 M1 metadata）。`/LICENSE`、`/TRADEMARKS.md` 回 404（檔案本來就不存在）。專案擁有者表示網站功能尚未開放不構成問題，依其開發節奏逐步補上；預覽保護是否啟用未查證 |
 
 ### 已完成（依 issue 檔記載，本機尚未重跑）
 - 文件：Brief、PRD v0.5.1、SRS v0.4、SAD v0.1、SDS v0.1、`06-test-plan.md` v0.2、`07-release-checklist.md`、`LESSONS.md`、`issues/001`～`018`
@@ -19,7 +20,8 @@
 - 005 部分：試用種子、`ensureReady`、隱私監看夾具（`fd83f51`）
 - 012 部分：`.github/workflows/ci.yml`（typecheck、lint、test、build）；issue 檔記 PR #3 的 run 42661882621 全過（19 秒）
 - 013 部分：metadata M1（`e4df3af`），`og:url`、`og:image` 未完成
-- 014 清單已建立；驗收條件待專案擁有者確認
+- 014 清單已建立，三個驗收條件 2026-11-11 前已核對並勾選（`docs/07-release-checklist.md` 20 列皆有歸屬；清單上的待決項目仍待決）
+- 001 守衛票（`issues/001-guard-secrets-false-positives.md`）：修復隨 PR #4 合併；2026-11-10 實跑 `test-guard-secrets.sh` 32 項全過、`.maintain/check.sh` 6 項全 ✓（啟用 pre-commit 後）；「取捨」第 1 點專案擁有者確認維持現狀
 
 ### 進行中
 - 無。
@@ -28,14 +30,14 @@
 - 005 真實接入、006～011、015～018 皆 blocked：等 Calendar 端授權（015～018 只是依賴，不是授權）與 ADR-03、ADR-04／OR-26、OR-20、D-11（共用模組發布管道與憑證）、套件清單核准
 - 公開上線前：D-10（LICENSE、TRADEMARKS.md、Calendar 來源授權；根目錄目前查無這兩個檔）、D-02 網域、D-03 統計工具、D-04 Windows 版驗證；完整清單見 `docs/07-release-checklist.md`
 - `CALENDAR_REPO` 仍是占位 `OWNER-TBD`／`REPO-TBD`（EXT-01），下載 `href` 無法驗收
-- 守衛誤判（見工作樹）擋住 `diagrams/` 與守衛測試檔的 commit
+- 已部署的公開網址上，頁尾 `LICENSE`／`TRADEMARKS.md` 連結與下載按鈕目前都打不開（檔案不存在、`CALENDAR_REPO` 為占位）；專案擁有者已表示依其節奏補上，不視為阻塞
 
 ### 下一步（最多三項）
 1. 專案擁有者回答 `docs/04-sad.md`「Gate」決策表：ADR-03、ADR-04、OR-20、D-11、套件清單。
 2. 專案擁有者決定是否授權 Calendar 端工作（015～018）；未授權前不修改 Calendar、不發布套件、不設憑證。
-3. 專案擁有者確認 `issues/001-guard-secrets-false-positives.md` 的方案（特別是「取捨」第 1 點），之後才能修守衛並提交 `diagrams/` 與守衛測試檔。
+3. 不依賴上述決策的小票（需專案擁有者提供資料或決定）：填入 `CALENDAR_REPO` 真實 owner／repo（EXT-01，002）；`og:url` 是否採用 Vercel 預設網域（013、D-02）；009 的人工算例預期值檔（可先做）。
 
-相關 issue／PR：PR #1～#3 已合併（`gh pr list --state all` 確認）；守衛票為未提交的 `issues/001-guard-secrets-false-positives.md`。
+相關 issue／PR：PR #1～#4 已合併（`gh pr list --state all` 確認）；本輪（001／014 收尾與本 HANDOFF）的 PR 見 `gh pr list --head feat/012-ci-workflow`。
 
 ### 狀態核對（分開寫，不要混為一談）
 
@@ -44,7 +46,7 @@
 | 已實作 | 部分 | 網站骨架、首頁、語言、互動閘門、種子與夾具、metadata M1；試用互動本體未接入 |
 | 自動測試 | 本機 Not Run | 本機尚未 `npm install`，沒有 `node_modules`，這台沒有跑過任何測試。上列通過紀錄來自 issue 檔與 CI，不是本輪驗證。Calendar 的測試一個都沒執行過 |
 | 人工驗收 | Manual Pending | M-1～M-10 全部未執行 |
-| 已 commit／push | 已合併：PR #1～#3 | 本文件的變更尚未 commit |
+| 已 commit／push | 已合併：PR #1～#4 | `0a28a72` 已 push 到 `origin/feat/012-ci-workflow`，尚未合併；本文件的變更於同一分支另行提交 |
 
 ### 接手者要先知道
 - **這台電腦的 Calendar 位置**：`..\juicy-calendar`（`C:\Users\student\Project\juicy-calendar`）。2026-11-10 用 `git -C ..\juicy-calendar cat-file -t 102ae1917047aee691e88cef9c497b50df745c41` 確認基準 commit 存在（回傳 `commit`）；Calendar 目前 HEAD 為 `4701e12`，與基準不同。LESSONS 寫的 `D:\Project\Fun\...` 是另一台電腦，這台沒有 D 槽。讀 Calendar 一律用 `git -C <路徑> show 102ae1917047aee691e88cef9c497b50df745c41:<路徑>`，不讀工作樹。
