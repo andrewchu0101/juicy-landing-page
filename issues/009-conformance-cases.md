@@ -7,7 +7,7 @@
 **Blocked by:** 007、016（X-2，含一致性案例的載入接口 SHARED-06）。
 - 可先做：人工算例的預期值檔。
 
-**Status:** blocked
+**Status:** partial（2026-11-11：`tests/conformance/cases.ts` 已有 CONF-01～CONF-10 的人工算例預期值與規格出處，`cases.test.ts` 只驗資料結構與自洽，**不是案例的執行結果**；執行器接入、基準交叉比對仍 blocked，等 007、016。CONF-06 受阻於 015；CONF-07 的「超過 10080 夾住」與 CONF-10 的貼上位置列為 `openQuestion`，待規格補上）
 
 **對應 TC：** TC-11（CONF-01～CONF-10、ENG-MAG）
 

@@ -9,7 +9,8 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:calendar-release": "node scripts/checkCalendarRelease.ts"
   },
   "dependencies": {
     "react": "19.3.1",

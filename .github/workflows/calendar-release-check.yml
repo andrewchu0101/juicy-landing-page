@@ -1,0 +1,25 @@
+# 下載按鈕固定在某個 Calendar release（src/config/links.ts）。這支排程檢查它是否過期或失效。
+# 與 ci.yml 分開：Calendar 發新版不應擋住無關的 PR；失敗時 GitHub 會通知，由專案擁有者決定要不要更新。
+# 不需要任何自訂憑證：只讀公開 repository，用 Actions 內建的 GITHUB_TOKEN 避開未登入的流量限制。
+name: Calendar release check
+
+on:
+  schedule:
+    - cron: '17 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm run check:calendar-release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

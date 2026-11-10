@@ -25,7 +25,7 @@
 | 5 | 流量統計工具與「開始試用」事件定義 | D-03／OR-10，專案擁有者 | 待決 | Brief D-03；SRS OR-10；G-04 | 須不跨站追蹤、不寫識別 cookie、無廣告 |
 | 6 | TC-06e（統計請求不含試用內容） | 005（TC-06）；等 #5 | 受阻：等 D-03 工具決定 | Test Plan TC-06 | 工具未定，無法寫測試 |
 | 7 | Windows 版乾淨電腦驗證 | D-04，專案擁有者 | 待決 | Brief D-04；NFR-03 | 完成前下載區只做版面，不放「已驗證」字樣或真實截圖 |
-| 8 | 實際下載驗證（`href` 與實際可下載分開記錄） | 011（M-10）；Releases owner／repo 待決（EXT-01） | 受阻：`CALENDAR_REPO` 目前是占位 `OWNER-TBD`／`REPO-TBD`，`verification` 為 `unverified` | SDS EXT-01；AC-02.1 | 未人工確認前不得宣稱下載已驗收 |
+| 8 | 實際下載驗證（`href` 與實際可下載分開記錄） | 011（M-10）；Releases owner／repo 待決（EXT-01） | 部分完成：主按鈕 2026-11-11 起直接下載 `juicy-calendar` 的 `v0.2.0-beta.3` 免安裝 zip（專案擁有者決定）；`href` 對照實際資產，curl 下載後 SHA-256 與 `SHA256SUMS.txt` 一致（自動化證據）；`verification` 仍為 `unverified`，M-10 人工確認未做 | SDS EXT-01；AC-02.1 | 未人工確認前不得宣稱下載已驗收 |
 | 9 | 靜態預覽圖（中英兩版） | 010 | 受阻：等 005、006、007（須截自實際互動版）、最終種子內容、英文說明文字 | SRS OR-14；AC-01.6 | 不放占位或仿真圖 |
 | 10 | 搜尋與分享 metadata、分享圖 | 013 | 部分完成：OR-18 M1 已於 2026-11-10 由專案擁有者核准並實作（見 `issues/013`）；`og:url` 等網域 D-02，`og:image` 等互動版完成 | SRS OR-18；NFR-08；TC-10e | 互動版完成前不放占位或仿真圖 |
 | 11 | 跨瀏覽器實測：Chrome、Edge、Firefox、Safari 最新兩個穩定版，含 Safari 實機 | 011（M-2） | 未執行；環境缺口須在 011 明列 | NFR-06 | 不在範圍的瀏覽器不宣稱已驗證 |
@@ -38,6 +38,8 @@
 | 18 | 效能基線已記錄；門檻由專案擁有者看過基線後訂 | 011 | 未執行；門檻待定 | NFR-05；Test Plan | 不預先假設數字 |
 | 19 | 共用模組取得方式與憑證（P1～P5 擇一；誰持有、誰可輪替） | D-11／OR-21，專案擁有者 | 待決 | Brief D-11；SRS OR-21 | 建議 P1 私有 npm 僅供參考，未核准；018 依此 |
 | 20 | 種子球正式名稱與色碼 | OR-12，專案擁有者 | 待決 | SRS OR-12 | 目前為占位；阻擋種子內容的驗收與發布 |
+
+| 21 | 下載連結固定版本，Calendar 發新版時更新 `CALENDAR_RELEASE`（tag 與檔名） | 002；每次 Calendar 發版 | 已加排程檢查（2026-11-11）：`.github/workflows/calendar-release-check.yml` 每日跑 `npm run check:calendar-release`，Calendar 有較新 release 或固定資產失效時失敗並通知；本機實跑通過；排程在 Actions 上尚未實跑 | SDS EXT-01 | 更新時要同步改 `src/config/links.ts` 的 `CALENDAR_RELEASE`、`tests/links.test.ts` 與 `tests/calendarRelease.test.ts` 的字面常數；它不擋 PR |
 
 ## 逐項歸屬核對
 

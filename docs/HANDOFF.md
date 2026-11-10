@@ -20,6 +20,7 @@
 - 005 部分：試用種子、`ensureReady`、隱私監看夾具（`fd83f51`）
 - 012 部分：`.github/workflows/ci.yml`（typecheck、lint、test、build）；issue 檔記 PR #3 的 run 42661882621 全過（19 秒）
 - 013 部分：metadata M1（`e4df3af`），`og:url`、`og:image` 未完成
+- 下載連結固定版本的漂移檢查：`scripts/calendarRelease.ts`（純函式，8 個單元測試）、`scripts/checkCalendarRelease.ts`、`.github/workflows/calendar-release-check.yml`（每日排程，Actions 上尚未實跑）
 - 014 清單已建立，三個驗收條件 2026-11-11 前已核對並勾選（`docs/07-release-checklist.md` 20 列皆有歸屬；清單上的待決項目仍待決）
 - 001 守衛票（`issues/001-guard-secrets-false-positives.md`）：修復隨 PR #4 合併；2026-11-10 實跑 `test-guard-secrets.sh` 32 項全過、`.maintain/check.sh` 6 項全 ✓（啟用 pre-commit 後）；「取捨」第 1 點專案擁有者確認維持現狀
 
@@ -29,13 +30,13 @@
 ### 阻塞
 - 005 真實接入、006～011、015～018 皆 blocked：等 Calendar 端授權（015～018 只是依賴，不是授權）與 ADR-03、ADR-04／OR-26、OR-20、D-11（共用模組發布管道與憑證）、套件清單核准
 - 公開上線前：D-10（LICENSE、TRADEMARKS.md、Calendar 來源授權；根目錄目前查無這兩個檔）、D-02 網域、D-03 統計工具、D-04 Windows 版驗證；完整清單見 `docs/07-release-checklist.md`
-- `CALENDAR_REPO` 仍是占位 `OWNER-TBD`／`REPO-TBD`（EXT-01），下載 `href` 無法驗收
+- `CALENDAR_REPO` 2026-11-11 起為 `andrewchu0101/juicy-calendar`（專案擁有者指定，EXT-01；先前一度誤給本站 repo，已更正）；該 repository 公開，只有預發行版（v0.2.0-beta.3，無安裝檔），主按鈕 2026-11-11 起直接下載 `v0.2.0-beta.3` 免安裝 zip（固定 tag，Calendar 發新版須更新 `CALENDAR_RELEASE`）；curl 下載雜湊一致，M-10 人工驗收未做
 - 已部署的公開網址上，頁尾 `LICENSE`／`TRADEMARKS.md` 連結與下載按鈕目前都打不開（檔案不存在、`CALENDAR_REPO` 為占位）；專案擁有者已表示依其節奏補上，不視為阻塞
 
 ### 下一步（最多三項）
 1. 專案擁有者回答 `docs/04-sad.md`「Gate」決策表：ADR-03、ADR-04、OR-20、D-11、套件清單。
 2. 專案擁有者決定是否授權 Calendar 端工作（015～018）；未授權前不修改 Calendar、不發布套件、不設憑證。
-3. 不依賴上述決策的小票（需專案擁有者提供資料或決定）：填入 `CALENDAR_REPO` 真實 owner／repo（EXT-01，002）；`og:url` 是否採用 Vercel 預設網域（013、D-02）；009 的人工算例預期值檔（可先做）。
+3. 專案擁有者確認 2026-11-11 的三項暫定處理是否正確：`CALENDAR_REPO` 指向 `andrewchu0101/juicy-calendar`（只有預發行版）；`og:url` 暫用 Vercel 預設網域；009 的 `openQuestion`（CONF-07 夾住、CONF-10 貼上位置）。
 
 相關 issue／PR：PR #1～#4 已合併（`gh pr list --state all` 確認）；本輪（001／014 收尾與本 HANDOFF）的 PR 見 `gh pr list --head feat/012-ci-workflow`。
 
@@ -49,7 +50,8 @@
 | 已 commit／push | 已合併：PR #1～#4 | `0a28a72` 已 push 到 `origin/feat/012-ci-workflow`，尚未合併；本文件的變更於同一分支另行提交 |
 
 ### 接手者要先知道
-- **這台電腦的 Calendar 位置**：`..\juicy-calendar`（`C:\Users\student\Project\juicy-calendar`）。2026-11-10 用 `git -C ..\juicy-calendar cat-file -t 102ae1917047aee691e88cef9c497b50df745c41` 確認基準 commit 存在（回傳 `commit`）；Calendar 目前 HEAD 為 `4701e12`，與基準不同。LESSONS 寫的 `D:\Project\Fun\...` 是另一台電腦，這台沒有 D 槽。讀 Calendar 一律用 `git -C <路徑> show 102ae1917047aee691e88cef9c497b50df745c41:<路徑>`，不讀工作樹。
+- **D 槽那台電腦的 Calendar 位置（2026-11-11）**：`D:\Project\Fun\juicy-calendar\juicy-calendar`，專案擁有者指定。同日唯讀確認：是 Git repository，origin 為 `https://github.com/andrewchu0101/juicy-calendar.git`，HEAD `a1c64e5`，基準 commit `102ae19…` 存在（`git cat-file -t` 回傳 `commit`）。讀規格一律用 `git -C <路徑> show 102ae1917047aee691e88cef9c497b50df745c41:<路徑>`，不讀工作樹。
+- **另一台（暫時工作電腦）的 Calendar 位置**：`..\juicy-calendar`（`C:\Users\student\Project\juicy-calendar`）。2026-11-10 用 `git -C ..\juicy-calendar cat-file -t 102ae1917047aee691e88cef9c497b50df745c41` 確認基準 commit 存在（回傳 `commit`）；Calendar 目前 HEAD 為 `4701e12`，與基準不同。LESSONS 寫的 `D:\Project\Fun\...` 是另一台電腦，這台沒有 D 槽。讀 Calendar 一律用 `git -C <路徑> show 102ae1917047aee691e88cef9c497b50df745c41:<路徑>`，不讀工作樹。
 - 方向已定：試用沿用 Calendar 的操作與規則，不新增 App 沒有的日曆功能；共用方式採方案 B，發布管道與權限未核准。
 - 預期值來自規格與人工算例，不呼叫實作；「找不到測試」不等於「沒有測試」。
 - OR-26：Calendar 的快捷鍵監聽在 `window` 上，放進 landing page 會攔截整頁 Ctrl+C（讀程式碼的結論，未在瀏覽器驗證）；TC-12 尚不可執行。
