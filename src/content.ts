@@ -19,11 +19,12 @@ export const COPY = {
     primary: '下載 Windows 版',
     portableZip: '免安裝 .zip',
     source: '原始碼',
-    factsHeading: '安裝前請先知道',
+    factsHeading: '下載前請先知道',
     facts: [
       { id: 'platform', text: '僅支援 Windows 10 1803 以上的 64 位元；更舊的系統與 32 位元不支援。' },
-      { id: 'webview2', text: '需要 WebView2 執行階段；安裝版缺少時，安裝程式會連網下載微軟官方版本（只有安裝當下需要網路）。' },
-      { id: 'unsigned', text: '安裝檔未簽章，Windows SmartScreen 可能顯示「Windows 已保護您的電腦」。確認檔案來自本專案的 Releases 後，選「更多資訊」，再選「仍要執行」。' },
+      { id: 'webview2', text: '需要已安裝的 Microsoft Edge WebView2 執行階段；免安裝版不會幫你安裝，缺少時請先安裝微軟官方版本。' },
+      { id: 'portable', text: '下載的是免安裝 .zip：解壓縮後執行 juicy-calendar.exe，並保留 portable.flag；資料會放在旁邊的 data 資料夾。' },
+      { id: 'unsigned', text: '免安裝版未簽章，Windows SmartScreen 可能顯示「Windows 已保護您的電腦」。確認檔案來自本專案的 Releases 後，選「更多資訊」，再選「仍要執行」。' },
       { id: 'web-trial', text: '網頁試用為瀏覽器版，與桌面版有差異；桌面版的功能以下載後為準。' },
       { id: 'offline', text: '桌面 App 離線使用、無帳號，資料只存在你的電腦。' },
     ],
@@ -39,6 +40,7 @@ export const COPY = {
 export const FACT_SOURCES = {
   platform: 'README.md「Windows」；docs/01-brief.md NG-10；docs/02-prd.md 最低支援',
   webview2: 'README.md「Windows」步驟 1；docs/02-prd.md WebView2 說明',
+  portable: 'Calendar GitHub Release v0.2.0-beta.3 說明「附件」',
   unsigned: 'README.md「Windows」步驟 2；docs/01-brief.md R-02',
   'web-trial': '本專案 docs/01-brief.md R-08、docs/02-prd.md（非 Calendar 文件）',
   offline: 'README.md 開頭；docs/01-brief.md 離線、無帳號、無遙測；NG-01',
