@@ -11,6 +11,10 @@ export const CALENDAR_REPO = { owner: 'andrewchu0101', repo: 'juicy-calendar' } 
 export const CALENDAR_RELEASE = {
   tag: 'v0.2.0-beta.3',
   portableZip: 'juicy-calendar_0.2.0-beta.3_x64-portable.zip',
+  // 該 zip 的 SHA-256。來源：Calendar release 的 SHA256SUMS.txt，與 GitHub 資產 digest 相同（2026-11-11 查證）。
+  // Release 附件事後可被替換（immutable: false），所以網站自己釘雜湊：頁面顯示給訪客核對，
+  // 排程檢查（scripts/checkCalendarRelease.ts）比對 GitHub 回報的 digest。Calendar 發新版時與 tag 一起更新。
+  sha256: 'c32de3723cefa66e2787eb5f340789220042bc3847f410f43de33350d8a1dc32',
 } as const;
 
 const repoUrl = `https://github.com/${CALENDAR_REPO.owner}/${CALENDAR_REPO.repo}`;
@@ -21,6 +25,7 @@ export const DOWNLOAD_LINKS = {
   // 目前唯一的 Windows 資產是免安裝 zip，主按鈕與「免安裝 .zip」因此指向同一個檔案。
   primary: portableZipUrl,
   portableZip: portableZipUrl,
+  sha256: CALENDAR_RELEASE.sha256,
   source: repoUrl,
 };
 

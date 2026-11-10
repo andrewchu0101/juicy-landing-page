@@ -13,6 +13,7 @@ export type SiteDictionary = {
     primary: string;
     portableZip: string;
     source: string;
+    checksum: { heading: string; label: string; howTo: string };
     factsHeading: string;
     facts: readonly { id: string; text: string }[];
   };
@@ -39,6 +40,11 @@ const EN: SiteDictionary = {
     primary: 'Download for Windows',
     portableZip: 'Portable .zip',
     source: 'Source code',
+    checksum: {
+      heading: 'Verify the download',
+      label: 'SHA-256',
+      howTo: 'After downloading, run Get-FileHash <path-to-file> in PowerShell; the result must match the hash above exactly. If it differs, do not run the file.',
+    },
     factsHeading: 'Before you download',
     facts: [
       { id: 'platform', text: 'Windows 10 version 1803 or later, 64-bit only. Older systems and 32-bit are not supported.' },

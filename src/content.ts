@@ -19,6 +19,11 @@ export const COPY = {
     primary: '下載 Windows 版',
     portableZip: '免安裝 .zip',
     source: '原始碼',
+    checksum: {
+      heading: '驗證下載',
+      label: 'SHA-256',
+      howTo: '下載後在 PowerShell 執行 Get-FileHash <檔案路徑>，結果應與上面的雜湊完全相同；不同就不要執行。',
+    },
     factsHeading: '下載前請先知道',
     facts: [
       { id: 'platform', text: '僅支援 Windows 10 1803 以上的 64 位元；更舊的系統與 32 位元不支援。' },

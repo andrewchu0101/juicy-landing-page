@@ -40,6 +40,20 @@ describe('TC-10a home page and download entry (FR-09, AC-02.1, UI-01)', () => {
 
 // TC-10c｜AC-02.2、NFR-03：五項敘述的字面內容取自 SRS FR-09 / PRD AC-02.2。
 // 「每項對得到 Calendar 文件來源」是人工對照（NFR-03），此處只驗每項敘述存在、且內容出現在下載區。
+describe('download integrity (TC-10e): the page shows how to verify the zip', () => {
+  const section = () => html.slice(indexOfOrFail('id="download"'), html.indexOf('</section>', indexOfOrFail('id="download"')));
+
+  it('shows the pinned SHA-256 in a code element, with a Get-FileHash instruction', () => {
+    expect(section()).toContain(`<code>${DOWNLOAD_LINKS.sha256}</code>`);
+    expect(section()).toContain('SHA-256');
+    expect(section()).toContain('Get-FileHash');
+  });
+
+  it('adds no extra links (the link count is asserted in UI-01)', () => {
+    expect(section().match(/<a /g)).toHaveLength(3);
+  });
+});
+
 describe('TC-10c download section statements (AC-02.2, NFR-03)', () => {
   const section = () => html.slice(indexOfOrFail('id="download"'), html.indexOf('</section>', indexOfOrFail('id="download"')));
 

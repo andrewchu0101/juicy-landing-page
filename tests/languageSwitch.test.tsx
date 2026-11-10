@@ -33,6 +33,13 @@ describe('TC-09 language switch control and page text (UI-06, NFR-02)', () => {
     expect(html).not.toContain('下載 Windows 版');
   });
 
+  it('explains how to verify the download in English too (TC-10e)', async () => {
+    const html = await render('en');
+
+    expect(html).toContain('Get-FileHash');
+    expect(html).toContain('Verify the download');
+  });
+
   it('shows Traditional Chinese page text when the language is zh-TW', async () => {
     const html = await render('zh-TW');
 

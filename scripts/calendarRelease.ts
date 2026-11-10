@@ -3,14 +3,15 @@
 // 這裡把「固定的 tag／檔名」與「Calendar 實際的 release 清單」比對，找出過期或失效的情況。
 // 純函式，不碰網路與檔案，方便單元測試；網路與檔案在 checkCalendarRelease.ts。
 
-export type Pinned = { owner: string; repo: string; tag: string; asset: string };
+export type Pinned = { owner: string; repo: string; tag: string; asset: string; sha256: string };
 export type ReleaseInfo = {
   tag_name: string;
   draft: boolean;
   prerelease: boolean;
   published_at: string | null;
   html_url?: string;
-  assets: { name: string }[];
+  // digest 為 GitHub API 的 "sha256:<hex>"；舊資產可能是 null。
+  assets: { name: string; digest?: string | null }[];
 };
 
 const field = (source: string, name: string): string | undefined =>
@@ -22,10 +23,12 @@ export function parsePinned(source: string): Pinned {
   const repo = field(source, 'repo');
   const tag = field(source, 'tag');
   const asset = field(source, 'portableZip');
-  if (!owner || !repo || !tag || !asset) {
-    throw new Error('讀不到 links.ts 的 CALENDAR_REPO／CALENDAR_RELEASE（owner、repo、tag、portableZip）');
+  const sha256 = field(source, 'sha256');
+  if (!owner || !repo || !tag || !asset || !sha256) {
+    throw new Error('讀不到 links.ts 的 CALENDAR_REPO／CALENDAR_RELEASE（owner、repo、tag、portableZip、sha256）');
   }
-  return { owner, repo, tag, asset };
+  if (!/^[0-9a-f]{64}$/.test(sha256)) throw new Error('links.ts 的 sha256 必須是 64 位小寫十六進位');
+  return { owner, repo, tag, asset, sha256 };
 }
 
 export type CheckResult = { ok: boolean; problems: string[]; notes: string[] };
@@ -41,8 +44,20 @@ export function evaluate(pinned: Pinned, releases: ReleaseInfo[]): CheckResult {
   const mine = published.find((r) => r.tag_name === pinned.tag);
   if (!mine) {
     problems.push(`固定的 release ${pinned.tag} 找不到或已不是公開狀態，下載按鈕會 404。`);
-  } else if (!mine.assets.some((a) => a.name === pinned.asset)) {
-    problems.push(`release ${pinned.tag} 沒有資產 ${pinned.asset}，下載按鈕會 404。`);
+  } else {
+    const asset = mine.assets.find((a) => a.name === pinned.asset);
+    if (!asset) {
+      problems.push(`release ${pinned.tag} 沒有資產 ${pinned.asset}，下載按鈕會 404。`);
+    } else if (!asset.digest) {
+      problems.push(`release ${pinned.tag} 的資產 ${pinned.asset} 沒有 digest，無法核對 SHA-256（不算通過）。`);
+    } else if (asset.digest.toLowerCase() !== `sha256:${pinned.sha256}`) {
+      problems.push(
+        `資產 ${pinned.asset} 的 digest 是 ${asset.digest}，與網站釘選的 sha256:${pinned.sha256} 不同：檔案可能被替換，` +
+          '請先確認 Calendar 端原因，再決定是否更新釘選值；在那之前不要信任下載按鈕。',
+      );
+    } else {
+      notes.push(`資產 ${pinned.asset} 的 SHA-256 與釘選值相同。`);
+    }
   }
 
   const newest = published[0];

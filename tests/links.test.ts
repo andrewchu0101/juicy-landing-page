@@ -7,6 +7,9 @@ import { CALENDAR_REPO, DOWNLOAD_LINKS } from '../src/config/links';
 const ZIP_URL =
   'https://github.com/andrewchu0101/juicy-calendar/releases/download/v0.2.0-beta.3/juicy-calendar_0.2.0-beta.3_x64-portable.zip';
 
+// 字面常數：Calendar v0.2.0-beta.3 的 SHA256SUMS.txt 與 GitHub 資產 digest 皆為此值（2026-11-11 查證）。
+const ZIP_SHA256 = 'c32de3723cefa66e2787eb5f340789220042bc3847f410f43de33350d8a1dc32';
+
 describe('TC-10a download links (FR-09, AC-02.1)', () => {
   it('primary button downloads the portable zip of a pinned Calendar release directly', () => {
     expect(DOWNLOAD_LINKS.primary).toBe(ZIP_URL);
@@ -21,6 +24,10 @@ describe('TC-10a download links (FR-09, AC-02.1)', () => {
   it('never uses a floating "latest" download path (the asset name carries the version)', () => {
     expect(DOWNLOAD_LINKS.primary).not.toContain('/latest');
     expect(DOWNLOAD_LINKS.primary).toMatch(/\/releases\/download\/v\d+\.\d+\.\d+(-[\w.]+)?\//);
+  });
+
+  it('pins the sha256 of the portable zip so the page and the drift check share one value', () => {
+    expect(DOWNLOAD_LINKS.sha256).toBe(ZIP_SHA256);
   });
 
   it('stays unverified until a person has downloaded and checked it (011, M-10)', () => {
