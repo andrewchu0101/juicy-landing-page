@@ -26,4 +26,16 @@ describe('skeleton health', () => {
     expect(html).toContain('id="root"');
     expect(html).toMatch(/<script[^>]+type="module"[^>]+src="\/assets\/[^"]+\.js"/);
   });
+
+  // issue 022：vercel.json 的 CSP 是 script-src／style-src 'self'。建置產物若有內嵌 script 或 style，部署後會被擋。
+  it('ships no inline script or style, so the strict Content-Security-Policy in vercel.json holds', async () => {
+    const html = await (await fetch(baseUrl)).text();
+    const inlineScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(
+      ([, attributes, body]) => !/\bsrc=/.test(attributes ?? '') || (body ?? '').trim() !== '',
+    );
+    expect(inlineScripts).toEqual([]);
+    expect(html).not.toMatch(/<style\b/i);
+    expect(html).not.toMatch(/\sstyle=/i);
+    expect(html).not.toMatch(/\son[a-z]+=/i);
+  });
 });
