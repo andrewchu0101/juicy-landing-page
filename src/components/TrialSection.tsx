@@ -26,6 +26,15 @@ export function TrialSection({ loader: injected }: { loader?: TrialLoader }) {
       ) : (
         <figure className="trial-preview">
           <p className="trial-preview-label">{copy.trial.preview.label}</p>
+          {/* 靜態圖：不可拖曳、不可點擊（AC-01.6）。尺寸固定以免載入時版面跳動。 */}
+          <img
+            className="trial-preview-image"
+            src={copy.trial.preview.image.src}
+            alt={copy.trial.preview.image.alt}
+            width={1280}
+            height={802}
+            draggable={false}
+          />
           <figcaption>{copy.trial.preview.caption}</figcaption>
         </figure>
       )}

@@ -12,6 +12,11 @@ export const COPY = {
     preview: {
       label: '產品預覽',
       caption: '將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
+      // 截自實際運作的互動版（scripts/capturePreviewImages.ts）；種子球名稱若改了要重截。
+      image: {
+        src: '/preview/trial-zh-TW.png',
+        alt: '試用畫面截圖：左側有藍、綠、橘三顆球，右側日曆上午 10:00 到下午 12:00 有一個藍色的「專注 Focus」時間區塊。',
+      },
     },
     // 試用區內的 App 介面文字（沿用 Calendar 的字典用語：palette.dragAria、radial.aria、grid.hiddenOne／Many）。
     app: {
