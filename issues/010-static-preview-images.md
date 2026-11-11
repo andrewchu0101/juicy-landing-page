@@ -48,3 +48,6 @@
 - 程式：`buildTrialWorkspace(now, language)`、`ensureReady({ language })`、`TrialLoader` 的 `getLanguage`；`settings.view` 改為 `visibleDays: 3`；`TrialApp` 用本地日期加一天產生三個日期欄（不用 24 小時，避免日光節約）。
 - 測試：`tests/buildTrialWorkspace.test.ts`、`trialRuntime.test.ts`、`trialLoader.test.ts`、`trialApp.test.tsx`、`trialStore.test.ts` 調整（契約變更，來自專案擁有者決定）；新增 `e2e/trialLayout.e2e.ts`。PRD、SRS、SDS、測試計畫的「單日」描述已同步為三天。
 - 仍待專案擁有者：英文圖下說明（暫定字句）；種子色碼的最終值。
+
+## 2026-11-11 本輪沒有新增可完成的項目
+剩下的都需要專案擁有者：種子色碼最終值（OR-12）、英文圖下說明、視覺（手動呼叫 `impeccable`）、M-5 人工檢視。任何一項決定後，重跑 `scripts/capturePreviewImages.ts` 即可更新兩張圖。
