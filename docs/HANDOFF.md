@@ -19,9 +19,11 @@
 - **專案擁有者的回答：** 008～010 都做；安全依賴建議都接受；CONF-07 的一週上限網站不開放，只開放三天的範圍；CONF-10 貼上位置跟 Calendar 一樣；授權唯讀 `C:/Users/student/Project/juicy-calendar`。
 - **008（partial）：** 沒改產品程式碼，新增 `e2e/dynamicEligibility.e2e.ts`（以注入的 `matchMedia` 模擬輸入能力變化）：8a／8b／8c／8d、OR-24 的 N-7、N-8、N-13、N-14。N-9、N-11 與 M-8 實機未執行。
 - **009（partial）：** 規格空白結案（見 `issues/009`）；新增 `tests/conformanceTrial.test.ts`，只執行網站開放的操作：CONF-08 完整、CONF-02 步驟 0–1 部分，其餘標「暫不開放」。基準只做了原始碼對照，沒有執行 Calendar。`cases.test.ts` 的 openQuestion 斷言因專案擁有者的回答而改（契約變更，不是為了讓測試通過）。
-- **010（partial）：** `public/preview/trial-zh-TW.png`、`trial-en.png` 由 `scripts/capturePreviewImages.ts` 對真實試用截出；`TrialSection` 引用，字典新增 `preview.image`；新增 `e2e/previewImage.e2e.ts`。**英文版截圖的球名仍是中文（種子占位，OR-12）；英文圖下說明是暫定；視覺交給 `impeccable`；M-5 未執行。**
-- **安全依賴：** `package.json` 新增 `overrides: { "minimatch": "11.0.7" }`，`npm audit` 由 1 個中度弱點降為 0；鎖定檔多一個開發期套件 `@isaacs/nonrecursive-glob-match`（minimatch 11 的相依）。比起 `npm audit fix --force`（會把 eslint 降到 9）改動小。gitleaks 未安裝（這台沒有 D 槽，依 `CLAUDE.md` §3 要先問是否接受裝在 C 槽）；2FA 與 Calendar immutable releases 要專案擁有者自己在帳號設定處理。
-- **本機驗證（這台，2026-11-11）：** `npm run typecheck`、`lint`、`test`（31 檔 299 通過、1 todo）、`build` 通過；`npm run test:e2e`（Chromium，8 項；`--repeat-each=5` 共 40 項）通過；`npm audit` 0 個弱點。GitHub 上的 CI 實跑未做（e2e 也尚未納入 `ci.yml`）。
+- **010（partial）：** `public/preview/trial-zh-TW.png`、`trial-en.png` 由 `scripts/capturePreviewImages.ts` 對真實試用截出；`TrialSection` 引用，字典新增 `preview.image`；新增 `e2e/previewImage.e2e.ts`。英文圖下說明是暫定；視覺交給 `impeccable`；M-5 未執行。
+- **三天與英文球名（專案擁有者後續回答，已實作，commit 見 git log）：** 試用日曆改為連續三天、每天 10:00–15:00（共 15 小時，不開放到一週；「三天」不是區塊長度上限）；種子球名稱英文版純英文、中文版中英並列，初始化時依網站語言決定、之後切換語言不改名。PRD／SRS／SDS／測試計畫的「單日」已同步；`settings.view` 改為 `visibleDays: 3`；兩張預覽圖已重截；新增 `e2e/trialLayout.e2e.ts`。三天以本地日期逐日加一產生（不是 +24 小時），日光節約與跨午夜未測。
+- **gitleaks：** v8.30.1 裝在 `C:/DevTools/gitleaks/gitleaks.exe`（這台沒有 D 槽，專案擁有者同意裝 C 槽；其他有 D 槽的電腦裝 `D:/DevTools`）；下載檔在 `C:/DevCache/gitleaks`，zip 的 SHA-256 與官方 checksums 一致；未改 PATH。`gitleaks git . --redact`：48 個 commit，no leaks found（掃的是 git 歷史，沒掃工作樹）。
+- **安全依賴：** `package.json` 新增 `overrides: { "minimatch": "11.0.7" }`，`npm audit` 由 1 個中度弱點降為 0；鎖定檔多一個開發期套件 `@isaacs/nonrecursive-glob-match`（minimatch 11 的相依）。比起 `npm audit fix --force`（會把 eslint 降到 9）改動小。2FA 與 Calendar immutable releases 要專案擁有者自己在帳號設定處理。
+- **本機驗證（這台，2026-11-11）：** `npm run typecheck`、`lint`、`test`（31 檔 303 通過、1 todo）、`build` 通過；`npm run test:e2e`（Chromium，10 項，三天與英文球名改完後）通過；`npm audit` 0 個弱點。GitHub 上的 CI 實跑未做（e2e 也尚未納入 `ci.yml`）。
 
 ### 2026-11-11 試用區功能（PR #9 已合併；以下是當時的記錄）
 - 專案擁有者決定：ADR-03 B、ADR-04 B、OR-20 新增／編輯球排除與圓形選單保留；**不修改 Calendar、不新增套件**；試用由網站自己照 Calendar 固定 commit 實作，要「做得一模一樣」；本輪只做長按出球、拖球放置、拖移區塊。
