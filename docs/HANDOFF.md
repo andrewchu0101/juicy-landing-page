@@ -7,14 +7,23 @@
 
 | 項目 | 內容 |
 |---|---|
-| 更新時間 | 2026-11-11（完成 019～023 後同步；工作樹有未提交修改） |
+| 更新時間 | 2026-11-11（`main` 已合併 PR #9；本輪在這台電腦（`C:/Users/student/Project/juicy-landing-page`，沒有 D 槽）完成 008～010 與 minimatch 弱點，**未 commit、未 push**） |
 | 目前目標 | 網站骨架與不依賴共用模組的部分已實作並合併，網站已部署到 Vercel；試用（長按出球、拖球放置、拖移區塊）已由網站自己實作，PR #9 待審；Gate 決策已回答（2026-11-11），後續是 008～011 與人工驗收 |
 | 工作目錄 | `D:\Project\Fun\juicy-landing-page`（2026-11-11 這一輪；先前記錄的 `C:\Users\student\...` 是另一台電腦） |
 | 分支／HEAD | 分支 `feat/012-ci-workflow`；`0a28a72` 之後再加本次 HANDOFF 更新的 commit，以 `git log -1` 為準。PR #1（文件）、#2（005 partial＋014）、#3（012 partial）、#4（HANDOFF 同步與守衛修復）皆已合併；本分支的新 PR 見下方「相關 issue／PR」 |
 | 工作樹 | （以下為先前一輪的記錄）本文件更新前乾淨。`issues/001-guard-secrets-false-positives.md` 與 `.claude/hooks/test-guard-secrets.sh` 已隨 PR #4 提交。`diagrams/0*.html`（8 個）不在任何遠端分支，只在另一台電腦的工作區，依 SRS v0.2 繪製已過期；專案擁有者 2026-11-10 決定守衛票中該項為「不適用」。注意 `issues/001-skeleton.md` 與守衛票同編號 001，是兩件事 |
 | 部署 | Vercel：`https://juicy-landing-page-tau.vercel.app/`（專案擁有者 2026-11-10 陳述；同日 curl 首頁回 200、初始 HTML 含 M1 metadata）。`/LICENSE`、`/TRADEMARKS.md` 回 404（檔案本來就不存在）。專案擁有者表示網站功能尚未開放不構成問題，依其開發節奏逐步補上；預覽保護是否啟用未查證 |
 
-### 2026-11-11 試用區功能（分支 `feat/005-trial-gestures`，**未 push**）
+### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）
+- **環境（這台，沒有 D 槽）：** Node v26.13.0、npm 11.20.0；`npm ci --ignore-scripts`；npm 快取與 Playwright 的 Chromium 都在暫存目錄（只對該次程序有效，不是 `D:/DevCache`，會被清掉）。
+- **專案擁有者的回答：** 008～010 都做；安全依賴建議都接受；CONF-07 的一週上限網站不開放，只開放三天的範圍；CONF-10 貼上位置跟 Calendar 一樣；授權唯讀 `C:/Users/student/Project/juicy-calendar`。
+- **008（partial）：** 沒改產品程式碼，新增 `e2e/dynamicEligibility.e2e.ts`（以注入的 `matchMedia` 模擬輸入能力變化）：8a／8b／8c／8d、OR-24 的 N-7、N-8、N-13、N-14。N-9、N-11 與 M-8 實機未執行。
+- **009（partial）：** 規格空白結案（見 `issues/009`）；新增 `tests/conformanceTrial.test.ts`，只執行網站開放的操作：CONF-08 完整、CONF-02 步驟 0–1 部分，其餘標「暫不開放」。基準只做了原始碼對照，沒有執行 Calendar。`cases.test.ts` 的 openQuestion 斷言因專案擁有者的回答而改（契約變更，不是為了讓測試通過）。
+- **010（partial）：** `public/preview/trial-zh-TW.png`、`trial-en.png` 由 `scripts/capturePreviewImages.ts` 對真實試用截出；`TrialSection` 引用，字典新增 `preview.image`；新增 `e2e/previewImage.e2e.ts`。**英文版截圖的球名仍是中文（種子占位，OR-12）；英文圖下說明是暫定；視覺交給 `impeccable`；M-5 未執行。**
+- **安全依賴：** `package.json` 新增 `overrides: { "minimatch": "11.0.7" }`，`npm audit` 由 1 個中度弱點降為 0；鎖定檔多一個開發期套件 `@isaacs/nonrecursive-glob-match`（minimatch 11 的相依）。比起 `npm audit fix --force`（會把 eslint 降到 9）改動小。gitleaks 未安裝（這台沒有 D 槽，依 `CLAUDE.md` §3 要先問是否接受裝在 C 槽）；2FA 與 Calendar immutable releases 要專案擁有者自己在帳號設定處理。
+- **本機驗證（這台，2026-11-11）：** `npm run typecheck`、`lint`、`test`（31 檔 299 通過、1 todo）、`build` 通過；`npm run test:e2e`（Chromium，8 項；`--repeat-each=5` 共 40 項）通過；`npm audit` 0 個弱點。GitHub 上的 CI 實跑未做（e2e 也尚未納入 `ci.yml`）。
+
+### 2026-11-11 試用區功能（PR #9 已合併；以下是當時的記錄）
 - 專案擁有者決定：ADR-03 B、ADR-04 B、OR-20 新增／編輯球排除與圓形選單保留；**不修改 Calendar、不新增套件**；試用由網站自己照 Calendar 固定 commit 實作，要「做得一模一樣」；本輪只做長按出球、拖球放置、拖移區塊。
 - 已實作：`src/trial/`（engine、gestures、store、ui、trial.css）。本機 `npm run typecheck`、`lint`、`test`（30 檔 295 通過、1 todo）、`build` 通過；Playwright 實測見 `issues/005` 實作紀錄（不是人工驗收）。
 - 未做：調整長度、命名、刪除、復原、右鍵選單、框選、剪貼簿（留到下載後體驗）；觸控、其他瀏覽器、日光節約與跨午夜未測；M-1～M-10 仍 Manual Pending；`issues/006` 的 TC-03 等對應案例「暫不開放」。
