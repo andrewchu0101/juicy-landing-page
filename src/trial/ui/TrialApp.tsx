@@ -31,8 +31,12 @@ export function TrialApp() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const columnsRef = useRef<HTMLDivElement>(null);
 
-  const days = useMemo(() => [startOfDay(new Date(state.anchor))], [state.anchor]);
-  const { startHour, endHour, pixelsPerMinute } = state.settings;
+  const { startHour, endHour, pixelsPerMinute, visibleDays } = state.settings;
+  // 從示範日起連續幾天（專案擁有者 2026-11-11：三天，每天 10:00–15:00）。用本地日期加一天，不用 24 小時，避免日光節約。
+  const days = useMemo(() => {
+    const first = startOfDay(new Date(state.anchor));
+    return Array.from({ length: visibleDays }, (_, i) => new Date(first.getFullYear(), first.getMonth(), first.getDate() + i));
+  }, [state.anchor, visibleDays]);
   const timeline = useMemo<TimelineConfig>(() => ({ startHour, endHour, pixelsPerMinute }), [startHour, endHour, pixelsPerMinute]);
   const templates = useMemo(() => Object.values(state.templates).sort((a, b) => a.order - b.order), [state.templates]);
   const timeFormat = useMemo<TimeFormatOptions>(

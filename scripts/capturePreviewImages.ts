@@ -1,7 +1,8 @@
 // issue 010：從「實際運作的互動版」截靜態預覽圖，中英各一張。不是仿真圖。
 // 用法（先啟動預覽：npm run build && npm run preview，另一個終端機再跑）：
 //   PLAYWRIGHT_BROWSERS_PATH=<瀏覽器位置> node scripts/capturePreviewImages.ts
-// 畫面：W1 1280×800、單日 10:00–15:00、三顆種子球、一個 10:00–12:00 的區塊。種子名稱與色碼若改了（OR-12），要重截。
+// 畫面：W1 1280×800、三天（每天 10:00–15:00）、三顆種子球、第一天一個 10:00–12:00 的區塊。種子名稱與色碼若改了（OR-12），要重截。
+// 英文版的種子球名稱是純英文（依初始化當下的網站語言決定）。
 import { chromium } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
 
@@ -26,10 +27,10 @@ try {
     const ball = await page.getByTestId('template-ball').first().boundingBox();
     const columns = await page.getByTestId('calendar-columns').boundingBox();
     if (!ball || !columns) throw new Error('trial UI not visible');
-    // 放在欄的最上緣：磁吸後起點 10:00，預設長度 120 分鐘 → 10:00–12:00。
+    // 放在第一天（三欄的第一欄）的最上緣：磁吸後起點 10:00，預設長度 120 分鐘 → 10:00–12:00。
     await page.mouse.move(ball.x + ball.width / 2, ball.y + ball.height / 2);
     await page.mouse.down();
-    await page.mouse.move(columns.x + columns.width / 2, columns.y + 2, { steps: 12 });
+    await page.mouse.move(columns.x + columns.width / 6, columns.y + 2, { steps: 12 });
     await page.mouse.up();
     await page.getByTestId('event-block').waitFor();
     await page.mouse.move(0, 0); // 移開游標，避免懸停樣式

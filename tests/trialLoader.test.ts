@@ -152,3 +152,21 @@ describe('TrialLoader failure path (MOD-02)', () => {
     expect(loader.getPhase()).toBe('active');
   });
 });
+
+// 專案擁有者 2026-11-11：種子球名稱依初始化當下的網站語言決定。
+describe('TrialLoader passes the site language to ensureReady (seed ball names)', () => {
+  it('reads the language when the module is initialized, not when the loader is created', async () => {
+    let language: 'zh-TW' | 'en' = 'zh-TW';
+    const seen: unknown[] = [];
+    const loader = createTrialLoader({
+      loadModule: async () => ({ TrialShell: () => null, ensureReady: async (options) => void seen.push(options) }),
+      getLanguage: () => language,
+    });
+
+    language = 'en';
+    loader.setInteractive(true);
+    await flush();
+
+    expect(seen).toEqual([{ language: 'en' }]);
+  });
+});

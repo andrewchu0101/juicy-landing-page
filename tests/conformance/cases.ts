@@ -40,7 +40,7 @@ export type ConformanceCase = {
   id: string;
   /** 規格出處（REUSE / AC / INV / OR）。 */
   source: string[];
-  /** 起始設定：單日、可見 10:00–15:00、三顆種子球；preset 為起始就存在、不佔歷史的區塊。 */
+  /** 起始設定：三天（每天可見 10:00–15:00）、三顆種子球；preset 為起始就存在、不佔歷史的區塊。 */
   preset: { ref: Ref; title: string; start: At; end: At }[];
   steps: Step[];
   /** 全部步驟之後的最終狀態。 */

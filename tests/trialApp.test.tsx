@@ -6,7 +6,7 @@ import type { SiteLanguage } from '../src/site/webLanguageBackend';
 import trialModule from '../src/trial/trialModule';
 import { TrialApp } from '../src/trial/ui/TrialApp';
 
-// 試用區的靜態標記：三顆球、單日 10:00–15:00 的時間軸、沒有區塊。互動（長按、拖曳）由 tests/trialGestures.test.ts 的狀態機測試
+// 試用區的靜態標記：三顆球、三天、每天 10:00–15:00 的時間軸、沒有區塊。互動（長按、拖曳）由 tests/trialGestures.test.ts 的狀態機測試
 // 與瀏覽器實測（issue 005／006 的實作紀錄）驗證；這裡不模擬 DOM 事件。
 async function render(language: SiteLanguage): Promise<string> {
   const store = createSiteLanguageStore({
@@ -60,8 +60,11 @@ describe('TrialApp markup', () => {
     expect(html).not.toContain('拖到日曆上');
   });
 
-  it('is a single day: one day header', async () => {
+  // 契約變更（專案擁有者 2026-11-11）：三天，每天 10:00–15:00，不開放到一週。
+  it('shows three days: three day headers and three day columns', async () => {
     const html = await render('zh-TW');
-    expect(html.match(/data-testid="day-header"/g)).toHaveLength(1);
+    expect(html.match(/data-testid="day-header"/g)).toHaveLength(3);
+    expect(html.match(/data-testid="day-column"/g)).toHaveLength(3);
+    expect(html.match(/data-testid="timeline-label"/g)).toHaveLength(5); // 時間軸只有一條，每天同一段 10:00–15:00
   });
 });

@@ -15,11 +15,11 @@ function ready() {
 }
 
 describe('trial store', () => {
-  it('starts empty: three seed balls, no events, 10:00–15:00 single day (FR-01)', () => {
+  it('starts empty: three seed balls, no events, 10:00–15:00 each day (FR-01)', () => {
     const state = ready().getState();
     expect(Object.keys(state.templates)).toEqual(['focus', 'rest', 'chore']);
     expect(state.events).toEqual({});
-    expect(state.settings).toMatchObject({ startHour: 10, endHour: 15, pixelsPerMinute: 1, view: 'day', magnetEnabled: true });
+    expect(state.settings).toMatchObject({ startHour: 10, endHour: 15, pixelsPerMinute: 1, visibleDays: 3, magnetEnabled: true });
   });
 
   it('goToday sets the demo day to the local today from the injected clock', () => {

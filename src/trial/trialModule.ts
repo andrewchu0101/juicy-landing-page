@@ -9,7 +9,7 @@ import { TrialApp } from './ui/TrialApp';
 const runtime = createTrialRuntime({ store: trialStore, now: () => new Date() });
 
 const trialModule: TrialModule = {
-  ensureReady: () => runtime.ensureReady(),
+  ensureReady: (options) => runtime.ensureReady(options),
   TrialShell: TrialApp,
 };
 

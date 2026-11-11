@@ -40,7 +40,7 @@ const EN: SiteDictionary = {
       caption: 'Drag a ball onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
       image: {
         src: '/preview/trial-en.png',
-        alt: 'Screenshot of the trial: three balls (blue, green, orange) on the left, and on the calendar one blue time block from 10:00 AM to 12:00 PM.',
+        alt: 'Screenshot of the trial: three balls (blue, green, orange) on the left, and a calendar with three consecutive days, each 10:00 AM to 3:00 PM, with one blue time block from 10:00 AM to 12:00 PM on the first day.',
       },
     },
     app: {
