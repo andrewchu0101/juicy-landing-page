@@ -9,7 +9,7 @@
 - eslint 等套件：專案擁有者 2026-11-10 已核准安裝（lint 部分已實作）。注意 typescript-eslint 8.72.2 不支援 TS 7，已改用官方建議的並存方式：`typescript` 別名指向 `@typescript/typescript6@6.0.2`（供 typescript-eslint），`@typescript/native` 別名指向 `typescript@7.0.2`（`tsc` 仍是 7.0.2）。
 - Vercel 不會自動等待 CI，阻擋機制須設計。
 
-**Status:** partial（已加 `.github/workflows/ci.yml`：typecheck、lint、test、build；lint 於 2026-11-10 本機通過，CI 實跑待推送後確認；2026-11-10 已在 PR #3 實際執行並通過（run 42661882621，typecheck／test／build 皆過，19 秒）。INV-11 比對、Vercel、憑證仍 blocked）
+**Status:** partial（`ci.yml` 有 `check`（typecheck、lint、test、build）與 `e2e`（Chromium，2026-11-11 新增，GitHub 上的實跑結果見下方實作紀錄）兩個 job；PR #3 的 run 42661882621 是只有 typecheck／test／build 的紀錄。INV-11 比對已更改決定不需要；Vercel 預覽保護、回退演練、憑證仍未做）
 
 **對應 TC：** 無直接 TC；支撐 INV-11、NFR-09
 
@@ -30,3 +30,8 @@ npm run typecheck && npm run lint && npm test && npm run build
 - [ ] 預覽部署的保護設定已確認
 - [ ] 回退演練（共用模組版本回退已更改決定，不再適用；Vercel 還原部署的可用性仍待驗證）：把鎖定版本改回上一版並重新建置；Vercel 還原部署的可用性標「未驗證」直到演練
 - [ ] 沒有把憑證寫進任何檔案；實際設定憑證前已得到你的核准
+
+## 實作紀錄：e2e 納入 CI（2026-11-11，TDD：先紅後綠）
+- **紅：** 先在 `tests/workflowSecurity.test.ts` 加「ci.yml 跑 Playwright e2e」3 項：有獨立的 `e2e` job（且 `check` job 不含 e2e）、依序 `npm ci --ignore-scripts`、`npx playwright install --with-deps chromium`（整份只出現一次）、`npm run test:e2e`、有自己的 `timeout-minutes`。執行 3 項失敗（job 不存在）。
+- **綠：** `ci.yml` 新增 `e2e` job（沿用已釘 SHA 的 checkout 與 setup-node，不新增第三方 Action；不用 secrets；權限仍是最上層的 `contents: read`）。`tests/workflowSecurity.test.ts` 其餘既有的 SHA 釘選、權限、secrets 檢查對新 job 也通過；全部 311 通過、1 todo。
+- 限制：這些測試只檢查 workflow 檔文字。e2e 在 GitHub 的 ubuntu 上能不能過，要看 PR 的 run。
