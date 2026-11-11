@@ -17,7 +17,8 @@ export type Step =
   | { op: 'undo' }
   | { op: 'redo' }
   | { op: 'copy' }
-  | { op: 'paste' };
+  /** at：貼上時的目標時間（Calendar：游標位置或右鍵選單位置）；最早的來源區塊起點移到這裡。 */
+  | { op: 'paste'; at: At };
 
 export type ExpectedEvent = {
   ref: Ref;
@@ -186,9 +187,8 @@ export const CONFORMANCE_CASES: ConformanceCase[] = [
       pastLength: 1,
       futureLength: 0,
     },
-    openQuestion:
-      '「超過 10080 分鐘（夾住）」需用調整長度（resizeEnd）手勢，SDS 的 Step 型別只有 update patch，不確定 patch 路徑是否同樣夾住。人工預期：把終點拉到起點後 10081 分鐘 → 終點為 day 7 的 10:00（起點 + 10080 分鐘 = 7 天）。此子案例待 SDS 補上調整長度的步驟型別後再加，不自行決定。',
-    derivation: '最小 1 分鐘允許：10:00 起、終點 10:01 = 長度 1 分鐘（REUSE-04）；一個變更 = 1 步。',
+    derivation:
+      '最小 1 分鐘允許：10:00 起、終點 10:01 = 長度 1 分鐘（REUSE-04）；一個變更 = 1 步。「超過 10080 分鐘夾住」的子案例：專案擁有者 2026-11-11 決定網站不開放到一週，只開放三天的範圍，且調整長度本來就暫不開放，所以此子案例不在網站驗收內（暫不開放，不是已通過）。',
   },
   {
     id: 'CONF-08',
@@ -225,17 +225,16 @@ export const CONFORMANCE_CASES: ConformanceCase[] = [
     id: 'CONF-10',
     source: ['REUSE-10'],
     preset: [{ ref: '$1', title: 'A', start: t('10:00'), end: t('12:00') }],
-    steps: [{ op: 'select', refs: ['$1'] }, { op: 'copy' }, { op: 'paste' }],
+    steps: [{ op: 'select', refs: ['$1'] }, { op: 'copy' }, { op: 'paste', at: t('14:00') }],
     expect: {
       events: [
         { ref: '$1', title: 'A', start: t('10:00'), end: t('12:00'), color: 'unchanged' },
-        { ref: '$2', title: 'A', color: 'unchanged' },
+        { ref: '$2', title: 'A', start: t('14:00'), end: t('16:00'), color: 'unchanged' },
       ],
       pastLength: 1,
       futureLength: 0,
     },
-    openQuestion:
-      '副本的起點取決於貼上時的游標或規則，SRS 只寫「剪貼簿（REUSE-10，部分）」，沒有給出貼上位置的算法，所以只斷言：區塊數為 2、副本標題與原區塊相同、貼上算 1 步。',
-    derivation: '複製貼上產生副本、算 1 步（SDS CONF-10）。',
+    derivation:
+      '專案擁有者 2026-11-11 決定貼上位置「跟原本 Calendar 一樣」。固定基準 `engine/mutations.ts#copiedEventTimes` 的規則：位移量 = 目標時間 − 被複製區塊中最早的起點，每個區塊的起迄都加上同一個位移量。這裡 10:00 → 14:00 = +4 小時，副本為 14:00–16:00，長度不變；貼上算 1 步（SDS CONF-10）。網站暫不開放剪貼簿，所以此案例網站端不執行。',
   },
 ];

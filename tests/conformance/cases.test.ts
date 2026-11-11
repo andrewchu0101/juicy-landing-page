@@ -49,8 +49,15 @@ describe('TC-11 conformance expected values (data only, not executed)', () => {
     expect(length('CONF-08')).toBe(120);
   });
 
-  it('lists spec gaps as open questions instead of guessing', () => {
-    expect(CONFORMANCE_CASES.filter((c) => c.openQuestion).map((c) => c.id)).toEqual(['CONF-07', 'CONF-10']);
+  // 契約變更（2026-11-11，專案擁有者回答）：CONF-07 的一週上限子案例網站不開放；CONF-10 貼上位置沿用 Calendar。
+  // 兩個 openQuestion 因此結束；預期值是依 Calendar 固定 commit 的規則人工算出（10:00 → 14:00 = +4 小時）。
+  it('has no unresolved spec gaps left, and CONF-10 pastes at the stated target', () => {
+    expect(CONFORMANCE_CASES.filter((c) => c.openQuestion).map((c) => c.id)).toEqual([]);
+    const paste = byId('CONF-10').steps.find((step) => step.op === 'paste');
+    expect(paste).toMatchObject({ op: 'paste', at: { day: 0, time: '14:00' } });
+    const copy = byId('CONF-10').expect.events[1]!;
+    expect(minutes(copy.start!)).toBe(minutes({ day: 0, time: '14:00' }));
+    expect(minutes(copy.end!) - minutes(copy.start!)).toBe(120);
   });
 
   it('marks only CONF-06 as blocked (by 015) with 101 steps and a cap of 100', () => {
