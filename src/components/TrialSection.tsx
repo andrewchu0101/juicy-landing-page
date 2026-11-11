@@ -1,16 +1,23 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useSiteLanguage } from '../site/LanguageContext';
+import type { SiteLanguage } from '../site/webLanguageBackend';
 import { connectGate } from '../trial/connectGate';
 import { createTrialLoader, type TrialLoader } from '../trial/trialLoader';
 
 // 動態 import：不符合互動資格時不會被呼叫，所以不會請求這個 chunk（FR-08、NFR-05）。
-const defaultLoader = () => createTrialLoader({ loadModule: () => import('../trial/trialModule').then((m) => m.default) });
+const defaultLoader = (getLanguage: () => SiteLanguage) =>
+  createTrialLoader({ loadModule: () => import('../trial/trialModule').then((m) => m.default), getLanguage });
 
 // UI-02／UI-03：互動資格成立且載入完成 → 試用；否則 → 靜態預覽容器（不可拖曳或點擊）。
 // loading／dormant／preview 都顯示預覽；載入中專用畫面與失敗文案未定（MOD-02）。
 export function TrialSection({ loader: injected }: { loader?: TrialLoader }) {
-  const { copy } = useSiteLanguage();
-  const [loader] = useState<TrialLoader>(() => injected ?? defaultLoader());
+  const { copy, language } = useSiteLanguage();
+  // 載入器初始化試用的當下才讀語言（種子球名稱用）；之後切換語言不會改名（FR-10）。
+  const languageRef = useRef(language);
+  useEffect(() => {
+    languageRef.current = language;
+  }, [language]);
+  const [loader] = useState<TrialLoader>(() => injected ?? defaultLoader(() => languageRef.current));
   const phase = useSyncExternalStore(loader.subscribe, loader.getPhase, loader.getPhase);
 
   useEffect(() => (injected ? undefined : connectGate(loader)), [loader, injected]);
@@ -26,6 +33,15 @@ export function TrialSection({ loader: injected }: { loader?: TrialLoader }) {
       ) : (
         <figure className="trial-preview">
           <p className="trial-preview-label">{copy.trial.preview.label}</p>
+          {/* 靜態圖：不可拖曳、不可點擊（AC-01.6）。尺寸固定以免載入時版面跳動。 */}
+          <img
+            className="trial-preview-image"
+            src={copy.trial.preview.image.src}
+            alt={copy.trial.preview.image.alt}
+            width={1280}
+            height={802}
+            draggable={false}
+          />
           <figcaption>{copy.trial.preview.caption}</figcaption>
         </figure>
       )}

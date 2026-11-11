@@ -1,4 +1,4 @@
-// 單日日曆（Calendar 的 CalendarGrid 去掉工具列、右鍵選單、框選與縮放）。版面、線條、標籤與現在線都沿用 App。
+// 日曆（三天，專案擁有者 2026-11-11；Calendar 的 CalendarGrid 去掉工具列、右鍵選單、框選與縮放）。版面、線條、標籤與現在線都沿用 App。
 import { useEffect, useMemo, useState, type PointerEvent as ReactPointerEvent, type RefObject } from 'react';
 import { GUTTER_WIDTH_PX, MIN_COLUMN_WIDTH_PX } from '../engine/limits';
 import { hiddenEventCounts, layoutSegments } from '../engine/layout';

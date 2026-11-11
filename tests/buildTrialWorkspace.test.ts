@@ -2,16 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { buildTrialWorkspace } from '../src/trial/buildTrialWorkspace';
 
 // 預期值為 SDS DATA-02 的字面常數，不呼叫實作去算。
-// TC-01a（試用區初始畫面：單日、10:00–15:00）｜FR-01、INV-05、DATA-02
+// TC-01a（試用區初始畫面：三天、每天 10:00–15:00）｜FR-01、INV-05、DATA-02
+// 契約變更（專案擁有者 2026-11-11）：從單日改為三天（15 小時），不開放到一週。
 describe('TC-01a buildTrialWorkspace settings (FR-01, INV-05, DATA-02)', () => {
-  it('uses the fixed single-day 10:00–15:00 settings at default zoom with magnet on', () => {
+  it('uses the fixed three-day 10:00–15:00 settings at default zoom with magnet on', () => {
     const workspace = buildTrialWorkspace(new Date(2026, 10, 10, 9, 30));
 
     expect(workspace.settings).toEqual({
       startHour: 10,
       endHour: 15,
       pixelsPerMinute: 1,
-      view: 'day',
+      visibleDays: 3,
       magnetEnabled: true,
       inspectorCollapsed: false,
     });
@@ -43,5 +44,20 @@ describe('TC-01a buildTrialWorkspace seed (FR-01, DATA-01, DATA-03, INV-07)', ()
     expect(workspace.issues).toEqual([]);
     expect(workspace.meta.name).toBe('trial');
     expect(buildTrialWorkspace(new Date(Date.UTC(2026, 10, 10, 1, 30))).meta.createdAt).toBe('2026-11-10T01:30:00.000Z');
+  });
+});
+
+// 專案擁有者 2026-11-11：英文版種子球名稱是純英文；中文版維持中英並列。
+describe('seed ball names by language', () => {
+  const now = new Date(2026, 10, 10, 9, 30);
+
+  it('defaults to the Traditional Chinese bilingual names', () => {
+    expect(buildTrialWorkspace(now).templates.map((t) => t.name)).toEqual(['專注 Focus', '休息 Rest', '雜事 Chore']);
+  });
+
+  it('uses plain English names for the English site', () => {
+    const { templates } = buildTrialWorkspace(now, 'en');
+    expect(templates.map((t) => t.name)).toEqual(['Focus', 'Rest', 'Chore']);
+    expect(templates.map((t) => t.id)).toEqual(['focus', 'rest', 'chore']);
   });
 });

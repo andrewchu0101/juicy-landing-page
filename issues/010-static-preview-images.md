@@ -13,7 +13,7 @@
 - **正式截圖前須確認最終種子內容（名稱與色碼）與視覺**，否則截圖要重做
 - 英文版圖下說明文字未定
 
-**Status:** blocked
+**Status:** partial（2026-11-11：兩張圖與引用已完成並通過測試；種子球名稱與色碼仍是占位，英文版圖下說明是暫定，兩者都待專案擁有者確認；M-5 未執行）
 
 **對應 TC：** TC-07e；M-5（預覽圖部分）
 
@@ -29,7 +29,22 @@
 
 ## 驗收條件
 
-- [ ] 兩張圖都截自實際運作的互動版，非仿真圖
-- [ ] 替代文字與說明中英完整，切換語言後無殘留
-- [ ] 最終種子內容與視覺已確認後才截圖
+- [x] 兩張圖都截自實際運作的互動版，非仿真圖（`scripts/capturePreviewImages.ts` 對 Chromium 跑真實試用：拖第一顆球到欄頂，得到 10:00–12:00 區塊）
+- [ ] 替代文字與說明中英完整，切換語言後無殘留 —— 自動測試與 e2e 已驗圖與替代文字跟語言切換；英文版截圖球名已改為純英文（Focus、Rest、Chore）；人工 M-5 前不勾
+- [ ] 最終種子內容與視覺已確認後才截圖 —— **未滿足**：種子名稱與色碼仍是占位（OR-12）。現在的圖是用占位內容截的，種子一改就要重跑腳本
 - [ ] 人工步驟執行並留下證據；未做前維持「未執行」
+
+## 實作紀錄（2026-11-11，**不是人工驗收**）
+
+- 圖：`public/preview/trial-zh-TW.png`、`public/preview/trial-en.png`（各 1280×802，W1 視窗，2 倍像素比）。畫面是單日 10:00–15:00、三顆球、一個 10:00–12:00 的藍色區塊。截圖時把「現在」的橫線隱藏（它會隨截圖時間跑位），沒有改產品畫面。重截：`npm run build && npm run preview` 後，在另一個終端機跑 `node scripts/capturePreviewImages.ts`。截圖來源：分支 `feat/008-010-dynamic-eligibility-conformance`（切自 `main` 的 `687bd34`），日期 2026-11-11。
+- 程式：字典新增 `trial.preview.image.{src,alt}`（`src/content.ts`、`src/site/dictionaries.ts`）；`TrialSection` 的預覽容器放一張 `<img draggable="false">`；`src/styles.css` 只加「不可操作、寬度自適應」的功能性樣式，沒有做視覺設計（`impeccable` 由專案擁有者手動呼叫）。
+- 測試：`tests/trialPreview.test.tsx` 新增「圖與替代文字跟語言一致」，並把「預覽內不得有 img」改為「只能有一張不可拖曳的圖、沒有連結或按鈕」（契約變更：這票就是要放圖；不可拖曳、不可點擊的要求沒有放寬）。新增 `e2e/previewImage.e2e.ts`：觸控環境圖真的載入（`naturalWidth > 0`）、`pointer-events: none`、手機寬度不橫向捲動、切換語言後圖與替代文字同步換。
+- 英文版圖下說明仍是 2026-11-10 的暫定字句，未確認。
+- 未做：M-5（兩種語言整頁人工檢視）、圖的視覺與觀感判斷、替代文字是否恰當。
+
+### 後續變更（2026-11-11，專案擁有者回答後）
+- 試用日曆改為**連續三天、每天 10:00–15:00**（共 15 小時，不開放到一週）；兩張圖已用新畫面重截（第一天一個 10:00–12:00 區塊）。
+- 英文版種子球名稱為純英文（Focus、Rest、Chore），中文版維持「專注 Focus」等中英並列；名稱在初始化時依網站語言決定，初始化後切換語言不改名（FR-10）。英文圖因此不再含中文球名。
+- 程式：`buildTrialWorkspace(now, language)`、`ensureReady({ language })`、`TrialLoader` 的 `getLanguage`；`settings.view` 改為 `visibleDays: 3`；`TrialApp` 用本地日期加一天產生三個日期欄（不用 24 小時，避免日光節約）。
+- 測試：`tests/buildTrialWorkspace.test.ts`、`trialRuntime.test.ts`、`trialLoader.test.ts`、`trialApp.test.tsx`、`trialStore.test.ts` 調整（契約變更，來自專案擁有者決定）；新增 `e2e/trialLayout.e2e.ts`。PRD、SRS、SDS、測試計畫的「單日」描述已同步為三天。
+- 仍待專案擁有者：英文圖下說明（暫定字句）；種子色碼的最終值。

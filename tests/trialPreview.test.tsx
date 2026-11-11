@@ -45,12 +45,29 @@ describe('TC-07b static preview shell (UI-03, FR-08)', () => {
     expect(text).not.toMatch(/[㐀-鿿]/);
   });
 
-  it('is not draggable or clickable: no image, link, button or draggable element inside the preview', async () => {
+  // 契約變更（issue 010，2026-11-11）：預覽先前只有占位文字，現在放入實際截圖，所以「不得有 img」改為
+  // 「只能有一張不可拖曳的靜態圖，且沒有連結、按鈕或點擊處理」。不可拖曳、不可點擊的要求本身沒有放寬。
+  it('is not draggable or clickable: one static image, no link, button, draggable element or click handler', async () => {
     const html = await render('zh-TW', <TrialSection />);
     const preview = /<figure[\s\S]*?<\/figure>/.exec(html)?.[0] ?? '';
 
     expect(preview).not.toBe('');
-    expect(preview).not.toMatch(/<(a|button|img)\b|draggable="true"|onclick/i);
+    expect(preview.match(/<img\b/g)).toHaveLength(1);
+    expect(preview).toContain('draggable="false"');
+    expect(preview).not.toMatch(/<(a|button)\b|draggable="true"|onclick/i);
+  });
+
+  it('shows the screenshot and alt text that match the page language (UI-03, NFR-02)', async () => {
+    const zh = await render('zh-TW', <TrialSection />);
+    const en = await render('en', <TrialSection />);
+
+    expect(zh).toContain('src="/preview/trial-zh-TW.png"');
+    expect(zh).toContain('alt="試用畫面截圖');
+    expect(en).toContain('src="/preview/trial-en.png"');
+    expect(en).toContain('alt="Screenshot of the trial');
+    expect(en).not.toContain('trial-zh-TW');
+    expect(zh).not.toContain('trial-en.png');
+    expect(/alt="([^"]*)"/.exec(en)![1]).not.toMatch(/[㐀-鿿]/);
   });
 
   it('keeps the download section visible on the page when the preview is shown (AC-02.1)', async () => {

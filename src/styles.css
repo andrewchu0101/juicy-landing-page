@@ -294,3 +294,13 @@ footer {
     transform: none;
   }
 }
+
+/* 靜態預覽圖（issue 010）：只保證可近用與不可操作；視覺細節由專案擁有者另以 impeccable 調整。 */
+.trial-preview-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}

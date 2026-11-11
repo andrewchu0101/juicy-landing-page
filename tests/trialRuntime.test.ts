@@ -16,9 +16,20 @@ describe('INV-02 TrialRuntime.ensureReady (FR-07, MOD-03)', () => {
 
     expect(store.hydrate).toHaveBeenCalledTimes(1);
     expect(store.hydrate.mock.calls[0]![1]).toBe('memory:trial');
-    expect(store.hydrate.mock.calls[0]![0].settings.view).toBe('day');
+    expect(store.hydrate.mock.calls[0]![0].settings.visibleDays).toBe(3);
     expect(store.goToday).toHaveBeenCalledTimes(1);
     expect(store.hydrate.mock.invocationCallOrder[0]!).toBeLessThan(store.goToday.mock.invocationCallOrder[0]!);
+  });
+
+  it('seeds the ball names from the language of the first call only', async () => {
+    const store = fakeStore();
+    const runtime = createTrialRuntime({ store, now });
+
+    await runtime.ensureReady({ language: 'en' });
+    await runtime.ensureReady({ language: 'zh-TW' });
+
+    expect(store.hydrate).toHaveBeenCalledTimes(1);
+    expect(store.hydrate.mock.calls[0]![0].templates.map((t: { name: string }) => t.name)).toEqual(['Focus', 'Rest', 'Chore']);
   });
 
   it('does not hydrate again on repeated or concurrent calls', async () => {
