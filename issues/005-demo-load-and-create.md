@@ -22,7 +22,7 @@
 - 瀏覽器實測（Playwright，Chromium 1280×900，2026-11-11，**不是人工驗收**）：長按 150ms 沒有選單、400ms 出現三顆球；hover 球 `transform` 為 `matrix(1.1,…)`；輪廓晃動；拖到 11:00 附近放開得到「專注 Focus 上午 11:00–下午 1:00」；單擊球不建立；放在日曆外出現 18 個粒子；重新整理後區塊清空；`localStorage` 在操作後仍是空的；沒有跨來源請求；英文切換後標籤變成 `10:00 AM`。
 - 沒有做、也沒有測：觸控環境（互動資格擋掉）、不同瀏覽器與縮放、鍵盤操作、日光節約切換日、跨午夜。M-1～M-10 仍 Manual Pending。
 
-**對應 TC：** TC-01a、TC-01e、TC-01f；TC-02；TC-06a～6d（TC-06e 等流量統計工具決定）
+**對應 TC：** TC-01a、TC-01e、TC-01f；TC-02；TC-06a～6d（TC-06e 不適用：不做流量統計，2026-11-13 決定）
 
 **預計檔案範圍（預估）：** `src/trial/` 下的 `TrialRuntime`、`buildTrialWorkspace`、`TrialShell`、占位種子資料、記憶體儲存接入；測試夾具（固定時鐘、`localStorage`／`fetch`／XHR／`sendBeacon` 監看）；對應測試。
 

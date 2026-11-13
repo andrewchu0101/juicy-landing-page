@@ -51,3 +51,7 @@ git rev-list --all | while read c; do git grep -I -n -E -i "<pattern>" $c; done
 2. 確認 GitHub 帳號 2FA。
 3. Calendar 的 Release 評估啟用 immutable releases（是否可用未查證）。
 4. 若要更強的歷史掃描，核准在 `D:\DevTools` 安裝 gitleaks。
+
+## 2026-11-13 更新（專案擁有者）
+- GitHub 帳號 2FA：**已啟用**（專案擁有者陳述，API 查不到，我沒有獨立驗證）。
+- Calendar 的 Release 設為不可竄改（immutable）：專案擁有者表示要設定，**尚未確認完成**。注意：這項設定只對設定之後發布的 release 生效，已發布的 `v0.2.0-beta.3`（目前 `immutable: false`）不會因此變成不可竄改；網站仍以 SHA-256 釘選把關。

@@ -39,3 +39,6 @@ npm run build && grep -E "<title>|og:title|og:description|og:url|og:image|<html 
 - **過程中的錯：** 截圖腳本試了三種做法才對：小數 `deviceScaleFactor`（0.9375）會裁歪；`fullPage` 加 `clip` 被頁面內容欄截成 920 寬（試用區是 640×400 CSS 像素、超出內容欄）；最後改成視窗 800 寬、scale 1.5、以視窗座標裁切，輸出剛好 1200×630。檔頭尺寸測試抓到了前兩次的錯誤尺寸。
 - **綠：** `tests/metadata.test.ts` 12 項通過。
 - **驗證的邊界：** 正式網址上的 `/preview/og-zh-TW.png` 要等這個分支 merge 並部署後才存在（目前線上的 `og:image` 還是舊的 1280×802 圖）；Facebook、LINE、X 的實際預覽沒有驗證，需要部署後用各平台的偵錯工具（Facebook Sharing Debugger、X Card Validator 等）。
+
+## 2026-11-13 補記
+專案擁有者決定**不做社群平台的實際預覽驗證**（Facebook、X、LINE 的偵錯工具）。上面「驗證的邊界」那一項因此結案為「不做」，不是「已驗證」；分享圖的尺寸與內容仍由測試與截圖目視確認。

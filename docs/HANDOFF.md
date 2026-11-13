@@ -27,6 +27,8 @@
 - **013 收尾：** 專用的 1200×630 分享圖（`public/preview/og-zh-TW.png`、`og-en.png`，由 `scripts/capturePreviewImages.ts` 從實際互動版截出）、`canonical`、`og:site_name`；`og:url`、`og:image` 不再是「暫用」。**社群平台上的實際預覽沒有驗證**，要部署後用各平台的偵錯工具；線上的 `/preview/og-zh-TW.png` 要等這個分支 merge 並部署後才存在。
 - **文件同步：** Brief D-02、PRD、SAD、SRS（OR-12）、SDS、測試計畫、`07-release-checklist.md` 的待決與占位敘述已改為已決；`issues/001-skeleton`、`010`、`013` 已更新。
 - **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（34 檔 341 通過）、`build`、`test:e2e`（Chromium 34 項）、`npm audit` 0 全數通過。
+- **專案擁有者的決定（2026-11-13，再稍晚）：** D-03 **不做流量統計**（OR-10、TC-06e 隨之結案／不適用）；D-04 Windows 乾淨電腦驗證排在 **2026-11-14**；六顆球目前**只展示、不能拖出區塊**（再次確認）；社群平台預覽**不做**；GitHub 帳號 2FA 已啟用；Calendar release 要設為不可竄改（待完成）；D-10 Calendar 授權：已請我提供選項，**尚未選擇**。
+- **待決的小事：** AC-03.2 原文要求「頁面明講網站使用哪種流量統計」，不做統計後措辭要改（建議一句「本網站不使用流量統計」），頁面目前沒有這句，我沒有自行新增。
 - **待你：** 合併本分支的 PR；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
 
 ### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）
