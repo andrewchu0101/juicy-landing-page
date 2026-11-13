@@ -17,6 +17,7 @@ declare global {
   interface Window {
     __setCapability(pointer: string, hover: string): void;
     __windowListenerCount(): number;
+    __pendingTrialTimers(): number;
   }
 }
 
@@ -79,6 +80,28 @@ async function injectControllableInput(page: Page) {
       return remove(type, listener as EventListener, options);
     }) as typeof window.removeEventListener;
     window.__windowListenerCount = () => [...live.values()].reduce((sum, set) => sum + set.size, 0);
+
+    // INV-09：數試用模組自己建立、還沒觸發也沒被取消的計時器（長按 250ms 的計時器是其中之一）。
+    // 計時器就算漏掉，畫面上也可能看不出來（元件已卸載，setState 變成空操作），所以要直接數。
+    const pending = new Set<number>();
+    const nativeSetTimeout = window.setTimeout.bind(window);
+    const nativeClearTimeout = window.clearTimeout.bind(window);
+    window.setTimeout = ((handler: TimerHandler, delay?: number, ...args: unknown[]) => {
+      if (!/trialModule/.test(new Error().stack ?? '') || typeof handler !== 'function') {
+        return nativeSetTimeout(handler, delay, ...args);
+      }
+      const id: number = nativeSetTimeout(() => {
+        pending.delete(id);
+        handler(...args);
+      }, delay);
+      pending.add(id);
+      return id;
+    }) as typeof window.setTimeout;
+    window.clearTimeout = ((id?: number) => {
+      if (id !== undefined) pending.delete(id);
+      return nativeClearTimeout(id);
+    }) as typeof window.clearTimeout;
+    window.__pendingTrialTimers = () => pending.size;
   }, WATCHED_TYPES);
 }
 
@@ -93,6 +116,7 @@ function watchTrialRequests(page: Page) {
 const setMouse = (page: Page) => page.evaluate(() => window.__setCapability('fine', 'hover'));
 const setTouch = (page: Page) => page.evaluate(() => window.__setCapability('coarse', 'none'));
 const listenerCount = (page: Page) => page.evaluate(() => window.__windowListenerCount());
+const pendingTimers = (page: Page) => page.evaluate(() => window.__pendingTrialTimers());
 const bodyClasses = (page: Page) => page.evaluate(() => [...document.body.classList]);
 
 async function centerOf(page: Page, selector: string, index = 0) {
@@ -228,5 +252,62 @@ test.describe('TC-08 dynamic eligibility (real browser, simulated input capabili
     await setMouse(page);
     await expect(page.getByTestId('trial-app')).toBeVisible();
     expect(requests).toHaveLength(1);
+  });
+
+  // OR-24 N-9（OR-20：圓形選單保留）：長按計時器與選單在卸載時被清除。
+  test('N-9a: losing eligibility while the radial menu is open removes it and it does not come back', async ({ page }) => {
+    await openTrial(page);
+    const spot = await columnPoint(page, 0.5);
+    await page.mouse.move(spot.x, spot.y);
+    await page.mouse.down();
+    await expect(page.locator('.radial-palette')).toBeVisible(); // 長按 250ms 後出現
+
+    await setTouch(page);
+    await expect(page.getByTestId('trial-app')).toHaveCount(0);
+    expect(await listenerCount(page)).toBe(0);
+    await page.mouse.up();
+
+    await setMouse(page);
+    await expect(page.getByTestId('trial-app')).toBeVisible();
+    await expect(page.locator('.radial-palette')).toHaveCount(0);
+    await expect(page.getByTestId('event-block')).toHaveCount(0);
+  });
+
+  test('N-9b: losing eligibility during the 250ms long press cancels the timer, so no menu appears later', async ({ page }) => {
+    await openTrial(page);
+    const spot = await columnPoint(page, 0.5);
+    await page.mouse.move(spot.x, spot.y);
+    await page.mouse.down();
+    expect(await pendingTimers(page)).toBeGreaterThan(0); // 長按計時器確實在跑（避免測試空轉）
+    await setTouch(page); // 計時器還沒到
+    await expect(page.getByTestId('trial-app')).toHaveCount(0);
+    expect(await pendingTimers(page)).toBe(0); // 卸載時被清掉
+    await page.waitForTimeout(600); // 超過 250ms：計時器若沒被清掉，現在會呼叫 onMenu
+    await page.mouse.up();
+
+    await setMouse(page);
+    await expect(page.getByTestId('trial-app')).toBeVisible();
+    await page.waitForTimeout(400);
+    await expect(page.locator('.radial-palette')).toHaveCount(0);
+  });
+
+  // OR-24 N-11：選取由 store 擁有，卸載前後保留（剪貼簿暫不開放，只記錄選取）。
+  test('N-11: a selected block is still selected after losing and regaining eligibility', async ({ page }) => {
+    await openTrial(page);
+    await dropBall(page, 0, 0.3);
+    const block = page.getByTestId('event-block');
+    await expect(block).toHaveCount(1);
+    await expect(block).toHaveAttribute('data-selected', 'false');
+
+    const center = await centerOf(page, '[data-testid="event-block"]');
+    await page.mouse.click(center.x, center.y);
+    await expect(block).toHaveAttribute('data-selected', 'true');
+
+    await setTouch(page);
+    await expect(page.getByTestId('trial-app')).toHaveCount(0);
+    await setMouse(page);
+    await expect(page.getByTestId('trial-app')).toBeVisible();
+    await expect(block).toHaveCount(1);
+    await expect(block).toHaveAttribute('data-selected', 'true');
   });
 });

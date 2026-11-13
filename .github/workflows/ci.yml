@@ -1,4 +1,4 @@
-# issue 012（部分）：型別檢查、lint、單元測試、建置。
+# issue 012（部分）：型別檢查、lint、單元測試、建置；e2e 是另一個 job（Chromium）。
 # 不含 INV-11 鎖定檔比對（共用模組尚未存在）、Vercel 與任何憑證（D-11 未核准）。
 name: CI
 
@@ -29,3 +29,18 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
+  # Playwright e2e（只跑 Chromium，見 playwright.config.ts）。瀏覽器用官方指令安裝，不新增第三方 Action。
+  # 不用 secrets，權限沿用最上層的 contents: read。
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4（2026-11-11 解析）
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4（2026-11-11 解析）
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e

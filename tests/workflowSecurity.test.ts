@@ -32,3 +32,40 @@ describe.each(Object.entries(workflows))('%s', (_name, text) => {
     expect(text).not.toMatch(/pull_request_target/);
   });
 });
+
+// issue 012｜e2e 納入 CI。預期規則是字面常數：瀏覽器用官方指令安裝（不新增第三方 Action），
+// 瀏覽器只裝 Chromium（playwright.config.ts 只跑 Chromium），e2e 是獨立 job，不拖慢也不遮蔽型別檢查與單元測試。
+// 只檢查 workflow 檔文字；GitHub 上的實際執行要看 run 結果。
+describe('ci.yml runs the Playwright e2e suite', () => {
+  // 取出某個 job 的內容：從 "  <name>:" 那一行之後，到下一個縮排只有兩格的 key（或檔尾）。
+  function jobBody(name: string): string {
+    const lines = ci.replace(/\r\n/g, '\n').split('\n');
+    const start = lines.findIndex((line) => line === `  ${name}:`);
+    if (start === -1) return '';
+    const body: string[] = [];
+    for (const line of lines.slice(start + 1)) {
+      if (line !== '' && !line.startsWith('   ')) break;
+      body.push(line);
+    }
+    return body.join('\n');
+  }
+  const e2eJob = jobBody('e2e');
+
+  it('has an e2e job separate from the check job', () => {
+    expect(e2eJob).not.toBe('');
+    expect(jobBody('check')).not.toBe('');
+    expect(jobBody('check')).not.toContain('test:e2e');
+  });
+
+  it('installs dependencies without lifecycle scripts, installs only Chromium, then runs npm run test:e2e', () => {
+    expect(e2eJob).toContain('npm ci --ignore-scripts');
+    expect(e2eJob).toContain('npx playwright install --with-deps chromium');
+    expect(e2eJob).toContain('npm run test:e2e');
+    expect(e2eJob.indexOf('playwright install')).toBeLessThan(e2eJob.indexOf('npm run test:e2e'));
+    expect(e2eJob.match(/playwright install/g)).toHaveLength(1);
+  });
+
+  it('has its own timeout', () => {
+    expect(e2eJob).toMatch(/timeout-minutes:\s*\d+/);
+  });
+});
