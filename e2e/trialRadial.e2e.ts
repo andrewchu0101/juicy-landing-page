@@ -1,7 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 
-// 試用的兩個體驗之一（專案擁有者 2026-11-13）：長按空白處叫出六顆球，hover 時果凍晃動；只展示，不建立區塊。
-// 另一個體驗（側邊三顆球拖放）由 trialDemo.e2e.ts 驗證。預期色碼是 Calendar 固定 commit 預設六顆球的字面值。
+// 線上試用的兩個階段式區塊（專案擁有者 2026-11-14）：
+//   步驟 1「試著長按」：在空白區域長按 → 六顆球、hover 時果凍晃動；只展示，不建立區塊。
+//   步驟 2「拖球建立時間區塊」：原本的試用，長按日曆空白處出的是三顆球，離開球就拖曳、放開就建立區塊。
+// 側邊三顆球拖放與拖移區塊由 trialDemo.e2e.ts 驗證。預期色碼是 Calendar 固定 commit 預設六顆球的字面值。
 test.use({ locale: 'en-US', viewport: { width: 1280, height: 1600 } });
 
 const SIX_COLORS = ['rgb(233, 139, 135)', 'rgb(131, 185, 208)', 'rgb(169, 201, 141)', 'rgb(156, 145, 206)', 'rgb(233, 185, 110)', 'rgb(229, 165, 189)'];
@@ -12,10 +14,11 @@ async function openTrial(page: Page) {
   await page.locator('#trial').scrollIntoViewIfNeeded();
 }
 
-async function holdOnCalendar(page: Page) {
-  const box = await page.getByTestId('calendar-columns').boundingBox();
-  if (!box) throw new Error('calendar not visible');
-  const at = { x: box.x + box.width / 2, y: box.y + 150 };
+/** 步驟 1 的空白區域：在中央按住不放，等六顆球出現。 */
+async function holdOnPad(page: Page) {
+  const box = await page.getByTestId('radial-demo-pad').boundingBox();
+  if (!box) throw new Error('step 1 pad not visible');
+  const at = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
   await page.mouse.move(at.x, at.y);
   await page.mouse.down();
   await expect(page.locator('.radial-palette')).toBeVisible(); // 長按 250ms 後出現
@@ -24,10 +27,66 @@ async function holdOnCalendar(page: Page) {
   return at;
 }
 
-test.describe('radial menu: six balls and hover wobble', () => {
-  test('holding an empty spot shows six balls with the Calendar colors and English names', async ({ page }) => {
+/** 步驟 2 的日曆：在第一欄上方按住不放，等三顆球出現。 */
+async function holdOnCalendar(page: Page) {
+  const box = await page.getByTestId('calendar-columns').boundingBox();
+  if (!box) throw new Error('calendar not visible');
+  const at = { x: box.x + box.width / 2, y: box.y + 150 };
+  await page.mouse.move(at.x, at.y);
+  await page.mouse.down();
+  await expect(page.locator('.radial-palette')).toBeVisible();
+  await page.locator('.radial-choice').last().evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)).then(() => undefined));
+  return at;
+}
+
+test.describe('two staged blocks', () => {
+  test('step 1 comes before step 2; each has its own heading and its own content', async ({ page }) => {
+    await openTrial(page);
+
+    await expect(page.locator('#trial-step-1 h3')).toHaveText('Step 1: Try a long press');
+    await expect(page.locator('#trial-step-2 h3')).toHaveText('Step 2: Drag a ball to make a time block');
+    const [first, second] = await Promise.all([page.locator('#trial-step-1').boundingBox(), page.locator('#trial-step-2').boundingBox()]);
+    expect(first!.y + first!.height).toBeLessThanOrEqual(second!.y);
+    await expect(page.locator('#trial-step-1').getByTestId('radial-demo-pad')).toBeVisible();
+    await expect(page.locator('#trial-step-1').getByTestId('calendar-columns')).toHaveCount(0);
+    await expect(page.locator('#trial-step-2').getByTestId('calendar-columns')).toBeVisible();
+    await expect(page.locator('#trial-step-2').getByTestId('template-ball')).toHaveCount(3);
+    await expect(page.locator('#trial-step-2').getByTestId('radial-demo-pad')).toHaveCount(0);
+  });
+});
+
+test.describe('step 2: the original trial with three balls', () => {
+  test('holding an empty spot on the calendar brings out the three trial balls (not six)', async ({ page }) => {
     await openTrial(page);
     await holdOnCalendar(page);
+
+    await expect(page.locator('.radial-choice')).toHaveCount(3);
+    await expect(page.locator('.radial-choice span')).toHaveText(['Focus', 'Rest', 'Chore']);
+    await page.mouse.up();
+  });
+
+  test('leaving a ball takes it and dropping it on the calendar creates a block (the same as before)', async ({ page }) => {
+    await openTrial(page);
+    await holdOnCalendar(page);
+    const ball = await page.locator('.radial-choice .ball').first().boundingBox();
+    const columns = await page.getByTestId('calendar-columns').boundingBox();
+    if (!ball || !columns) throw new Error('not visible');
+
+    await page.mouse.move(ball.x + ball.width / 2, ball.y + ball.height / 2, { steps: 6 }); // hover 只是標示
+    await expect(page.locator('.radial-hovered')).toHaveCount(1);
+    await page.mouse.move(columns.x + columns.width / 6, columns.y + 40, { steps: 12 }); // 離開球 → 選中並開始拖曳
+    await expect(page.locator('.radial-palette')).toHaveCount(0);
+    await page.mouse.up();
+
+    await expect(page.getByTestId('event-block')).toHaveCount(1);
+    await expect(page.getByTestId('event-title')).toHaveText('Focus');
+  });
+});
+
+test.describe('step 1: six balls and hover wobble', () => {
+  test('holding an empty spot shows six balls with the Calendar colors and English names', async ({ page }) => {
+    await openTrial(page);
+    await holdOnPad(page);
 
     const choices = page.locator('.radial-choice');
     await expect(choices).toHaveCount(6);
@@ -38,9 +97,23 @@ test.describe('radial menu: six balls and hover wobble', () => {
     await page.mouse.up();
   });
 
+  test('the hint is shown before the long press and hidden while the menu is open, without moving the layout', async ({ page }) => {
+    await openTrial(page);
+    const hint = page.getByTestId('radial-demo-pad').locator('span');
+    await expect(hint).toHaveText('Press and hold here');
+    await expect(hint).toBeVisible();
+    const before = await page.getByTestId('radial-demo-pad').boundingBox();
+
+    await holdOnPad(page);
+    await expect(hint).toBeHidden();
+    expect(await page.getByTestId('radial-demo-pad').boundingBox()).toEqual(before);
+    await page.mouse.up();
+    await expect(hint).toBeVisible();
+  });
+
   test('hovering a ball makes only that ball wobble, and leaving it stops the wobble', async ({ page }) => {
     await openTrial(page);
-    await holdOnCalendar(page);
+    await holdOnPad(page);
     const second = await page.locator('.radial-choice .ball').nth(1).boundingBox();
     if (!second) throw new Error('ball not visible');
 
@@ -58,7 +131,7 @@ test.describe('radial menu: six balls and hover wobble', () => {
 
   test('the wobble grows out of a perfect circle (no pop on hover) and the hovered ball keeps clear of its name', async ({ page }) => {
     await openTrial(page);
-    await holdOnCalendar(page);
+    await holdOnPad(page);
     const second = await page.locator('.radial-choice .ball').nth(1).boundingBox();
     if (!second) throw new Error('ball not visible');
     await page.mouse.move(second.x + second.width / 2, second.y + second.height / 2, { steps: 6 });
@@ -89,7 +162,7 @@ test.describe('radial menu: six balls and hover wobble', () => {
 
   test('releasing closes the menu and never creates a block, even right after hovering a ball', async ({ page }) => {
     await openTrial(page);
-    await holdOnCalendar(page);
+    await holdOnPad(page);
     const first = await page.locator('.radial-choice .ball').first().boundingBox();
     if (!first) throw new Error('ball not visible');
     await page.mouse.move(first.x + first.width / 2, first.y + first.height / 2, { steps: 6 });
@@ -102,13 +175,16 @@ test.describe('radial menu: six balls and hover wobble', () => {
 
   test('Escape closes the menu', async ({ page }) => {
     await openTrial(page);
-    await holdOnCalendar(page);
+    await holdOnPad(page);
     await page.keyboard.press('Escape');
     await expect(page.locator('.radial-palette')).toHaveCount(0);
     await page.mouse.up();
   });
 
-  test('the three side balls still create blocks by dragging, in the new Calendar colors', async ({ page }) => {
+});
+
+test.describe('step 2: side balls', () => {
+  test('the three side balls create blocks by dragging, in the Calendar colors', async ({ page }) => {
     await openTrial(page);
     const balls = page.getByTestId('template-ball');
     const colors = await balls.evaluateAll((els) => els.map((el) => getComputedStyle(el).backgroundColor));

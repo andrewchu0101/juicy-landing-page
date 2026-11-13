@@ -7,7 +7,10 @@ export type TrialPhase = 'preview' | 'loading' | 'active' | 'dormant';
 export type TrialModule = {
   /** 初始化試用（只在第一次成功；之後再呼叫應直接返回）。 */
   ensureReady(options?: { language?: SiteLanguage }): Promise<void>;
+  /** 步驟 2：原本的試用（日曆、三顆球、長按出三顆球可拖）。 */
   TrialShell: ComponentType;
+  /** 步驟 1：試著長按（六顆展示球、hover 晃動，只展示）。 */
+  RadialShell: ComponentType;
 };
 
 export type TrialLoader = {

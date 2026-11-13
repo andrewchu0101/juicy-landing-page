@@ -25,7 +25,8 @@ test.describe('TC-07b touch / non-qualifying environment', () => {
     await page.waitForLoadState('networkidle');
 
     expect(await page.evaluate(() => matchMedia('(pointer: fine) and (hover: hover)').matches)).toBe(false);
-    await expect(page.getByText(PREVIEW_LABEL)).toBeVisible();
+    await expect(page.getByText(PREVIEW_LABEL)).toHaveCount(2); // 兩個階段式區塊各有一張靜態預覽（2026-11-14）
+    await expect(page.getByText(PREVIEW_LABEL).first()).toBeVisible();
     expect(trialRequests).toEqual([]);
     await expect(page.locator('#download')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

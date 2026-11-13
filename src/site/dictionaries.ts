@@ -10,6 +10,10 @@ export type SiteDictionary = {
   trial: {
     heading: string;
     note: string;
+    steps: {
+      one: { heading: string; instruction: string; hint: string; menuAria: string; preview: { label: string; caption: string; image: { src: string; alt: string } } };
+      two: { heading: string; instruction: string };
+    };
     preview: { label: string; caption: string; image: { src: string; alt: string } };
     app: { ballAria: string; radialAria: string; hiddenOne: string; hiddenMany: string };
   };
@@ -34,10 +38,29 @@ const EN: SiteDictionary = {
   trial: {
     heading: 'Try it online',
     note: 'Nothing you do in the trial is uploaded, and it disappears when you reload the page.',
+    steps: {
+      one: {
+        heading: 'Step 1: Try a long press',
+        instruction: 'Press and hold on the empty area below. Six balls pop out; move the pointer over one to see it wobble.',
+        hint: 'Press and hold here',
+        menuAria: 'Six demo balls; hover one to see it wobble',
+        preview: {
+          label: 'Product preview',
+          caption: 'Hold an empty spot and six balls pop out; hover one to see it wobble. Use a computer with a mouse to try it interactively.',
+          image: {
+            src: '/preview/radial-en.png',
+            alt: 'Screenshot after a long press: six balls in a circle (Coding, Study, Exercise, Reading, Rest and Personal), with the Study ball wobbling.',
+          },
+        },
+      },
+      two: {
+        heading: 'Step 2: Drag a ball to make a time block',
+        instruction: 'Drag a ball onto the calendar to create a time block, and drag a block to move it. Holding an empty spot on the calendar also brings out the balls.',
+      },
+    },
     preview: {
       label: 'Product preview',
-      // 暫定英文（UI-03：英文版圖下說明文字待定，需專案擁有者確認）。
-      caption: 'Two things to try: hold an empty spot on the calendar and six balls pop out, then hover one to see it wobble; drag one of the three balls on the left onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
+      caption: 'Drag a ball onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
       image: {
         src: '/preview/trial-en.png',
         alt: 'Screenshot of the trial: three balls (light blue, light green, apricot) on the left, and a calendar with three consecutive days, each 10:00 AM to 3:00 PM, with one light blue time block from 10:00 AM to 12:00 PM on the first day.',
@@ -45,7 +68,7 @@ const EN: SiteDictionary = {
     },
     app: {
       ballAria: 'Drag {name} onto the calendar',
-      radialAria: 'Six balls shown by holding an empty spot on the calendar; hover over one to see it wobble',
+      radialAria: 'Hold and drag a ball onto the calendar',
       hiddenOne: '1 event outside the visible hours',
       hiddenMany: '{count} events outside the visible hours',
     },

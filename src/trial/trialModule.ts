@@ -3,6 +3,7 @@
 import type { TrialModule } from './trialLoader';
 import { createTrialRuntime } from './trialRuntime';
 import { trialStore } from './trialStore';
+import { RadialDemo } from './ui/RadialDemo';
 import { TrialApp } from './ui/TrialApp';
 
 // 初始化只做一次（INV-02）：再次呼叫（例如資格消失又恢復）直接返回，不會清掉訪客已放的區塊。
@@ -11,6 +12,7 @@ const runtime = createTrialRuntime({ store: trialStore, now: () => new Date() })
 const trialModule: TrialModule = {
   ensureReady: (options) => runtime.ensureReady(options),
   TrialShell: TrialApp,
+  RadialShell: RadialDemo,
 };
 
 export default trialModule;

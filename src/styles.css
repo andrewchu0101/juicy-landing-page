@@ -168,23 +168,28 @@ p {
 }
 
 /* 互動試用載入後，試用區自己就是那塊容器，不再顯示下面的留白 */
-#trial[data-trial-active]::after {
-  display: none;
-}
-
 #trial[data-trial-active] > p {
   margin-bottom: 1.25rem;
 }
 
-#trial::after {
-  content: '';
-  display: block;
-  min-height: 16rem;
-  margin-top: 1.25rem;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: 0 6px 24px -12px rgb(46 42 38 / 0.12);
+/* 兩個階段式的區塊（專案擁有者 2026-11-14）：步驟 1 試著長按、步驟 2 拖球建立時間區塊。每個區塊有自己的標題、說明與內容，
+   所以不再需要原本在整個試用區下方的那塊留白。視覺細節由專案擁有者另以 impeccable 調整。 */
+.trial-step {
+  margin-top: 2.75rem;
+}
+
+.trial-step:first-of-type {
+  margin-top: 1.5rem;
+}
+
+.trial-step h3 {
+  margin: 0 0 0.5rem;
+}
+
+.trial-step > p {
+  margin-bottom: 1.25rem;
+  color: var(--muted-text);
+  font-size: 0.9rem;
 }
 
 /* 連結 */

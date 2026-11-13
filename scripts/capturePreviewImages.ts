@@ -12,6 +12,10 @@ const LANGUAGES = [
   { locale: 'zh-TW', file: 'trial-zh-TW.png', ogFile: 'og-zh-TW.png' },
   { locale: 'en-US', file: 'trial-en.png', ogFile: 'og-en.png' },
 ] as const;
+const RADIAL_IMAGES = [
+  { locale: 'zh-TW', radialFile: 'radial-zh-TW.png' },
+  { locale: 'en-US', radialFile: 'radial-en.png' },
+] as const;
 // 分享圖（issue 013）：社群平台建議 1.91:1。同一個畫面（不是另外畫的圖）：試用區是 640×400 CSS 像素、置中，
 // 視窗寬 800、scale 1.5，取 800×420 CSS 像素（試用區上下各留 10px）→ 剛好 1200×630，試用區約佔 80% 寬。
 // （試過 fullPage 加 clip：試用區超出頁面內容欄，被截成 920 寬；所以視窗要夠大、不用 fullPage，直接以視窗座標裁切。）
@@ -56,6 +60,32 @@ try {
       if (clip.x < 0 || clip.y < 0 || clip.y + clip.height > OG.viewport.height) throw new Error(`share image clip outside the viewport: ${JSON.stringify(clip)}`);
       await page.screenshot({ path: `${OUT}/${ogFile}`, animations: 'disabled', clip });
     });
+  }
+
+  // 步驟 1「試著長按」的靜態預覽（專案擁有者 2026-11-14）：在空白區域長按、六顆球出現，第二顆（學習 Study）hover 中、
+  // 果凍晃動停在固定的時間點（2.6 秒）。取空白區域本身（640×256 CSS 像素，scale 2 → 1280×512）。
+  for (const { locale, radialFile } of RADIAL_IMAGES) {
+    const context = await browser.newContext({ locale, viewport: { width: 800, height: 1400 }, deviceScaleFactor: 2 });
+    const page = await context.newPage();
+    await page.goto(BASE);
+    const pad = page.getByTestId('radial-demo-pad');
+    await pad.waitFor();
+    await pad.scrollIntoViewIfNeeded();
+    const box = await pad.boundingBox();
+    if (!box) throw new Error('step 1 pad not visible');
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.locator('.radial-palette').waitFor();
+    await page.locator('.radial-choice').last().evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)).then(() => undefined));
+    const second = await page.locator('.radial-choice .ball').nth(1).boundingBox();
+    if (!second) throw new Error('radial ball not visible');
+    await page.mouse.move(second.x + second.width / 2, second.y + second.height / 2, { steps: 6 });
+    await page.locator('.radial-hovered').waitFor();
+    await page.waitForTimeout(400);
+    await page.evaluate(() => document.querySelector('.radial-hovered .ball')!.getAnimations().forEach((a) => { a.pause(); a.currentTime = 2600; }));
+    await page.screenshot({ path: `${OUT}/${radialFile}`, clip: box });
+    console.log(`${locale}: step 1 preview ${box.width}x${box.height} css px`);
+    await context.close();
   }
 } finally {
   await browser.close();

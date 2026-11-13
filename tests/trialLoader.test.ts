@@ -159,7 +159,7 @@ describe('TrialLoader passes the site language to ensureReady (seed ball names)'
     let language: 'zh-TW' | 'en' = 'zh-TW';
     const seen: unknown[] = [];
     const loader = createTrialLoader({
-      loadModule: async () => ({ TrialShell: () => null, ensureReady: async (options) => void seen.push(options) }),
+      loadModule: async () => ({ TrialShell: () => null, RadialShell: () => null, ensureReady: async (options) => void seen.push(options) }),
       getLanguage: () => language,
     });
 

@@ -33,6 +33,7 @@ export function createFakeTrial(options: { hold?: boolean; failInit?: boolean } 
   const pending: Deferred<TrialModule>[] = [];
   const module: TrialModule = {
     TrialShell: () => null,
+    RadialShell: () => null,
     ensureReady: async () => {
       inits += 1;
       if (options.failInit) throw new Error('init failed');

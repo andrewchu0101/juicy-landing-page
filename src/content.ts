@@ -9,9 +9,31 @@ export const COPY = {
   trial: {
     heading: '線上試用',
     note: '試用內容不會上傳，重新整理頁面就會消失',
+    // 專案擁有者 2026-11-14：線上試用分成兩個階段式的區塊。步驟 1 長按出六顆球、hover 晃動（只展示）；步驟 2 是原本的試用，只有三顆球。
+    steps: {
+      one: {
+        heading: '步驟 1：試著長按',
+        instruction: '在下面的空白處按住不放，六顆球會跑出來；把滑鼠移到球上，看它晃動。',
+        hint: '在這裡按住不放',
+        menuAria: '六顆展示球，滑過去看球的晃動',
+        preview: {
+          label: '產品預覽',
+          caption: '長按空白處，六顆球會跑出來，滑過去看它晃動。請使用電腦及滑鼠體驗互動試用。',
+          // 截自實際運作的互動版（scripts/capturePreviewImages.ts）。
+          image: {
+            src: '/preview/radial-zh-TW.png',
+            alt: '長按後的畫面截圖：六顆球圍成一圈，分別是寫程式、學習、運動、閱讀、休息、個人，其中「學習」那一顆正在晃動。',
+          },
+        },
+      },
+      two: {
+        heading: '步驟 2：拖球建立時間區塊',
+        instruction: '把球拖進日曆就能建立時間區塊，也可以拖移區塊；長按日曆空白處同樣會跑出球。',
+      },
+    },
     preview: {
       label: '產品預覽',
-      caption: '兩個體驗：長按日曆空白處，六顆球會跑出來，滑過去看它晃動；把左側三顆球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
+      caption: '將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
       // 截自實際運作的互動版（scripts/capturePreviewImages.ts）；種子球名稱若改了要重截。
       image: {
         src: '/preview/trial-zh-TW.png',
@@ -21,7 +43,7 @@ export const COPY = {
     // 試用區內的 App 介面文字（沿用 Calendar 的字典用語：palette.dragAria、radial.aria、grid.hiddenOne／Many）。
     app: {
       ballAria: '將 {name} 拖到日曆上',
-      radialAria: '長按日曆空白處叫出的六顆球，滑過去看球的晃動',
+      radialAria: '按住球並拖到日曆上',
       hiddenOne: '有 1 個事件在可見時段之外',
       hiddenMany: '有 {count} 個事件在可見時段之外',
     },
