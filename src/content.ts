@@ -11,17 +11,17 @@ export const COPY = {
     note: '試用內容不會上傳，重新整理頁面就會消失',
     preview: {
       label: '產品預覽',
-      caption: '將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
+      caption: '兩個體驗：長按日曆空白處，六顆球會跑出來，滑過去看它晃動；把左側三顆球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
       // 截自實際運作的互動版（scripts/capturePreviewImages.ts）；種子球名稱若改了要重截。
       image: {
         src: '/preview/trial-zh-TW.png',
-        alt: '試用畫面截圖：左側有藍、綠、橘三顆球，右側日曆有連續三天，每天 10:00 到 15:00，第一天上午 10:00 到下午 12:00 有一個藍色的「專注 Focus」時間區塊。',
+        alt: '試用畫面截圖：左側有淺藍、淺綠、杏橘三顆球，右側日曆有連續三天，每天 10:00 到 15:00，第一天上午 10:00 到下午 12:00 有一個淺藍色的「專注 Focus」時間區塊。',
       },
     },
     // 試用區內的 App 介面文字（沿用 Calendar 的字典用語：palette.dragAria、radial.aria、grid.hiddenOne／Many）。
     app: {
       ballAria: '將 {name} 拖到日曆上',
-      radialAria: '按住球並拖到日曆上',
+      radialAria: '長按日曆空白處叫出的六顆球，滑過去看球的晃動',
       hiddenOne: '有 1 個事件在可見時段之外',
       hiddenMany: '有 {count} 個事件在可見時段之外',
     },

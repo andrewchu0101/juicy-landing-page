@@ -1,7 +1,7 @@
 // MOD-03：buildTrialWorkspace（DATA-01～03）。純函式，不讀系統時鐘。
 // 注意：WorkspaceData 的正式型別與 templateSchema 由共用模組擁有（尚未可取得，見 issue 005 Blocked by）；
 // 這裡的本地型別只是暫時的結構描述，接入共用模組後改為匯入。
-// 種子名稱與色碼是占位（OR-12 待確認），不代表正式內容。
+// 種子名稱是占位（OR-12 待確認）；色碼 2026-11-13 起用 Calendar 柔和色票的 Sky、Sage、Peach（專案擁有者）。
 import type { SiteLanguage } from '../site/webLanguageBackend';
 
 export type TrialSettings = {
@@ -42,9 +42,9 @@ export function buildTrialWorkspace(now: Date, language: SiteLanguage = 'zh-TW')
   return {
     meta: { name: 'trial', createdAt: now.toISOString() },
     templates: [
-      { id: 'focus', name: focus, color: '#3B82F6', defaultDuration: 120, order: 0 },
-      { id: 'rest', name: rest, color: '#22C55E', defaultDuration: 120, order: 1 },
-      { id: 'chore', name: chore, color: '#F97316', defaultDuration: 120, order: 2 },
+      { id: 'focus', name: focus, color: '#83B9D0', defaultDuration: 120, order: 0 },
+      { id: 'rest', name: rest, color: '#A9C98D', defaultDuration: 120, order: 1 },
+      { id: 'chore', name: chore, color: '#E9B96E', defaultDuration: 120, order: 2 },
     ],
     events: {},
     settings: {

@@ -35,7 +35,7 @@ describe('trial store', () => {
       id,
       templateId: 'focus',
       title: '專注 Focus',
-      color: '#3B82F6',
+      color: '#83B9D0',
       startAt: at(12, 30).toISOString(),
       endAt: at(14, 30).toISOString(),
     });

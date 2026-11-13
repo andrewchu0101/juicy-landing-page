@@ -37,15 +37,15 @@ const EN: SiteDictionary = {
     preview: {
       label: 'Product preview',
       // 暫定英文（UI-03：英文版圖下說明文字待定，需專案擁有者確認）。
-      caption: 'Drag a ball onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
+      caption: 'Two things to try: hold an empty spot on the calendar and six balls pop out, then hover one to see it wobble; drag one of the three balls on the left onto the calendar to create a time block. Use a computer with a mouse to try it interactively.',
       image: {
         src: '/preview/trial-en.png',
-        alt: 'Screenshot of the trial: three balls (blue, green, orange) on the left, and a calendar with three consecutive days, each 10:00 AM to 3:00 PM, with one blue time block from 10:00 AM to 12:00 PM on the first day.',
+        alt: 'Screenshot of the trial: three balls (light blue, light green, apricot) on the left, and a calendar with three consecutive days, each 10:00 AM to 3:00 PM, with one light blue time block from 10:00 AM to 12:00 PM on the first day.',
       },
     },
     app: {
       ballAria: 'Drag {name} onto the calendar',
-      radialAria: 'Hold and drag a ball onto the calendar',
+      radialAria: 'Six balls shown by holding an empty spot on the calendar; hover over one to see it wobble',
       hiddenOne: '1 event outside the visible hours',
       hiddenMany: '{count} events outside the visible hours',
     },

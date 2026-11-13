@@ -1,4 +1,5 @@
-// 試用區的組裝（Calendar 的 AppShell 去掉工具列、右側面板與設定）。長按出球、拖球放置、拖移區塊。
+// 試用區的組裝（Calendar 的 AppShell 去掉工具列、右側面板與設定）。兩個體驗：長按出六顆球看 hover 晃動（只展示），
+// 以及把側邊三顆球拖放建立區塊、拖移區塊。
 // 手勢的規則在 gestures/（不依賴 DOM，有單元測試）；這裡只負責把視窗的指標事件接上去，並顯示結果。
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from 'react';
 import { useSiteLanguage } from '../../site/LanguageContext';
@@ -8,6 +9,7 @@ import { createBallDrag, type BallDragView } from '../gestures/ballDrag';
 import { createBallPress } from '../gestures/ballPress';
 import { createEventMove, type MoveDraft } from '../gestures/eventMove';
 import { createRadial, type RadialMenu } from '../gestures/radial';
+import { demoRadialBalls } from '../radialBalls';
 import { pointerToTime, type GridGeometry, type Point } from '../engine/pointer';
 import type { TrialEvent } from '../store';
 import { trialStore } from '../trialStore';
@@ -45,9 +47,11 @@ export function TrialApp() {
   );
 
   // 手勢的回呼讀「最新」的資料，而不是建立當時的快照。
-  const latest = useRef({ days, timeline, templates, magnetEnabled: state.settings.magnetEnabled });
+  // 圓形選單的六顆展示球依目前網站語言命名（選單是暫時的，不像種子球名稱要固定）。
+  const radialTemplates = useMemo(() => demoRadialBalls(language), [language]);
+  const latest = useRef({ days, timeline, radialTemplates, magnetEnabled: state.settings.magnetEnabled });
   useEffect(() => {
-    latest.current = { days, timeline, templates, magnetEnabled: state.settings.magnetEnabled };
+    latest.current = { days, timeline, radialTemplates, magnetEnabled: state.settings.magnetEnabled };
   });
 
   const [ballView, setBallView] = useState<BallDragView>(INITIAL_VIEW);
@@ -77,17 +81,8 @@ export function TrialApp() {
     });
     const ballPress = createBallPress(ballDrag);
     const radial = createRadial({
-      templates: () => latest.current.templates,
+      templates: () => latest.current.radialTemplates,
       viewport: () => ({ width: window.innerWidth, height: window.innerHeight }),
-      drag: {
-        start: (id, point) => {
-          ballDrag.start(id, point);
-          ballDrag.move(id, point);
-        },
-        move: ballDrag.move,
-        end: ballDrag.end,
-        cancel: () => ballDrag.cancel(false),
-      },
       onMenu: setMenu,
     });
     return { ballDrag, ballPress, radial };
@@ -121,7 +116,7 @@ export function TrialApp() {
       eventMove.move(event.pointerId, at(event));
     };
     const up = (event: PointerEvent) => {
-      radial.up(event.pointerId, at(event));
+      radial.up(event.pointerId);
       ballPress.up(event.pointerId, at(event));
       eventMove.up(event.pointerId);
     };
@@ -215,7 +210,7 @@ export function TrialApp() {
       <BallOverlay template={dragging} view={ballView} />
       <DropSplash splash={ballView.splash} />
       <SplitBurst burst={ballView.burst} />
-      <RadialPalette menu={menu} templates={templates} label={copy.trial.app.radialAria} />
+      <RadialPalette menu={menu} templates={radialTemplates} label={copy.trial.app.radialAria} />
     </div>
   );
 }
