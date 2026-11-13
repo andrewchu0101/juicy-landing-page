@@ -28,7 +28,7 @@
 - **文件同步：** Brief D-02、PRD、SAD、SRS（OR-12）、SDS、測試計畫、`07-release-checklist.md` 的待決與占位敘述已改為已決；`issues/001-skeleton`、`010`、`013` 已更新。
 - **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（34 檔 341 通過）、`build`、`test:e2e`（Chromium 34 項）、`npm audit` 0 全數通過。
 - **專案擁有者的決定（2026-11-13，再稍晚）：** D-03 **不做流量統計**（OR-10、TC-06e 隨之結案／不適用）；D-04 Windows 乾淨電腦驗證排在 **2026-11-14**；六顆球目前**只展示、不能拖出區塊**（再次確認）；社群平台預覽**不做**；GitHub 帳號 2FA 已啟用；Calendar release 要設為不可竄改（待完成）；D-10 Calendar 授權：**選 MIT**；依賴授權已查（`docs/evidence/010-calendar-dependency-licenses-2026-11-13.md`），沒有衝突，但發布的 zip 沒有隨附第三方授權聲明；Calendar 圖示是專案擁有者自己的作品（陳述）。專案擁有者隨後授權修改 Calendar：`LICENSE`（MIT）、README 授權章節、`THIRD-PARTY-LICENSES.md`（`npm run licenses` 產生，241 個套件）、zip 組裝腳本與 NSIS `bundle.resources` 都已在 Calendar 工作樹做好，**未 commit、未 push、未發布**；已發布的 `v0.2.0-beta.3` 仍沒有授權檔，要等下次發新版（請先把 release 設成不可竄改）。
-- **待決的小事：** AC-03.2 原文要求「頁面明講網站使用哪種流量統計」，不做統計後措辭要改（建議一句「本網站不使用流量統計」），頁面目前沒有這句，我沒有自行新增。
+- **AC-03.2（2026-11-14 已做）：** 頁尾加「本網站不使用流量統計。」；英文版 `This website does not use analytics.` 是我翻的，專案擁有者只給了中文句。`tests/home.test.tsx`、`tests/languageSwitch.test.tsx`、新增 `tests/noAnalytics.test.ts`（樣式比對，擋常見統計工具與網域）。AC-03.2 原文另外要求的「桌面 App 無遙測」與「語言偏好存在訪客瀏覽器」的說明，頁面目前沒有，待確認。
 - **待你：** 合併本分支的 PR；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
 
 ### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）

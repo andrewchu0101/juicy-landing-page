@@ -80,6 +80,16 @@ describe('TC-10d footer links (AC-02.3, FR-15)', () => {
   });
 });
 
+// AC-03.2｜專案擁有者 2026-11-13：不做流量統計，頁面明講「本網站不使用流量統計。」（放在頁尾，授權連結之前）。
+describe('AC-03.2 privacy statement', () => {
+  it('says in the footer that the site does not use analytics', () => {
+    const footer = html.slice(indexOfOrFail('<footer'));
+
+    expect(footer).toContain('<p>本網站不使用流量統計。</p>');
+    expect(footer.indexOf('本網站不使用流量統計。')).toBeLessThan(footer.indexOf('<a '));
+  });
+});
+
 // UI-01｜網站自己的控制項可用鍵盤操作並有可辨識名稱。
 // 原生 <a href> 預設可聚焦、可用 Enter 啟動；此處驗證每個連結都有 href、非空名稱，且沒有正的 tabindex。
 describe('UI-01 keyboard operable controls with names', () => {

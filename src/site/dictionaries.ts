@@ -22,7 +22,7 @@ export type SiteDictionary = {
     factsHeading: string;
     facts: readonly { id: string; text: string }[];
   };
-  footer: { license: string; trademarks: string };
+  footer: { privacy: string; license: string; trademarks: string };
 };
 
 const EN: SiteDictionary = {
@@ -71,6 +71,7 @@ const EN: SiteDictionary = {
     ],
   },
   footer: {
+    privacy: 'This website does not use analytics.',
     license: 'LICENSE',
     trademarks: 'TRADEMARKS.md',
   },

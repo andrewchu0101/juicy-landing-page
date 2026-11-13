@@ -47,6 +47,8 @@ export const COPY = {
     ],
   },
   footer: {
+    // AC-03.2：專案擁有者 2026-11-13 決定不做流量統計，頁面明講這件事（tests/noAnalytics.test.ts 守住它是真的）。
+    privacy: '本網站不使用流量統計。',
     license: 'LICENSE',
     trademarks: 'TRADEMARKS.md',
   },
