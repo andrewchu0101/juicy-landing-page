@@ -166,7 +166,8 @@ test.describe('TC-08 dynamic eligibility (real browser, simulated input capabili
     await setTouch(page);
 
     // 8a：改顯示靜態預覽；N-8：跟著指標的球、落點預覽不殘留。
-    await expect(page.getByText(PREVIEW_LABEL)).toBeVisible();
+    await expect(page.getByText(PREVIEW_LABEL)).toHaveCount(2); // 兩個階段式區塊各有一張靜態預覽（2026-11-14）
+    await expect(page.getByText(PREVIEW_LABEL).first()).toBeVisible();
     await expect(page.getByTestId('trial-app')).toHaveCount(0);
     await expect(page.getByTestId('ball-overlay')).toHaveCount(0);
     await expect(page.getByTestId('drop-ghost')).toHaveCount(0);
@@ -247,7 +248,8 @@ test.describe('TC-08 dynamic eligibility (real browser, simulated input capabili
     release();
     await page.waitForLoadState('networkidle');
     await expect(page.getByTestId('trial-app')).toHaveCount(0);
-    await expect(page.getByText(PREVIEW_LABEL)).toBeVisible();
+    await expect(page.getByText(PREVIEW_LABEL)).toHaveCount(2); // 兩個階段式區塊各有一張靜態預覽（2026-11-14）
+    await expect(page.getByText(PREVIEW_LABEL).first()).toBeVisible();
 
     await setMouse(page);
     await expect(page.getByTestId('trial-app')).toBeVisible();

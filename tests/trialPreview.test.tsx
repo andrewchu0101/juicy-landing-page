@@ -25,6 +25,7 @@ async function render(language: SiteLanguage, ui: React.ReactElement): Promise<s
 const FAKE_MODULE: TrialModule = {
   ensureReady: async () => {},
   TrialShell: () => <div data-fake-trial="">fake trial</div>,
+  RadialShell: () => <div data-fake-radial="">fake radial</div>,
 };
 
 // TC-07b（靜態標記層）｜不符合資格時的靜態預覽容器（AC-01.6、FR-08、UI-03）
@@ -33,7 +34,7 @@ describe('TC-07b static preview shell (UI-03, FR-08)', () => {
     const html = await render('zh-TW', <TrialSection />);
 
     expect(html).toContain('產品預覽');
-    expect(html).toContain('兩個體驗：長按日曆空白處，六顆球會跑出來，滑過去看它晃動；把左側三顆球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。');
+    expect(html).toContain('將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。');
     expect(html).not.toContain('data-fake-trial');
   });
 

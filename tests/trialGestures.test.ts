@@ -428,3 +428,129 @@ describe('move a block (REUSE-03, REUSE-05)', () => {
     expect(updates).toEqual([]);
   });
 });
+
+// 步驟 2（專案擁有者 2026-11-14）：長按叫出的是試用的三顆球，離開球就選中並開始拖曳，放開就建立區塊——就是原本的試用行為。
+// 步驟 1 的六顆展示球不帶 drag，見上面的 showcase only。
+describe('radial palette with drag (PRD AC-01.4, step 2)', () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  function setup() {
+    const log: string[] = [];
+    let menu: RadialMenu | null = null;
+    const radial = createRadial({
+      templates: () => templates,
+      viewport: () => ({ width: 1000, height: 800 }),
+      drag: {
+        start: (id, p) => log.push(`start ${id} ${Math.round(p.x)},${Math.round(p.y)}`),
+        move: (id) => log.push(`move ${id}`),
+        end: (id, p) => log.push(`end ${id} ${Math.round(p.x)},${Math.round(p.y)}`),
+        cancel: () => log.push('cancel'),
+      },
+      onMenu: (next) => (menu = next),
+    });
+    return { radial, log, menu: () => menu };
+  }
+
+  it('opens the menu after holding 250ms, not before', () => {
+    const { radial, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(249);
+    expect(menu()).toBeNull();
+    vi.advanceTimersByTime(1);
+    expect(menu()?.hovered).toBe(-1);
+    expect(menu()?.positions).toHaveLength(3);
+  });
+
+  it('moving more than 6px before the menu opens cancels the long press', () => {
+    const { radial, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    radial.move(1, { x: 507, y: 400 });
+    vi.advanceTimersByTime(1000);
+    expect(menu()).toBeNull();
+  });
+
+  it('moving 6px or less keeps the long press', () => {
+    const { radial, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    radial.move(1, { x: 506, y: 400 });
+    vi.advanceTimersByTime(250);
+    expect(menu()).not.toBeNull();
+  });
+
+  it('releasing before 250ms never opens the menu', () => {
+    const { radial, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(100);
+    radial.up(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(1000);
+    expect(menu()).toBeNull();
+  });
+
+  it('hovering a ball highlights it; leaving its circle picks it and starts the drag', () => {
+    const { radial, log, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(250);
+    const second = menu()!.positions[1]!;
+    radial.move(1, { x: second.x, y: second.y });
+    expect(menu()!.hovered).toBe(1);
+    expect(log).toEqual([]);
+    radial.move(1, { x: second.x + 200, y: second.y + 200 });
+    expect(menu()).toBeNull();
+    expect(log[0]).toMatch(/^start rest /);
+  });
+
+  it('after picking, moves go to the drag and releasing drops it', () => {
+    const { radial, log, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(250);
+    const first = menu()!.positions[0]!;
+    radial.move(1, first);
+    radial.move(1, { x: 500, y: 100 });
+    radial.move(1, { x: 600, y: 300 });
+    radial.up(1, { x: 600, y: 300 });
+    expect(log).toEqual(['start focus 500,100', 'move focus', 'end focus 600,300']);
+  });
+
+  it('releasing with the menu open but nothing picked just closes it', () => {
+    const { radial, log, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(250);
+    radial.up(1, { x: 500, y: 400 });
+    expect(menu()).toBeNull();
+    expect(log).toEqual([]);
+  });
+
+  it('Escape closes the menu, or cancels a drag already started', () => {
+    const a = setup();
+    a.radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(250);
+    a.radial.escape();
+    expect(a.menu()).toBeNull();
+    expect(a.log).toEqual([]);
+
+    const b = setup();
+    b.radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(250);
+    b.radial.move(1, b.menu()!.positions[0]!);
+    b.radial.move(1, { x: 500, y: 100 });
+    b.radial.escape();
+    expect(b.log.at(-1)).toBe('cancel');
+  });
+
+  it('destroy clears a pending long press and stops an active drag (REUSE-05: unmount cleans up)', () => {
+    const { radial, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    radial.destroy();
+    vi.advanceTimersByTime(1000);
+    expect(menu()).toBeNull();
+  });
+
+  it('ignores other pointers', () => {
+    const { radial, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(250);
+    radial.up(2, { x: 500, y: 400 });
+    expect(menu()).not.toBeNull();
+  });
+});

@@ -518,3 +518,26 @@ body.trial-interacting-move * {
   100.0% { clip-path: polygon(90.0% 50.0%,94.3% 55.8%,96.5% 62.5%,95.5% 68.8%,91.6% 74.0%,85.7% 77.4%,79.3% 79.3%,73.3% 80.4%,68.3% 81.6%,63.8% 83.4%,59.5% 85.5%,54.9% 87.3%,50.0% 88.0%,45.1% 87.3%,40.5% 85.5%,36.2% 83.4%,31.7% 81.6%,26.7% 80.4%,20.7% 79.3%,14.3% 77.4%,8.4% 74.0%,4.5% 68.8%,3.5% 62.5%,5.7% 55.8%,10.0% 50.0%,15.0% 45.4%,19.2% 41.7%,21.6% 38.2%,22.3% 34.0%,22.2% 28.7%,22.7% 22.7%,24.6% 16.9%,28.3% 12.4%,33.2% 9.5%,38.8% 8.3%,44.5% 8.0%,50.0% 8.0%,55.5% 8.0%,61.2% 8.3%,66.8% 9.5%,71.7% 12.4%,75.4% 16.9%,77.3% 22.7%,77.8% 28.7%,77.7% 34.0%,78.4% 38.2%,80.8% 41.7%,85.0% 45.4%); }
 }
 @media (prefers-reduced-motion: reduce) { .radial-hovered span { transform: none; } .radial-choice span { transition: none; } .radial-hovered .ball { animation: none; will-change: auto; clip-path: none; transform: none; box-shadow: 0 3px 8px color-mix(in srgb, var(--ball-color) 38%, transparent); outline: 3px solid #2E2A26; outline-offset: 4px; } .radial-choice { animation: none; } .split-particle { display: none; } }
+
+/* 步驟 1「試著長按」的空白區域（專案擁有者 2026-11-14）：一塊像日曆區的白色面板，長按它就會跑出六顆球。高度留夠圓形選單展開。 */
+.radial-demo-pad {
+  display: flex;
+  min-height: 16rem;
+  padding-top: 0.9rem;
+  align-items: flex-start; /* 提示放在上方，不會被在中央展開的圓形選單蓋住 */
+  justify-content: center;
+  border: 1px dashed var(--color-line-strong);
+  border-radius: 1rem;
+  background: var(--color-surface);
+  color: var(--color-muted-text);
+  font-size: 0.9rem;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+/* 六顆球的雙語名稱（例如「寫程式 Coding」）在 56px 寬的欄位裡會折成兩行並壓到鄰近的球；步驟 1 的區域內改成單行、置中。 */
+.radial-demo .radial-choice span {
+  white-space: nowrap;
+  text-align: center;
+}

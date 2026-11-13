@@ -9,9 +9,31 @@ export const COPY = {
   trial: {
     heading: '線上試用',
     note: '試用內容不會上傳，重新整理頁面就會消失',
+    // 專案擁有者 2026-11-14：線上試用分成兩個階段式的區塊。步驟 1 長按出六顆球、hover 晃動（只展示）；步驟 2 是原本的試用，只有三顆球。
+    steps: {
+      one: {
+        heading: '步驟 1：試著長按',
+        instruction: '在下面的空白處按住不放，六顆球會跑出來；把滑鼠移到球上，看它晃動。',
+        hint: '在這裡按住不放',
+        menuAria: '六顆展示球，滑過去看球的晃動',
+        preview: {
+          label: '產品預覽',
+          caption: '長按空白處，六顆球會跑出來，滑過去看它晃動。請使用電腦及滑鼠體驗互動試用。',
+          // 截自實際運作的互動版（scripts/capturePreviewImages.ts）。
+          image: {
+            src: '/preview/radial-zh-TW.png',
+            alt: '長按後的畫面截圖：六顆球圍成一圈，分別是寫程式、學習、運動、閱讀、休息、個人，其中「學習」那一顆正在晃動。',
+          },
+        },
+      },
+      two: {
+        heading: '步驟 2：拖球建立時間區塊',
+        instruction: '把球拖進日曆就能建立時間區塊，也可以拖移區塊；長按日曆空白處同樣會跑出球。',
+      },
+    },
     preview: {
       label: '產品預覽',
-      caption: '兩個體驗：長按日曆空白處，六顆球會跑出來，滑過去看它晃動；把左側三顆球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
+      caption: '將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。',
       // 截自實際運作的互動版（scripts/capturePreviewImages.ts）；種子球名稱若改了要重截。
       image: {
         src: '/preview/trial-zh-TW.png',
@@ -21,7 +43,7 @@ export const COPY = {
     // 試用區內的 App 介面文字（沿用 Calendar 的字典用語：palette.dragAria、radial.aria、grid.hiddenOne／Many）。
     app: {
       ballAria: '將 {name} 拖到日曆上',
-      radialAria: '長按日曆空白處叫出的六顆球，滑過去看球的晃動',
+      radialAria: '按住球並拖到日曆上',
       hiddenOne: '有 1 個事件在可見時段之外',
       hiddenMany: '有 {count} 個事件在可見時段之外',
     },
@@ -44,9 +66,15 @@ export const COPY = {
       { id: 'unsigned', text: '免安裝版未簽章，Windows SmartScreen 可能顯示「Windows 已保護您的電腦」。確認檔案來自本專案的 Releases 後，選「更多資訊」，再選「仍要執行」。' },
       { id: 'web-trial', text: '網頁試用為瀏覽器版，與桌面版有差異；桌面版的功能以下載後為準。' },
       { id: 'offline', text: '桌面 App 離線使用、無帳號，資料只存在你的電腦。' },
+      // 只陳述 Calendar 已驗證的事：App 自有程式與依賴的靜態稽核（NFR-03b）。WebView2 實際有對外連線（票 024），所以明寫例外。
+      { id: 'telemetry', text: '桌面 App 本身不含遙測，程式碼與依賴不主動對外連線。它使用的 Microsoft Edge WebView2 是微軟的元件，可能有自己的網路活動，不在這個保證範圍內。' },
     ],
   },
   footer: {
+    // AC-03.2：專案擁有者 2026-11-13 決定不做流量統計，頁面明講這件事（tests/noAnalytics.test.ts 守住它是真的）。
+    privacy: '本網站不使用流量統計。',
+    // 網站唯一寫入瀏覽器儲存的資料是語言偏好（tests/privacy.test.ts、e2e TC-06）。
+    storage: '網站只在你的瀏覽器保存你選擇的語言，不會上傳。',
     license: 'LICENSE',
     trademarks: 'TRADEMARKS.md',
   },
@@ -61,4 +89,5 @@ export const FACT_SOURCES = {
   unsigned: 'README.md「Windows」步驟 2；docs/01-brief.md R-02',
   'web-trial': '本專案 docs/01-brief.md R-08、docs/02-prd.md（非 Calendar 文件）',
   offline: 'README.md 開頭；docs/01-brief.md 離線、無帳號、無遙測；NG-01',
+  telemetry: 'docs/03-srs.md NFR-03b（App 自有程式與依賴不含遙測、不主動連網）、NFR-03c（WebView2 的網路行為須揭露）；issues/024-offline-investigation.md（WebView2 觀察到對外連線）；README.md 開頭「The app itself never goes online」',
 } as const;

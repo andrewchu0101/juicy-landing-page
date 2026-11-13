@@ -5,6 +5,8 @@ export function Footer() {
   const { copy } = useSiteLanguage();
   return (
     <footer>
+      <p>{copy.footer.privacy}</p>
+      <p>{copy.footer.storage}</p>
       <a href={LEGAL_LINKS.license}>{copy.footer.license}</a> <a href={LEGAL_LINKS.trademarks}>{copy.footer.trademarks}</a>
     </footer>
   );

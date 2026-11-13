@@ -14,8 +14,15 @@
 | 工作樹 | （以下為先前一輪的記錄）本文件更新前乾淨。`issues/001-guard-secrets-false-positives.md` 與 `.claude/hooks/test-guard-secrets.sh` 已隨 PR #4 提交。`diagrams/0*.html`（8 個）不在任何遠端分支，只在另一台電腦的工作區，依 SRS v0.2 繪製已過期；專案擁有者 2026-11-10 決定守衛票中該項為「不適用」。注意 `issues/001-skeleton.md` 與守衛票同編號 001，是兩件事 |
 | 部署 | Vercel：`https://juicy-landing-page-tau.vercel.app/`（專案擁有者 2026-11-10 陳述；同日 curl 首頁回 200、初始 HTML 含 M1 metadata）。`/LICENSE`、`/TRADEMARKS.md` 回 404（檔案本來就不存在）。專案擁有者表示網站功能尚未開放不構成問題，依其開發節奏逐步補上；預覽保護是否啟用未查證 |
 
+### 2026-11-14：線上試用分成兩個階段式區塊（專案擁有者驗收實際網站後的修正）
+- **背景：** 專案擁有者驗收實際網站後說「現在的功能並不是我需要的」。我之前把「長按出六顆球」做成同一個試用裡的圓形選單（只展示、不能拖），這不是他要的。
+- **現在的結構（我的解讀，請確認）：** 線上試用是**兩個階段式區塊**，依序顯示、沒有鎖定：**步驟 1「試著長按」**——一塊空白區域，長按出**六顆展示球**、hover 果凍晃動，只展示、不建立區塊；**步驟 2「拖球建立時間區塊」**——跟原本的線上試用功能完全一樣，只有**三顆球**（側邊三顆；長按日曆空白處出的也是同樣三顆，離開球就拖曳、放開就建立區塊）。
+- **實作：** `src/trial/ui/RadialDemo.tsx`（步驟 1）；`TrialApp` 的圓形選單還原成原本的三顆可拖；`createRadial` 的 `drag` 改為可選（有＝步驟 2、沒有＝步驟 1 只展示）；`TrialModule` 多一個 `RadialShell`；`TrialSection` 輸出兩個 `#trial-step-1`／`#trial-step-2`；不符合互動資格時各有一張靜態預覽（新增 `public/preview/radial-zh-TW.png`、`radial-en.png`，1280×512，從實際互動版截出）。
+- **我加的小決定（請確認）：** 步驟 1 區域中央有提示「在這裡按住不放」，選單展開時隱藏；步驟 1 的球名單行、置中（雙語名稱在 56px 欄位會折行並壓到鄰近的球）；移除原本在整個試用區下方的那塊留白（每個步驟有自己的容器）；英文標題 `Step 1: Try a long press`／`Step 2: Drag a ball to make a time block` 與說明文字是我寫的。
+- **驗證（這台）：** 見本分支最後一次回報。
+
 ### 2026-11-13 本輪（分支 `feat/011-009-012-trial-two-parts`，疊在 PR #12 的分支上，**已 commit、未 push**）
-- **試用改成兩個體驗（專案擁有者）：** (1) 長按空白處叫出**六顆展示球**（Calendar 預設六顆球的名稱與色碼：`#E98B87`、`#83B9D0`、`#A9C98D`、`#9C91CE`、`#E9B96E`、`#E5A5BD`），hover 該球果凍晃動，離開只停止晃動，放開或 Escape 關閉，**不建立區塊**；(2) 側邊三顆種子球改用 Calendar 柔和色票 Sky `#83B9D0`、Sage `#A9C98D`、Peach `#E9B96E`，拖放建立區塊如常。圓形選單不再開始拖曳（契約變更，`tests/trialGestures.test.ts` 的 radial 測試依此改寫）。「六顆球選了能不能建立區塊」是我的解讀（只展示）；若你要選了也能建立，要另外決定六顆球要不要進側邊或有自己的模板。
+- **（2026-11-14 取代：試用改成兩個階段式區塊，見本節最上方「2026-11-14」。）** 試用改成兩個體驗（專案擁有者）： (1) 長按空白處叫出**六顆展示球**（Calendar 預設六顆球的名稱與色碼：`#E98B87`、`#83B9D0`、`#A9C98D`、`#9C91CE`、`#E9B96E`、`#E5A5BD`），hover 該球果凍晃動，離開只停止晃動，放開或 Escape 關閉，**不建立區塊**；(2) 側邊三顆種子球改用 Calendar 柔和色票 Sky `#83B9D0`、Sage `#A9C98D`、Peach `#E9B96E`，拖放建立區塊如常。圓形選單不再開始拖曳（契約變更，`tests/trialGestures.test.ts` 的 radial 測試依此改寫）。「六顆球選了能不能建立區塊」是我的解讀（只展示）；若你要選了也能建立，要另外決定六顆球要不要進側邊或有自己的模板。
 - **文件與預覽圖：** SRS FR-01／FR-02、測試計畫的色碼已同步；兩張預覽圖與替代文字已重截；`index.html` 的 `og:image:alt` 同步。
 - **009：** 基準端實際執行 CONF-01～10，10／10 與人工算例一致（`issues/009`、`docs/evidence/009-baseline-conformance.runner.ts.txt`）。
 - **011：** 驗收報告 `docs/08-delivery-acceptance.md`；人工項目全是 Manual Pending，**不宣稱整體已驗收**；下載機器端檢查通過，M-10 人工未做。
@@ -28,7 +35,7 @@
 - **文件同步：** Brief D-02、PRD、SAD、SRS（OR-12）、SDS、測試計畫、`07-release-checklist.md` 的待決與占位敘述已改為已決；`issues/001-skeleton`、`010`、`013` 已更新。
 - **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（34 檔 341 通過）、`build`、`test:e2e`（Chromium 34 項）、`npm audit` 0 全數通過。
 - **專案擁有者的決定（2026-11-13，再稍晚）：** D-03 **不做流量統計**（OR-10、TC-06e 隨之結案／不適用）；D-04 Windows 乾淨電腦驗證排在 **2026-11-14**；六顆球目前**只展示、不能拖出區塊**（再次確認）；社群平台預覽**不做**；GitHub 帳號 2FA 已啟用；Calendar release 要設為不可竄改（待完成）；D-10 Calendar 授權：**選 MIT**；依賴授權已查（`docs/evidence/010-calendar-dependency-licenses-2026-11-13.md`），沒有衝突，但發布的 zip 沒有隨附第三方授權聲明；Calendar 圖示是專案擁有者自己的作品（陳述）。專案擁有者隨後授權修改 Calendar：`LICENSE`（MIT）、README 授權章節、`THIRD-PARTY-LICENSES.md`（`npm run licenses` 產生，241 個套件）、zip 組裝腳本與 NSIS `bundle.resources` 都已在 Calendar 工作樹做好，**未 commit、未 push、未發布**；已發布的 `v0.2.0-beta.3` 仍沒有授權檔，要等下次發新版（請先把 release 設成不可竄改）。
-- **待決的小事：** AC-03.2 原文要求「頁面明講網站使用哪種流量統計」，不做統計後措辭要改（建議一句「本網站不使用流量統計」），頁面目前沒有這句，我沒有自行新增。
+- **AC-03.2（2026-11-14 已做）：** 頁尾加「本網站不使用流量統計。」；英文版 `This website does not use analytics.` 是我翻的，專案擁有者只給了中文句。`tests/home.test.tsx`、`tests/languageSwitch.test.tsx`、新增 `tests/noAnalytics.test.ts`（樣式比對，擋常見統計工具與網域）。AC-03.2 另外要求的兩點也已加（2026-11-14，專案擁有者同意）：頁尾「網站只在你的瀏覽器保存你選擇的語言，不會上傳。」；下載區「桌面 App 本身不含遙測，程式碼與依賴不主動對外連線。它使用的 Microsoft Edge WebView2 是微軟的元件，可能有自己的網路活動，不在這個保證範圍內。」——**WebView2 例外是我加的**（Calendar 票 024 觀察到 WebView2 有對外連線；只寫「無遙測」會超出已驗證的範圍），措辭請專案擁有者確認；英文版也是我翻的。依據記在 `src/content.ts` 的 `FACT_SOURCES.telemetry`。
 - **待你：** 合併本分支的 PR；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
 
 ### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）
