@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { App } from '../src/App';
 import { DOWNLOAD_LINKS, LEGAL_LINKS } from '../src/config/links';
+import { FACT_SOURCES } from '../src/content';
 
 // 以 react-dom/server 輸出靜態標記，不需要 DOM 環境；每次呼叫都是全新渲染，沒有共用狀態。
 const html = renderToStaticMarkup(<App />);
@@ -87,6 +88,23 @@ describe('AC-03.2 privacy statement', () => {
 
     expect(footer).toContain('<p>本網站不使用流量統計。</p>');
     expect(footer.indexOf('本網站不使用流量統計。')).toBeLessThan(footer.indexOf('<a '));
+  });
+
+  // 專案擁有者 2026-11-14：AC-03.2 另外要求的兩點也要明講。事實依據：網站唯一寫入瀏覽器儲存的是語言偏好（tests/privacy.test.ts、
+  // e2e TC-06）；Calendar 的 NFR-03b／03c：App 自有程式與依賴不含遙測、不主動連網，WebView2 是微軟元件，網路行為另行揭露。
+  it('says the language choice is stored only in the visitor browser and never uploaded', () => {
+    const footer = html.slice(indexOfOrFail('<footer'));
+
+    expect(footer).toContain('<p>網站只在你的瀏覽器保存你選擇的語言，不會上傳。</p>');
+    expect(footer.indexOf('網站只在你的瀏覽器保存')).toBeLessThan(footer.indexOf('<a '));
+  });
+
+  it('says the desktop app has no telemetry, with the WebView2 exception stated, in the download facts', () => {
+    const section = html.slice(indexOfOrFail('id="download"'), html.indexOf('</section>', indexOfOrFail('id="download"')));
+
+    expect(section).toContain('桌面 App 本身不含遙測，程式碼與依賴不主動對外連線。');
+    expect(section).toContain('可能有自己的網路活動，不在這個保證範圍內');
+    expect(FACT_SOURCES.telemetry).toContain('NFR-03');
   });
 });
 

@@ -47,6 +47,14 @@ describe('TC-09 language switch control and page text (UI-06, NFR-02)', () => {
     expect(html).not.toContain('本網站不使用流量統計。');
   });
 
+  it('states in English the language-storage and no-telemetry facts, with the WebView2 exception (AC-03.2)', async () => {
+    const html = await render('en');
+
+    expect(html).toContain('<p>This website only stores your chosen language in your own browser. It is never uploaded.</p>');
+    expect(html).toContain('The desktop app itself contains no telemetry, and its own code and dependencies do not connect out.');
+    expect(html).toContain('may have its own network activity and is not covered by this');
+  });
+
   it('shows Traditional Chinese page text when the language is zh-TW', async () => {
     const html = await render('zh-TW');
 

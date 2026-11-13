@@ -22,7 +22,7 @@ export type SiteDictionary = {
     factsHeading: string;
     facts: readonly { id: string; text: string }[];
   };
-  footer: { privacy: string; license: string; trademarks: string };
+  footer: { privacy: string; storage: string; license: string; trademarks: string };
 };
 
 const EN: SiteDictionary = {
@@ -68,10 +68,12 @@ const EN: SiteDictionary = {
       { id: 'unsigned', text: 'The portable version is unsigned, so Windows SmartScreen may show “Windows protected your PC”. After confirming the file comes from this project’s Releases, choose “More info”, then “Run anyway”.' },
       { id: 'web-trial', text: 'The online trial is the browser version and differs from the desktop app; the desktop app’s features are as you find them after downloading.' },
       { id: 'offline', text: 'The desktop app works offline with no account; your data stays on your computer.' },
+      { id: 'telemetry', text: 'The desktop app itself contains no telemetry, and its own code and dependencies do not connect out. It uses Microsoft Edge WebView2, a Microsoft component that may have its own network activity and is not covered by this.' },
     ],
   },
   footer: {
     privacy: 'This website does not use analytics.',
+    storage: 'This website only stores your chosen language in your own browser. It is never uploaded.',
     license: 'LICENSE',
     trademarks: 'TRADEMARKS.md',
   },
