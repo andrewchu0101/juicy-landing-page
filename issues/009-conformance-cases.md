@@ -43,3 +43,7 @@ npm test   # 網站端執行同一組案例
 
 **仍然沒有：** CONF-06 的 100 步上限（試用沒有歷史，受阻）；基準的實際執行。
 
+## 追加（2026-11-11，005／006 驗收補齊時）
+- 基準交叉比對又多了一項（只讀不執行）：Calendar 固定 commit 的 `engine.test.ts` 第 283–287 行五組 `magnetMinutes` 值，加進 `tests/trialEngine.test.ts` 的「baseline cross-check」，網站實作結果一致。
+- 沒有新增可執行的 CONF 案例：其餘案例都需要命名、刪除、復原或剪貼簿（暫不開放）。第一個執行器（`tests/conformanceTrial.test.ts`）不變。
+- 仍然沒有：CONF-06 的 100 步上限、基準的實際執行。

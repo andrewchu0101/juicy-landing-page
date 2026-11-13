@@ -39,13 +39,13 @@ npm run test:e2e    # TC-01a/e/f、TC-06a～6d
 
 ## 驗收條件
 
-- [ ] 球放在離 10:30 線上方 7 像素處 → 10:30–12:30；TC-02 表逐列通過
-- [ ] 在 14:30 建立 → 終點 16:30 被保存
-- [ ] 排除項以角色與可及名稱查詢為 0、不在 DOM、Tab 走訪不含；`data-testid` 僅輔助（TC-01f）
-- [ ] `localStorage` 只出現語言偏好鍵；沒有請求攜帶標題或時間；沒有 cookie；惡意標題純文字顯示
-- [ ] 重新整理後日曆為空、歷史清空、球仍在；第二個分頁看不到
-- [ ] `hydrate` 整個頁面生命週期只呼叫一次
-- [ ] 實際執行測試並貼出；未完成者維持「未執行」
+- [x] 球放在離 10:30 線上方 7 像素處 → 10:30–12:30（e2e 1a，另驗 9 像素不吸附 → 10:21–12:21）；TC-02 表 12 列逐列通過（`tests/trialEngine.test.ts`，對網站自己的 `pointerToTime`）
+- [x] 在 14:30 建立 → 終點 16:30 被保存（e2e 1e 讀區塊的 `title` 屬性；可見的只有 14:30–15:00，太矮不顯示時間文字；單元：CONF-08）
+- [x] 排除項以角色與可及名稱查詢為 0、不在 DOM、Tab 走訪不含（TC-01f，e2e 4 項，含 `includeHidden`、中英兩版名稱清單）。**注意：** 試用區裡唯一的按鈕是三顆球（`role="button"`，名稱 "Drag <球名> onto the calendar"）；名稱清單是我列的，專案擁有者若有補充的排除項要加上
+- [x] `localStorage` 只出現語言偏好鍵；操作期間沒有任何網路請求；沒有 cookie；沒有 sessionStorage 與 IndexedDB（TC-06a，e2e）。「惡意標題純文字顯示」**不適用**：命名不開放，標題只來自固定的種子球名稱，沒有訪客輸入的標題
+- [x] 重新整理後日曆為空、球仍在；第二個分頁看不到（TC-06b、06c，e2e）。歷史不適用（復原不開放）
+- [x] `hydrate` 整個頁面生命週期只呼叫一次（單元 `tests/trialRuntime.test.ts`；e2e 以「失去再恢復資格後區塊仍在」間接佐證）
+- [x] 實際執行測試並貼出（見下方「驗收補齊」）；M-1 等人工驗收仍未執行
 
 ## 實作紀錄（2026-11-10；已合併 `fd83f51`）
 
@@ -60,3 +60,9 @@ npm run test:e2e    # TC-01a/e/f、TC-06a～6d
 | 其餘（拖曳建立、排除控制項、重新整理、雙分頁、TrialShell、INV-07 `templateSchema`、`schemaVersion`、INV-10 語言步驟） | 未執行，等 016／017／Playwright | — |
 
 偏差：本地暫定 `TrialWorkspace` 型別；種子名稱色碼為占位；`ensureReady` 少 MOD-03 步驟 2。
+
+## 驗收補齊（2026-11-11，TDD）
+- **TC-02**：把 `tests/privacy.test.ts` 裡等共用引擎的 `it.todo` 換成真正的比對：`tests/trialEngine.test.ts` 對 `pointerToTime` 逐列比對 `tests/fixtures/magnetTable.ts`（預期值是人工算出的字面常數）。夾具補上 `docs/06-test-plan.md` TC-02 有、SDS 表沒有的 raw 23 → 10:30（離 30 為 7，吸附），共 12 列。這個測試第一次就綠（引擎本來就對），不是自然紅燈；突變檢查：把磁吸門檻 8 改 9，多個列失敗（8.4、21、21.5、38.5、39），還原後全過。
+- **基準交叉比對（只讀不執行）**：Calendar 固定 commit 的 `engine.test.ts` 第 283–287 行的五組 `magnetMinutes` 值，網站實作結果相同。
+- **e2e**：新增 `e2e/trialDemo.e2e.ts`（見 `issues/006` 的清單）；突變檢查：磁吸門檻 8 改 9 → 「1a boundary」失敗；在 `createEventFromTemplate` 偷塞 `localStorage.setItem` → 「6a」失敗；還原後 `git status` 確認 `src/` 乾淨，全部 e2e 通過。
+- 限制：Chromium 單一引擎；觸控、其他瀏覽器、日光節約與跨午夜未測；M-1～M-10 仍 Manual Pending。

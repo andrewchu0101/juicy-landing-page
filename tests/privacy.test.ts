@@ -27,10 +27,9 @@ describe('TC-06a trial initialization stays in memory (INV-01, NFR-01, FR-07)', 
   });
 });
 
-// TC-02｜REUSE-01：引擎在共用模組（SHARED-01），尚不可取得。
-describe('TC-02 magnet table (REUSE-01, AC-01.1)', () => {
-  it('has the eleven SDS rows ready as literal constants', () => {
-    expect(MAGNET_ROWS).toHaveLength(11);
+// TC-02 的逐列比對在 tests/trialEngine.test.ts（網站自己的 pointerToTime；2026-11-11 不再依賴共用模組）。
+describe('TC-02 magnet table fixture (REUSE-01, AC-01.1)', () => {
+  it('has the twelve rows of docs/06-test-plan.md TC-02 as literal constants', () => {
+    expect(MAGNET_ROWS).toHaveLength(12);
   });
-  it.todo('magnetMinutes matches every row of the table — blocked by 016/017 (shared engine)');
 });
