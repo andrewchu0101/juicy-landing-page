@@ -59,5 +59,21 @@
 1. （已做）在 Calendar 根目錄新增 `LICENSE`（MIT，版權人沿用本網站的 `CHU YI AN`，年份 2026）。
 2. （已做）在 Calendar 的 `README.md` 加授權章節，並指向 `TRADEMARKS.md`。
 3. （已做，沒有新增任何套件或工具：用 `scripts/third-party-licenses.mjs` 讀 `package-lock.json`、`node_modules` 與 `cargo metadata`，`npm run licenses` 產生 `THIRD-PARTY-LICENSES.md`）產生並隨附第三方聲明：把上面的 npm 與 Rust 依賴的版權與授權文字整理成 `THIRD-PARTY-LICENSES`（Rust 可用 `cargo-about` 或 `cargo-license` 類工具；npm 可用 `license-checker` 類工具；需新增開發工具的話要先過套件核准）。
-4. 下一次發布時把該聲明檔放進 zip（與 NSIS 安裝檔）。**已發布的 `v0.2.0-beta.3` 不會因為補檔而改變**；若要讓既有版本合規，需要重新發布（且 release 設成不可竄改之前的檔案都可被替換）。
+4. （已做，**但沒有發布**：`scripts/make-portable-zip.mjs` 會複製 `LICENSE` 與 `THIRD-PARTY-LICENSES.md` 進 zip，缺任何一個就失敗；`src-tauri/tauri.conf.json` 的 `bundle.resources` 讓安裝檔把兩個檔放進安裝資料夾）下一次發布時把該聲明檔放進 zip（與 NSIS 安裝檔）。**已發布的 `v0.2.0-beta.3` 不會因為補檔而改變**；若要讓既有版本合規，需要重新發布（且 release 設成不可竄改之前的檔案都可被替換）。
 5. 網站頁尾的授權連結目前指向**本網站**的 `LICENSE`；Calendar 補上 LICENSE 後，下載區是否也要連到 Calendar 的授權，由專案擁有者決定。
+
+## 做完的結果（2026-11-13，Calendar 工作樹，**未 commit、未 push、未發布**）
+
+| 項目 | 結果 |
+|---|---|
+| `LICENSE` | MIT，`Copyright (c) 2026 CHU YI AN`，與網站的 `LICENSE` 相同 |
+| `README.md` | 新增 `## License`：MIT、商標指向網站 repo 的 `TRADEMARKS.md`、第三方授權檔的位置、`THIRD-PARTY-NOTICES.md`（範本內容）與它的區別 |
+| `THIRD-PARTY-LICENSES.md` | 419,960 位元組；241 個套件（11 npm＋230 Rust），140 組不同的授權文字（相同文字只印一次）。記錄 `package-lock.json` 與 `Cargo.lock` 的 SHA-256；兩個鎖定檔在產生前後雜湊相同（沒有被改） |
+| 沒有授權檔的 5 個 crate | `alloc-stdlib`（BSD-3）沿用同 repository 的 `alloc-no-stdlib` 的授權檔；`webview2-com`、`-sys`、`-macros`（MIT）沒有任何授權檔，授權文字**從上游 repository 原樣複製**（`MIT License, Copyright (c) 2021 Bill Avery`，登記在 `scripts/third-party-license-supplements/`，記有來源網址與日期）；`selectors`（MPL-2.0）沿用同授權的 `cssparser` 的全文。這 5 個在清單中標 †。**這些補充文字是我從上游取得的，不是套件本身附的，請你知道** |
+| 免安裝 zip 組裝 | `assembleLayout`／`makeZip` 新增 `rootDir`，把 `LICENSE`、`THIRD-PARTY-LICENSES.md` 原樣複製進包裡，缺任一個丟錯誤、不建立版面；zip 內 `README.txt` 加第 8 點（中英）。已用真正的 release 執行檔組裝到暫存資料夾確認：包內有 `juicy-calendar.exe`、`LICENSE`、`THIRD-PARTY-LICENSES.md`、`portable.flag`、`README.txt`、`data/` |
+| NSIS 安裝檔 | `bundle.resources` 兩個檔；`npm run test:rust`（47 項）編譯通過，代表設定可被 Tauri 解析、檔案存在。**沒有實際建置安裝檔**，所以安裝資料夾裡是否真的有這兩個檔**未驗證** |
+| 防過期 | `scripts/third-party-licenses.test.ts` 比對聲明檔記錄的鎖定檔雜湊與目前的鎖定檔；相依套件有變就失敗，要重新 `npm run licenses`。突變檢查（把雜湊改成 0000）會失敗 |
+| `docs/RELEASING.md` | 第 5 步補上這兩個檔與重新產生的規則 |
+| 驗證（Calendar，這台） | `npx vitest run` 42 檔 514 項通過、`npm run typecheck`、`npm run lint` 通過、`npm run test:rust` 47 項通過 |
+
+**沒做：** 發布新版（已發布的 `v0.2.0-beta.3` 的 zip 仍沒有授權檔）；實際建置 NSIS 安裝檔與人工驗證；`test:e2e`、`test:desktop`（沒有改到畫面與桌面行為，沒跑）。
