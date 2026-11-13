@@ -50,14 +50,14 @@
 
 ## 還需要專案擁有者回答或確認（我沒有查證）
 
-1. `src-tauri/icons/` 的圖示與應用程式圖示是**你自己的作品**，還是 Tauri 範本的預設圖示？目前只看得到它們是在第一個 commit（`chore: import Juicy Calendar demo with template scaffolding`）一起匯入的，來源無法由 git 判斷。如果是第三方圖示，要另外確認其授權。
+1. `src-tauri/icons/` 的圖示與應用程式圖示：**專案擁有者 2026-11-13 回答：是自己的作品**（陳述，我沒有獨立驗證；從 git 只看得到它們在第一個 commit 一起匯入）。因此沒有第三方圖示授權問題，圖示屬於 `TRADEMARKS.md` 保留的 LOGO 與圖像識別。
 2. App 使用系統字型（`index.css` 的 `--font-sans`，沒有 `@font-face`，repo 內沒有字型檔），**沒有夾帶字型授權問題**。
 3. 免安裝版需要使用者自行安裝 Microsoft Edge WebView2 執行階段（`README.txt` 第 6 點）；它是微軟的元件，**不在 zip 裡**，不屬於 Calendar 的散布內容。
 
-## 需要另案授權才能做的事（依 `AGENTS.md`，我不修改 Calendar）
+## 後續處理（專案擁有者 2026-11-13 授權修改 Calendar；以下 1–4 已在 Calendar 工作樹完成，**尚未 commit、未 push、未發布**）
 
-1. 在 Calendar 根目錄新增 `LICENSE`（MIT，版權人沿用本網站的 `CHU YI AN`，年份 2026）。
-2. 在 Calendar 的 `README.md` 加授權章節。
-3. 產生並隨附第三方聲明：把上面的 npm 與 Rust 依賴的版權與授權文字整理成 `THIRD-PARTY-LICENSES`（Rust 可用 `cargo-about` 或 `cargo-license` 類工具；npm 可用 `license-checker` 類工具；需新增開發工具的話要先過套件核准）。
+1. （已做）在 Calendar 根目錄新增 `LICENSE`（MIT，版權人沿用本網站的 `CHU YI AN`，年份 2026）。
+2. （已做）在 Calendar 的 `README.md` 加授權章節，並指向 `TRADEMARKS.md`。
+3. （已做，沒有新增任何套件或工具：用 `scripts/third-party-licenses.mjs` 讀 `package-lock.json`、`node_modules` 與 `cargo metadata`，`npm run licenses` 產生 `THIRD-PARTY-LICENSES.md`）產生並隨附第三方聲明：把上面的 npm 與 Rust 依賴的版權與授權文字整理成 `THIRD-PARTY-LICENSES`（Rust 可用 `cargo-about` 或 `cargo-license` 類工具；npm 可用 `license-checker` 類工具；需新增開發工具的話要先過套件核准）。
 4. 下一次發布時把該聲明檔放進 zip（與 NSIS 安裝檔）。**已發布的 `v0.2.0-beta.3` 不會因為補檔而改變**；若要讓既有版本合規，需要重新發布（且 release 設成不可竄改之前的檔案都可被替換）。
 5. 網站頁尾的授權連結目前指向**本網站**的 `LICENSE`；Calendar 補上 LICENSE 後，下載區是否也要連到 Calendar 的授權，由專案擁有者決定。
