@@ -290,7 +290,7 @@ stateDiagram-v2
 | Vercel 連線與預覽保護 | 連線前確認預覽是否公開 | Brief R-11 |
 | 授權 | `LICENSE`、`TRADEMARKS.md`、版權人與聲明文字；Calendar 來源授權 | D-10、R-14 |
 | 共用模組取得方式與鎖定 | P1～P5 擇一；Calendar 公開後多數選項不需讀取憑證（2026-11-11），改為決定鎖定方式（commit SHA／雜湊）與是否仍需任何憑證 | D-11、OR-21 |
-| 網域 | 未定 | D-02 |
+| 網域 | 已決：Vercel 的網域（2026-11-13） | D-02 |
 | 流量統計 | 工具與「開始試用」定義 | D-03、OR-10 |
 | Windows 版驗證 | 影響下載區敘述 | D-04 |
 | CI | GitHub Actions：型別檢查、lint、單元、建置、一致性案例；Vercel 不會自動等待 CI，阻擋機制需設計 | Brief「部署前檢查」 |

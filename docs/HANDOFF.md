@@ -23,7 +23,11 @@
 - **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（33 檔 335 通過）、`build`、`test:e2e`（Chromium 33 項）、`npm audit` 0 全數通過。
 - **視覺收尾（同日稍晚，impeccable）：** 見 `issues/010` 末段。球名稱對比、晃動起手、名字讓位；兩張預覽圖再重截。`tests/trialVisual.test.ts`、`vite.config.ts`（`test.css.include`）。
 - **重要：#12 沒有進到 `main`。** #11 先 merge 進 `main`（`a4cb715`），之後 #12 才 merge，但它的目標分支是已刪除前的 `feat/013-012-008-followups`，所以 #12 的 3 個 commit（TC-02 磁吸表、`e2e/trialDemo.e2e.ts` 等）不在 `main`。本分支包含它們，開 PR 到 `main` 即可補上。
-- **待你：** 本分支推送與開 PR（目標 `main`；注意本分支的 upstream 還指向 `origin/feat/005-006-009-acceptance`，推送請用新分支名）；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
+- **專案擁有者的決定（2026-11-13，同日稍晚）：** (1) 追認 `package.json` 現有的 15 個直接依賴（`issues/001-skeleton.md` 有清單，`AGENTS.md` 已改）；(2) OR-12：網站上現有的名稱、色碼與英文說明都是正式內容，不是占位；(3) D-02：網域就是 Vercel 的網域；(4) 013 做好；(5) 推送並開 PR 到 `main`。
+- **013 收尾：** 專用的 1200×630 分享圖（`public/preview/og-zh-TW.png`、`og-en.png`，由 `scripts/capturePreviewImages.ts` 從實際互動版截出）、`canonical`、`og:site_name`；`og:url`、`og:image` 不再是「暫用」。**社群平台上的實際預覽沒有驗證**，要部署後用各平台的偵錯工具；線上的 `/preview/og-zh-TW.png` 要等這個分支 merge 並部署後才存在。
+- **文件同步：** Brief D-02、PRD、SAD、SRS（OR-12）、SDS、測試計畫、`07-release-checklist.md` 的待決與占位敘述已改為已決；`issues/001-skeleton`、`010`、`013` 已更新。
+- **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（34 檔 341 通過）、`build`、`test:e2e`（Chromium 34 項）、`npm audit` 0 全數通過。
+- **待你：** 合併本分支的 PR；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
 
 ### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）
 - **環境（這台，沒有 D 槽）：** Node v26.13.0、npm 11.20.0；`npm ci --ignore-scripts`；npm 快取與 Playwright 的 Chromium 都在暫存目錄（只對該次程序有效，不是 `D:/DevCache`，會被清掉）。

@@ -1,7 +1,7 @@
 // MOD-03：buildTrialWorkspace（DATA-01～03）。純函式，不讀系統時鐘。
 // 注意：WorkspaceData 的正式型別與 templateSchema 由共用模組擁有（尚未可取得，見 issue 005 Blocked by）；
 // 這裡的本地型別只是暫時的結構描述，接入共用模組後改為匯入。
-// 種子名稱是占位（OR-12 待確認）；色碼 2026-11-13 起用 Calendar 柔和色票的 Sky、Sage、Peach（專案擁有者）。
+// 種子名稱與色碼是正式內容（OR-12 已決，專案擁有者 2026-11-13：網站上現有的就是正式）；色碼用 Calendar 柔和色票的 Sky、Sage、Peach。
 import type { SiteLanguage } from '../site/webLanguageBackend';
 
 export type TrialSettings = {

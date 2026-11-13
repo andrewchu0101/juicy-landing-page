@@ -38,7 +38,7 @@
 | **008 動態資格** | Passed（Chromium e2e，注入 `matchMedia`）／**Manual Pending（M-8 實機）** | `e2e/dynamicEligibility.e2e.ts` | 專案擁有者 |
 | **009 一致性案例** | 見下表 | `docs/evidence/009-baseline-conformance.runner.ts.txt` | — |
 | **010 預覽圖** | Passed（自動）／**Manual Pending（M-5、視覺確認）** | 圖與替代文字隨語言：`e2e/previewImage.e2e.ts`；2026-11-13 已用新球色重截。種子球**名稱**仍是占位（OR-12），名稱改了要重截 | 專案擁有者（交給 `impeccable` 做視覺） |
-| **013 metadata** | Passed（自動）／社群平台實際預覽未驗證 | `tests/metadata.test.ts` | 專案擁有者 |
+| **013 metadata** | Passed（自動）／社群平台實際預覽未驗證 | `tests/metadata.test.ts`（含 1200×630 分享圖檔頭尺寸、canonical、`og:site_name`）。部署後才能用 Facebook／X／LINE 的偵錯工具看實際預覽 | 專案擁有者 |
 | **TC-10a 下載 `href`** | **Passed** | `tests/links.test.ts`：按鈕與 zip 都指向 `releases/download/v0.2.0-beta.3/juicy-calendar_0.2.0-beta.3_x64-portable.zip` | — |
 | **TC-10b 實際下載（機器端）** | **Passed（curl，不是人工）** | 2026-11-13：`curl -L` 回 200，2,958,720 位元組；SHA-256 `c32de372…dc32` 與 `src/config/links.ts` 釘選值、GitHub 資產 digest 相同；release 為預發行、2026-11-08 發布，只有 zip 與 `SHA256SUMS.txt` | — |
 | **M-10 人工下載驗收** | **Manual Pending** | 還沒有人在瀏覽器點按鈕、下載、解壓縮並啟動。**M-10 完成前不得宣稱下載已驗收**；`DOWNLOAD_LINKS.verification` 維持 `'unverified'` | 專案擁有者 |
