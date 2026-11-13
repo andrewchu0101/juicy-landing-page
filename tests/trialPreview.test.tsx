@@ -33,7 +33,7 @@ describe('TC-07b static preview shell (UI-03, FR-08)', () => {
     const html = await render('zh-TW', <TrialSection />);
 
     expect(html).toContain('產品預覽');
-    expect(html).toContain('將球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。');
+    expect(html).toContain('兩個體驗：長按日曆空白處，六顆球會跑出來，滑過去看它晃動；把左側三顆球拖進日曆，即可建立時間區塊。請使用電腦及滑鼠體驗互動試用。');
     expect(html).not.toContain('data-fake-trial');
   });
 

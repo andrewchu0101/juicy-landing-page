@@ -37,6 +37,14 @@ describe('TC-01a buildTrialWorkspace seed (FR-01, DATA-01, DATA-03, INV-07)', ()
     }
   });
 
+  // 專案擁有者 2026-11-13：試用球改用 Calendar 的柔和色票。預期值是 Calendar 固定 commit 的 DESIGN.md 色票字面值
+  // （Sky #83B9D0、Sage #A9C98D、Peach #E9B96E），不是呼叫實作算出來的。
+  it('colors the three balls with Calendar palette Sky, Sage and Peach', () => {
+    const { templates } = buildTrialWorkspace(now);
+
+    expect(templates.map((t) => t.color)).toEqual(['#83B9D0', '#A9C98D', '#E9B96E']);
+  });
+
   it('starts with no events or issues and stamps meta from the given time', () => {
     const workspace = buildTrialWorkspace(now);
 

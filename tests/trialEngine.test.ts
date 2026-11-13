@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { MAGNET_ROWS } from './fixtures/magnetTable';
 import {
   EVENT_MIN_MINUTES,
   NEW_EVENT_MINUTES,
@@ -207,5 +208,40 @@ describe('feedback helpers', () => {
   it('keeps feedback at least 24px inside the window', () => {
     expect(visibleFeedbackPoint({ x: -50, y: 9999 }, 1000, 800)).toEqual({ x: 24, y: 776 });
     expect(visibleFeedbackPoint({ x: 300, y: 200 }, 1000, 800)).toEqual({ x: 300, y: 200 });
+  });
+});
+
+// TC-02｜REUSE-01、AC-01.1：磁吸換算表逐列比對。預期值是 tests/fixtures/magnetTable.ts 的字面常數（人工算出），
+// 不呼叫實作。raw 是相對 10:00 的分鐘數，縮放 1 像素／分鐘；走完整路徑 pointerToTime（指標 y → 起點時間）。
+describe('TC-02 magnet table through pointerToTime (REUSE-01, AC-01.1)', () => {
+  const geometry = { left: 0, top: 0, columnWidth: 100, columnCount: 1 };
+  it.each(MAGNET_ROWS.map((row) => [row.raw, row.start] as const))('raw %f minutes after 10:00 → start %s', (raw, start) => {
+    const result = pointerToTime({ x: 50, y: raw }, geometry, [day], timeline, { magnetEnabled: true });
+    const hh = String(result.getHours()).padStart(2, '0');
+    const mm = String(result.getMinutes()).padStart(2, '0');
+    expect(`${hh}:${mm}`).toBe(start);
+  });
+
+  it('AC-01.1 examples: 9 px above the 10:30 line → 10:21 (block 10:21–12:21); 9 px below → 10:39', () => {
+    const above = pointerToTime({ x: 50, y: 21 }, geometry, [day], timeline, { magnetEnabled: true });
+    expect([above.getHours(), above.getMinutes()]).toEqual([10, 21]);
+    expect(newEventTimes(above).endAt).toBe(new Date(2026, 10, 11, 12, 21).toISOString());
+    const below = pointerToTime({ x: 50, y: 39 }, geometry, [day], timeline, { magnetEnabled: true });
+    expect([below.getHours(), below.getMinutes()]).toEqual([10, 39]);
+  });
+});
+
+// 基準交叉比對（issue 009，只讀不執行）：下列五組取自 Calendar 固定 commit 102ae19… 的
+// src/features/calendar/engine/engine.test.ts 第 283–287 行（2026-11-11 以 git show 讀取，沒有執行 Calendar）。
+// 網站的 magnetMinutes 與基準測試所寫的結果一致；若日後不一致，先記錄差異與來源，不改這裡的值去迎合實作。
+describe('baseline cross-check: Calendar engine.test.ts magnetMinutes cases (read at the pinned commit)', () => {
+  it.each([
+    [26, 1, true, 30],
+    [21, 1, true, 21],
+    [26, 3, true, 26],
+    [26, 1, false, 26],
+    [-4, 1, true, -0],
+  ])('magnetMinutes(%f, ppm %f, %s) = %f', (minutes, ppm, enabled, expected) => {
+    expect(magnetMinutes(minutes, ppm, enabled)).toBe(expected);
   });
 });

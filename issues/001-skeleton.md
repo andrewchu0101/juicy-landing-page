@@ -27,7 +27,7 @@ curl -sf http://127.0.0.1:4173/   # 回 200
 - [x] 專案可安裝、型別檢查、建置，並產生可服務的靜態輸出
 - [x] 預覽伺服器的首頁請求回 200（健康檢查）
 - [x] 有一個實際執行過的 smoke test，結果貼在 PR／回報中
-- [ ] 只使用已核准的套件，版本為確切版本並有鎖定檔
+- [x] 只使用已核准的套件，版本為確切版本並有鎖定檔（2026-11-13：專案擁有者追認現有的 15 個直接依賴，見下方「套件追認」；確切版本與鎖定檔由 `tests/lockfileGuard.test.ts` 把關）
 - [x] 沒有業務邏輯、沒有頁面結構、沒有 metadata
 - [x] 補 `AGENTS.md`「怎麼跑」段的實際指令
 
@@ -56,3 +56,18 @@ SAD 清單中的 `@playwright/test`、`zustand`、`@dnd-kit/core`、`date-fns`�
 - 「確切版本並有鎖定檔」已成立。
 - 「只使用已核准的套件」**無法勾**：最小集 6 個套件中 `typescript` 以別名形式存在，另有 8 個最小集以外的套件（上表標「否」者）沒有核准紀錄。
 - 待專案擁有者決定：(a) 追認現有 14 個套件；(b) 要求移除 `@typescript/native` 這類不在清單內的套件；(c) `typescript` 別名是否接受。決定後再勾選並記錄日期。
+
+## 套件追認（2026-11-13，專案擁有者）
+專案擁有者追認 `package.json` 現有的 15 個直接依賴為已核准；**不含**任何未列在此的套件，新增仍要先得到同意。
+
+| 套件 | 用途 | 備註 |
+|---|---|---|
+| `react`、`react-dom` | 介面 | 執行期依賴 |
+| `vite`、`@vitejs/plugin-react` | 建置與開發伺服器 | |
+| `vitest` | 單元測試 | 也提供 `vitest/config`（`vite.config.ts` 用） |
+| `typescript`（別名 `npm:@typescript/typescript6@6.0.2`）、`@typescript/native`（別名 `npm:typescript@7.0.2`） | 型別檢查（`tsc` 為 7.0.2）與 typescript-eslint 相容 | 兩套並存的原因見 `issues/012` |
+| `@types/react`、`@types/react-dom` | react 型別宣告 | |
+| `eslint`、`@eslint/js`、`eslint-plugin-react-hooks`、`globals`、`typescript-eslint` | lint | 012 引入 |
+| `@playwright/test` | e2e | 2026-11-11 另案核准，這次一併追認 |
+
+追認只涵蓋「目前有的」；沒有改任何依賴，`npm ci` 與鎖定檔不變。

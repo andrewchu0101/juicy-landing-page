@@ -187,35 +187,36 @@ describe('ball press (a press on a palette ball becomes a drag after moving more
   });
 });
 
-describe('radial palette (PRD AC-01.4)', () => {
+// 專案擁有者 2026-11-13：長按叫出六顆球，只展示 hover 的果凍晃動；真正拖放建立區塊只在側邊三顆球。
+// 所以圓形選單不再開始拖曳：離開球只是取消 hover，放開或 Escape 只是關閉，永遠不建立區塊。
+describe('radial palette (PRD AC-01.4, showcase only)', () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
+  const sixBalls = Array.from({ length: 6 }, (_, i) => ({ id: `b${i}`, name: `Ball ${i}`, color: '#E98B87', order: i }));
+
   function setup() {
-    const log: string[] = [];
     let menu: RadialMenu | null = null;
+    const history: Array<RadialMenu | null> = [];
     const radial = createRadial({
-      templates: () => templates,
+      templates: () => sixBalls,
       viewport: () => ({ width: 1000, height: 800 }),
-      drag: {
-        start: (id, p) => log.push(`start ${id} ${Math.round(p.x)},${Math.round(p.y)}`),
-        move: (id) => log.push(`move ${id}`),
-        end: (id, p) => log.push(`end ${id} ${Math.round(p.x)},${Math.round(p.y)}`),
-        cancel: () => log.push('cancel'),
+      onMenu: (next) => {
+        menu = next;
+        history.push(next);
       },
-      onMenu: (next) => (menu = next),
     });
-    return { radial, log, menu: () => menu };
+    return { radial, menu: () => menu, history };
   }
 
-  it('opens the menu after holding 250ms, not before', () => {
+  it('opens the menu with six balls after holding 250ms, not before', () => {
     const { radial, menu } = setup();
     radial.down(1, { x: 500, y: 400 });
     vi.advanceTimersByTime(249);
     expect(menu()).toBeNull();
     vi.advanceTimersByTime(1);
-    expect(menu()?.hovered).toBe(-1);
-    expect(menu()?.positions).toHaveLength(3);
+    expect(menu()!.positions).toHaveLength(6);
+    expect(menu()!.hovered).toBe(-1);
   });
 
   it('moving more than 6px before the menu opens cancels the long press', () => {
@@ -234,67 +235,56 @@ describe('radial palette (PRD AC-01.4)', () => {
     expect(menu()).not.toBeNull();
   });
 
-  it('releasing before 250ms never opens the menu', () => {
+  it('releasing before 250ms never opens a menu', () => {
     const { radial, menu } = setup();
     radial.down(1, { x: 500, y: 400 });
     vi.advanceTimersByTime(100);
-    radial.up(1, { x: 500, y: 400 });
+    radial.up(1);
     vi.advanceTimersByTime(1000);
     expect(menu()).toBeNull();
   });
 
-  it('hovering a ball highlights it; leaving its circle picks it and starts the drag', () => {
-    const { radial, log, menu } = setup();
+  it('hovering each of the six balls highlights exactly that ball', () => {
+    const { radial, menu } = setup();
+    radial.down(1, { x: 500, y: 400 });
+    vi.advanceTimersByTime(250);
+    const positions = menu()!.positions;
+    positions.forEach((p, i) => {
+      radial.move(1, { x: p.x, y: p.y });
+      expect(menu()!.hovered).toBe(i);
+    });
+  });
+
+  it('leaving a ball only stops its hover: the menu stays open and nothing is picked', () => {
+    const { radial, menu } = setup();
     radial.down(1, { x: 500, y: 400 });
     vi.advanceTimersByTime(250);
     const second = menu()!.positions[1]!;
     radial.move(1, { x: second.x, y: second.y });
     expect(menu()!.hovered).toBe(1);
-    expect(log).toEqual([]);
     radial.move(1, { x: second.x + 200, y: second.y + 200 });
-    expect(menu()).toBeNull();
-    expect(log[0]).toMatch(/^start rest /);
+    expect(menu()).not.toBeNull();
+    expect(menu()!.hovered).toBe(-1);
   });
 
-  it('after picking, moves go to the drag and releasing drops it', () => {
-    const { radial, log, menu } = setup();
+  it('releasing with the menu open just closes it', () => {
+    const { radial, menu } = setup();
     radial.down(1, { x: 500, y: 400 });
     vi.advanceTimersByTime(250);
-    const first = menu()!.positions[0]!;
-    radial.move(1, first);
-    radial.move(1, { x: 500, y: 100 });
-    radial.move(1, { x: 600, y: 300 });
-    radial.up(1, { x: 600, y: 300 });
-    expect(log).toEqual(['start focus 500,100', 'move focus', 'end focus 600,300']);
+    radial.move(1, menu()!.positions[0]!);
+    radial.up(1);
+    expect(menu()).toBeNull();
   });
 
-  it('releasing with the menu open but nothing picked just closes it', () => {
-    const { radial, log, menu } = setup();
+  it('Escape closes the menu', () => {
+    const { radial, menu } = setup();
     radial.down(1, { x: 500, y: 400 });
     vi.advanceTimersByTime(250);
-    radial.up(1, { x: 500, y: 400 });
+    radial.escape();
     expect(menu()).toBeNull();
-    expect(log).toEqual([]);
   });
 
-  it('Escape closes the menu, or cancels a drag already started', () => {
-    const a = setup();
-    a.radial.down(1, { x: 500, y: 400 });
-    vi.advanceTimersByTime(250);
-    a.radial.escape();
-    expect(a.menu()).toBeNull();
-    expect(a.log).toEqual([]);
-
-    const b = setup();
-    b.radial.down(1, { x: 500, y: 400 });
-    vi.advanceTimersByTime(250);
-    b.radial.move(1, b.menu()!.positions[0]!);
-    b.radial.move(1, { x: 500, y: 100 });
-    b.radial.escape();
-    expect(b.log.at(-1)).toBe('cancel');
-  });
-
-  it('destroy clears a pending long press and stops an active drag (REUSE-05: unmount cleans up)', () => {
+  it('destroy clears a pending long press (REUSE-05: unmount cleans up)', () => {
     const { radial, menu } = setup();
     radial.down(1, { x: 500, y: 400 });
     radial.destroy();
@@ -306,10 +296,11 @@ describe('radial palette (PRD AC-01.4)', () => {
     const { radial, menu } = setup();
     radial.down(1, { x: 500, y: 400 });
     vi.advanceTimersByTime(250);
-    radial.up(2, { x: 500, y: 400 });
+    radial.up(2);
     expect(menu()).not.toBeNull();
   });
 });
+
 
 describe('move a block (REUSE-03, REUSE-05)', () => {
   // 欄位區：left 0、top 100、寬 300；10:00 在 y=100，每分鐘 1 像素。

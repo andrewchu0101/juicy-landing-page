@@ -22,7 +22,7 @@ npm run typecheck && npm run lint && npm test
 
 - [x] RED：先寫測試，三項失敗（Vercel、CI、workflow 規則），「只有 fsevents 有安裝腳本」本來就成立；改設定後全綠
 - [x] 乾淨環境驗證：把專案複製到暫存目錄（不含 `node_modules`、`.git`），`npm ci --ignore-scripts --cache D:\DevCache\npm-juicy-landing-page` 後，`typecheck`、`lint` 通過，`npm test` 23 檔 172 項通過（1 todo），`npm run build` 成功。也就是這個專案不需要任何安裝腳本
-- [ ] 推送後 CI 實跑、合併後 Vercel 部署成功（未執行）
+- [x] 推送後 CI 實跑、合併後 Vercel 部署成功（2026-11-13：main `a4cb715` 的 CI 成功；該 commit 的 Vercel 狀態 `success`「Deployment has completed」；`vercel.json` 的 `installCommand` 為 `npm ci --ignore-scripts`。沒有看 Vercel 建置日誌，所以「Vercel 實際以 `--ignore-scripts` 安裝」是依設定推斷，不是日誌證據）
 
 ## 實作紀錄與發現
 

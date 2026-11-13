@@ -7,12 +7,29 @@
 
 | 項目 | 內容 |
 |---|---|
-| 更新時間 | 2026-11-11（`main` 已合併 PR #9；本輪在這台電腦（`C:/Users/student/Project/juicy-landing-page`，沒有 D 槽）完成 008～010 與 minimatch 弱點，**未 commit、未 push**） |
+| 更新時間 | 2026-11-13（見下方「2026-11-13 本輪」，先看那一段；以下是 2026-11-11 的摘要）2026-11-11（`main` 已合併 PR #9；本輪在這台電腦（`C:/Users/student/Project/juicy-landing-page`，沒有 D 槽）完成 008～010 與 minimatch 弱點，**未 commit、未 push**） |
 | 目前目標 | 網站骨架與不依賴共用模組的部分已實作並合併，網站已部署到 Vercel；試用（長按出球、拖球放置、拖移區塊）已由網站自己實作，PR #9 待審；Gate 決策已回答（2026-11-11），後續是 008～011 與人工驗收 |
 | 工作目錄 | `D:\Project\Fun\juicy-landing-page`（2026-11-11 這一輪；先前記錄的 `C:\Users\student\...` 是另一台電腦） |
 | 分支／HEAD | 分支 `feat/012-ci-workflow`；`0a28a72` 之後再加本次 HANDOFF 更新的 commit，以 `git log -1` 為準。PR #1（文件）、#2（005 partial＋014）、#3（012 partial）、#4（HANDOFF 同步與守衛修復）皆已合併；本分支的新 PR 見下方「相關 issue／PR」 |
 | 工作樹 | （以下為先前一輪的記錄）本文件更新前乾淨。`issues/001-guard-secrets-false-positives.md` 與 `.claude/hooks/test-guard-secrets.sh` 已隨 PR #4 提交。`diagrams/0*.html`（8 個）不在任何遠端分支，只在另一台電腦的工作區，依 SRS v0.2 繪製已過期；專案擁有者 2026-11-10 決定守衛票中該項為「不適用」。注意 `issues/001-skeleton.md` 與守衛票同編號 001，是兩件事 |
 | 部署 | Vercel：`https://juicy-landing-page-tau.vercel.app/`（專案擁有者 2026-11-10 陳述；同日 curl 首頁回 200、初始 HTML 含 M1 metadata）。`/LICENSE`、`/TRADEMARKS.md` 回 404（檔案本來就不存在）。專案擁有者表示網站功能尚未開放不構成問題，依其開發節奏逐步補上；預覽保護是否啟用未查證 |
+
+### 2026-11-13 本輪（分支 `feat/011-009-012-trial-two-parts`，疊在 PR #12 的分支上，**已 commit、未 push**）
+- **試用改成兩個體驗（專案擁有者）：** (1) 長按空白處叫出**六顆展示球**（Calendar 預設六顆球的名稱與色碼：`#E98B87`、`#83B9D0`、`#A9C98D`、`#9C91CE`、`#E9B96E`、`#E5A5BD`），hover 該球果凍晃動，離開只停止晃動，放開或 Escape 關閉，**不建立區塊**；(2) 側邊三顆種子球改用 Calendar 柔和色票 Sky `#83B9D0`、Sage `#A9C98D`、Peach `#E9B96E`，拖放建立區塊如常。圓形選單不再開始拖曳（契約變更，`tests/trialGestures.test.ts` 的 radial 測試依此改寫）。「六顆球選了能不能建立區塊」是我的解讀（只展示）；若你要選了也能建立，要另外決定六顆球要不要進側邊或有自己的模板。
+- **文件與預覽圖：** SRS FR-01／FR-02、測試計畫的色碼已同步；兩張預覽圖與替代文字已重截；`index.html` 的 `og:image:alt` 同步。
+- **009：** 基準端實際執行 CONF-01～10，10／10 與人工算例一致（`issues/009`、`docs/evidence/009-baseline-conformance.runner.ts.txt`）。
+- **011：** 驗收報告 `docs/08-delivery-acceptance.md`；人工項目全是 Manual Pending，**不宣稱整體已驗收**；下載機器端檢查通過，M-10 人工未做。
+- **012：** 預覽保護已確認（302 導向 Vercel SSO）、憑證掃描測試；**只剩 Vercel 還原部署演練**。
+- **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（33 檔 335 通過）、`build`、`test:e2e`（Chromium 33 項）、`npm audit` 0 全數通過。
+- **視覺收尾（同日稍晚，impeccable）：** 見 `issues/010` 末段。球名稱對比、晃動起手、名字讓位；兩張預覽圖再重截。`tests/trialVisual.test.ts`、`vite.config.ts`（`test.css.include`）。
+- **重要：#12 沒有進到 `main`。** #11 先 merge 進 `main`（`a4cb715`），之後 #12 才 merge，但它的目標分支是已刪除前的 `feat/013-012-008-followups`，所以 #12 的 3 個 commit（TC-02 磁吸表、`e2e/trialDemo.e2e.ts` 等）不在 `main`。本分支包含它們，開 PR 到 `main` 即可補上。
+- **專案擁有者的決定（2026-11-13，同日稍晚）：** (1) 追認 `package.json` 現有的 15 個直接依賴（`issues/001-skeleton.md` 有清單，`AGENTS.md` 已改）；(2) OR-12：網站上現有的名稱、色碼與英文說明都是正式內容，不是占位；(3) D-02：網域就是 Vercel 的網域；(4) 013 做好；(5) 推送並開 PR 到 `main`。
+- **013 收尾：** 專用的 1200×630 分享圖（`public/preview/og-zh-TW.png`、`og-en.png`，由 `scripts/capturePreviewImages.ts` 從實際互動版截出）、`canonical`、`og:site_name`；`og:url`、`og:image` 不再是「暫用」。**社群平台上的實際預覽沒有驗證**，要部署後用各平台的偵錯工具；線上的 `/preview/og-zh-TW.png` 要等這個分支 merge 並部署後才存在。
+- **文件同步：** Brief D-02、PRD、SAD、SRS（OR-12）、SDS、測試計畫、`07-release-checklist.md` 的待決與占位敘述已改為已決；`issues/001-skeleton`、`010`、`013` 已更新。
+- **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（34 檔 341 通過）、`build`、`test:e2e`（Chromium 34 項）、`npm audit` 0 全數通過。
+- **專案擁有者的決定（2026-11-13，再稍晚）：** D-03 **不做流量統計**（OR-10、TC-06e 隨之結案／不適用）；D-04 Windows 乾淨電腦驗證排在 **2026-11-14**；六顆球目前**只展示、不能拖出區塊**（再次確認）；社群平台預覽**不做**；GitHub 帳號 2FA 已啟用；Calendar release 要設為不可竄改（待完成）；D-10 Calendar 授權：**選 MIT**；依賴授權已查（`docs/evidence/010-calendar-dependency-licenses-2026-11-13.md`），沒有衝突，但發布的 zip 沒有隨附第三方授權聲明；Calendar 圖示是專案擁有者自己的作品（陳述）。專案擁有者隨後授權修改 Calendar：`LICENSE`（MIT）、README 授權章節、`THIRD-PARTY-LICENSES.md`（`npm run licenses` 產生，241 個套件）、zip 組裝腳本與 NSIS `bundle.resources` 都已在 Calendar 工作樹做好，**未 commit、未 push、未發布**；已發布的 `v0.2.0-beta.3` 仍沒有授權檔，要等下次發新版（請先把 release 設成不可竄改）。
+- **待決的小事：** AC-03.2 原文要求「頁面明講網站使用哪種流量統計」，不做統計後措辭要改（建議一句「本網站不使用流量統計」），頁面目前沒有這句，我沒有自行新增。
+- **待你：** 合併本分支的 PR；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
 
 ### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）
 - **環境（這台，沒有 D 槽）：** Node v26.13.0、npm 11.20.0；`npm ci --ignore-scripts`；npm 快取與 Playwright 的 Chromium 都在暫存目錄（只對該次程序有效，不是 `D:/DevCache`，會被清掉）。
@@ -22,6 +39,7 @@
 - **010（partial）：** `public/preview/trial-zh-TW.png`、`trial-en.png` 由 `scripts/capturePreviewImages.ts` 對真實試用截出；`TrialSection` 引用，字典新增 `preview.image`；新增 `e2e/previewImage.e2e.ts`。英文圖下說明是暫定；視覺交給 `impeccable`；M-5 未執行。
 - **三天與英文球名（專案擁有者後續回答，已實作，commit 見 git log）：** 試用日曆改為連續三天、每天 10:00–15:00（共 15 小時，不開放到一週；「三天」不是區塊長度上限）；種子球名稱英文版純英文、中文版中英並列，初始化時依網站語言決定、之後切換語言不改名。PRD／SRS／SDS／測試計畫的「單日」已同步；`settings.view` 改為 `visibleDays: 3`；兩張預覽圖已重截；新增 `e2e/trialLayout.e2e.ts`。三天以本地日期逐日加一產生（不是 +24 小時），日光節約與跨午夜未測。
 - **三張收尾票（分支 `feat/013-012-008-followups`，疊在 PR #10 上，TDD）：** 013 `og:image`（先 5 項紅，再補 `index.html` 與 `applyPageMetadata`，社群平台實際預覽未驗證）；012 `ci.yml` 新增 `e2e` job（先 3 項紅，GitHub 上的實跑結果見該 PR 的 checks）；008 的 OR-24 N-9、N-11 e2e（產品程式碼沒改，不是自然紅燈；以拿掉 `radial.destroy()` 的突變檢查證明測試抓得到漏掉的計時器）。008 只剩 M-8 實機。
+- **005／006／009／010 收尾（分支 `feat/005-006-009-acceptance`，疊在 #11 上，TDD）：** TC-02 磁吸表 12 列對網站 `pointerToTime` 逐列通過（換掉 `it.todo`）；新增 `e2e/trialDemo.e2e.ts`（TC-01a／01e／01f、TC-04 移動、取消、TC-06a～6d）；基準 `engine.test.ts` 五組磁吸值只讀交叉比對一致。這些測試第一次就綠（程式本來就對，不是自然紅燈），以突變檢查證明抓得到問題（磁吸門檻 8→9、偷塞 `localStorage`），已還原。調整長度、命名、TC-03 暫不開放；010 本輪沒有可完成項（等專案擁有者）。
 - **gitleaks：** v8.30.1 裝在 `C:/DevTools/gitleaks/gitleaks.exe`（這台沒有 D 槽，專案擁有者同意裝 C 槽；其他有 D 槽的電腦裝 `D:/DevTools`）；下載檔在 `C:/DevCache/gitleaks`，zip 的 SHA-256 與官方 checksums 一致；未改 PATH。`gitleaks git . --redact`：48 個 commit，no leaks found（掃的是 git 歷史，沒掃工作樹）。
 - **安全依賴：** `package.json` 新增 `overrides: { "minimatch": "11.0.7" }`，`npm audit` 由 1 個中度弱點降為 0；鎖定檔多一個開發期套件 `@isaacs/nonrecursive-glob-match`（minimatch 11 的相依）。比起 `npm audit fix --force`（會把 eslint 降到 9）改動小。2FA 與 Calendar immutable releases 要專案擁有者自己在帳號設定處理。
 - **本機驗證（這台，2026-11-11）：** `npm run typecheck`、`lint`、`test`（31 檔 303 通過、1 todo）、`build` 通過；`npm run test:e2e`（Chromium，10 項，三天與英文球名改完後）通過；`npm audit` 0 個弱點。GitHub 上的 CI 實跑未做（e2e 也尚未納入 `ci.yml`）。

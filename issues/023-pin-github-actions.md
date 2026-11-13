@@ -25,7 +25,7 @@ gh api repos/actions/setup-node/git/ref/tags/v4 --jq .object.sha
 - [x] 兩個 SHA 由 `gh api` 向 `actions/*` 官方 repository 取得，不是從記憶或第三方來源填入
 - [x] 每個 `uses:` 都是 40 位 SHA 且附 `# v4` 註解
 - [x] 頂層 `permissions` 只有 `contents: read`
-- [ ] 推送後 CI 與 `calendar-release-check` 在 GitHub 上實際跑過（未執行）
+- [x] 推送後 CI 與 `calendar-release-check` 在 GitHub 上實際跑過（2026-11-13：`gh run list` 顯示 main 的 CI 在 `a4cb715` 成功，`Calendar release check` 於 2026-11-11、11-12、11-13 排程皆成功）
 
 ## 實作紀錄
 

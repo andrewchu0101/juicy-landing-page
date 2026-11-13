@@ -9,15 +9,19 @@ import { mkdirSync } from 'node:fs';
 const BASE = process.env.PREVIEW_URL ?? 'http://127.0.0.1:4173/';
 const OUT = 'public/preview';
 const LANGUAGES = [
-  { locale: 'zh-TW', file: 'trial-zh-TW.png' },
-  { locale: 'en-US', file: 'trial-en.png' },
+  { locale: 'zh-TW', file: 'trial-zh-TW.png', ogFile: 'og-zh-TW.png' },
+  { locale: 'en-US', file: 'trial-en.png', ogFile: 'og-en.png' },
 ] as const;
+// 分享圖（issue 013）：社群平台建議 1.91:1。同一個畫面（不是另外畫的圖）：試用區是 640×400 CSS 像素、置中，
+// 視窗寬 800、scale 1.5，取 800×420 CSS 像素（試用區上下各留 10px）→ 剛好 1200×630，試用區約佔 80% 寬。
+// （試過 fullPage 加 clip：試用區超出頁面內容欄，被截成 920 寬；所以視窗要夠大、不用 fullPage，直接以視窗座標裁切。）
+const OG = { viewport: { width: 800, height: 1400 }, scale: 1.5, margin: 10, width: 800, height: 420 } as const;
 
 mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch();
 try {
-  for (const { locale, file } of LANGUAGES) {
-    const context = await browser.newContext({ locale, viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2 });
+  async function capture(locale: string, viewport: { width: number; height: number }, scale: number, output: (app: import('@playwright/test').Locator, page: import('@playwright/test').Page) => Promise<void>) {
+    const context = await browser.newContext({ locale, viewport, deviceScaleFactor: scale });
     const page = await context.newPage();
     await page.goto(BASE);
     const app = page.getByTestId('trial-app');
@@ -40,8 +44,18 @@ try {
 
     const time = await page.getByTestId('event-time').first().textContent();
     console.log(`${locale}: block time label = ${time}`);
-    await app.screenshot({ path: `${OUT}/${file}`, animations: 'disabled' });
+    await output(app, page);
     await context.close();
+  }
+  for (const { locale, file, ogFile } of LANGUAGES) {
+    await capture(locale, { width: 1280, height: 800 }, 2, (app) => app.screenshot({ path: `${OUT}/${file}`, animations: 'disabled' }).then(() => undefined));
+    await capture(locale, OG.viewport, OG.scale, async (app, page) => {
+      const box = await app.boundingBox();
+      if (!box) throw new Error('trial app not visible');
+      const clip = { x: box.x + box.width / 2 - OG.width / 2, y: box.y - OG.margin, width: OG.width, height: OG.height };
+      if (clip.x < 0 || clip.y < 0 || clip.y + clip.height > OG.viewport.height) throw new Error(`share image clip outside the viewport: ${JSON.stringify(clip)}`);
+      await page.screenshot({ path: `${OUT}/${ogFile}`, animations: 'disabled', clip });
+    });
   }
 } finally {
   await browser.close();
