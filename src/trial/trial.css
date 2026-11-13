@@ -10,6 +10,8 @@
   --color-surface: #ffffff;
   --color-ink: #2e2a26;
   --color-muted: #8c857c;
+  /* 小字用的次要文字色：App 的 muted 對暖白底只有約 3.4:1，球名稱（12px）要 4.5:1，沿用網站的 --muted-text（#6b655c，約 5.6:1）。 */
+  --color-muted-text: #6b655c;
   --color-line: #ede7dd;
   --color-line-strong: #d9d1c4;
   --color-danger: #c4544f;
@@ -125,7 +127,7 @@
   padding-inline: 0.25rem;
   font-size: 0.75rem;
   line-height: 1.3333;
-  color: var(--color-muted);
+  color: var(--color-muted-text);
 }
 
 .size-11 {
@@ -496,7 +498,13 @@ body.trial-interacting-move * {
 .split-particle { position: fixed; z-index: 100; pointer-events: none; border-radius: 50%; animation: split-burst 560ms ease-out forwards; }
 @keyframes split-burst { from { transform: translate(-50%, -50%) scale(2); opacity: 1; } to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.1); opacity: 0; } }
 /* Q-05: the outline wobbles like jelly and the filled shape is the ball. Visual only: hit-testing is in JS. */
-.radial-hovered .ball { animation: radial-wobble 4s linear infinite; transform: scale(1.3); box-shadow: none; }
+/* 2026-11-13 視覺收尾（impeccable）：球原本是正圓（沒有 clip-path），直接切進第 0 格的多邊形會讓直徑瞬間縮約 20%，同時又在放大，看起來「跳一下」。
+   先用 200ms 從同頂點數的正圓長成第 0 格（radial-wobble-in），再接 4s 的果凍循環；兩者在第 0 格銜接，沒有跳動。離開 hover 時沒有對應的退場：CSS 無法從目前的多邊形回到沒有 clip-path，球直接恢復正圓，由 160ms 的縮放遮住。 */
+.radial-hovered .ball { animation: radial-wobble-in 200ms cubic-bezier(0.16, 1, 0.3, 1) both, radial-wobble 4s linear 200ms infinite; transform: scale(1.3); box-shadow: none; will-change: clip-path, transform; }
+@keyframes radial-wobble-in { from { clip-path: polygon(100.0% 50.0%,99.6% 56.5%,98.3% 62.9%,96.2% 69.1%,93.3% 75.0%,89.7% 80.4%,85.4% 85.4%,80.4% 89.7%,75.0% 93.3%,69.1% 96.2%,62.9% 98.3%,56.5% 99.6%,50.0% 100.0%,43.5% 99.6%,37.1% 98.3%,30.9% 96.2%,25.0% 93.3%,19.6% 89.7%,14.6% 85.4%,10.3% 80.4%,6.7% 75.0%,3.8% 69.1%,1.7% 62.9%,0.4% 56.5%,0.0% 50.0%,0.4% 43.5%,1.7% 37.1%,3.8% 30.9%,6.7% 25.0%,10.3% 19.6%,14.6% 14.6%,19.6% 10.3%,25.0% 6.7%,30.9% 3.8%,37.1% 1.7%,43.5% 0.4%,50.0% 0.0%,56.5% 0.4%,62.9% 1.7%,69.1% 3.8%,75.0% 6.7%,80.4% 10.3%,85.4% 14.6%,89.7% 19.6%,93.3% 25.0%,96.2% 30.9%,98.3% 37.1%,99.6% 43.5%); } to { clip-path: polygon(90.0% 50.0%,94.3% 55.8%,96.5% 62.5%,95.5% 68.8%,91.6% 74.0%,85.7% 77.4%,79.3% 79.3%,73.3% 80.4%,68.3% 81.6%,63.8% 83.4%,59.5% 85.5%,54.9% 87.3%,50.0% 88.0%,45.1% 87.3%,40.5% 85.5%,36.2% 83.4%,31.7% 81.6%,26.7% 80.4%,20.7% 79.3%,14.3% 77.4%,8.4% 74.0%,4.5% 68.8%,3.5% 62.5%,5.7% 55.8%,10.0% 50.0%,15.0% 45.4%,19.2% 41.7%,21.6% 38.2%,22.3% 34.0%,22.2% 28.7%,22.7% 22.7%,24.6% 16.9%,28.3% 12.4%,33.2% 9.5%,38.8% 8.3%,44.5% 8.0%,50.0% 8.0%,55.5% 8.0%,61.2% 8.3%,66.8% 9.5%,71.7% 12.4%,75.4% 16.9%,77.3% 22.7%,77.8% 28.7%,77.7% 34.0%,78.4% 38.2%,80.8% 41.7%,85.0% 45.4%); } }
+/* 放大到 1.3 倍後，最低的一瓣會碰到名字：hover 時名字往下讓 4px。 */
+.radial-choice span { transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1); }
+.radial-hovered span { transform: translateY(4px); }
 /* 縮小成圓點的右側面板：同一組 radial-wobble，讓它在小尺寸下仍容易辨認。 */
 @keyframes radial-wobble {
   0.0% { clip-path: polygon(90.0% 50.0%,94.3% 55.8%,96.5% 62.5%,95.5% 68.8%,91.6% 74.0%,85.7% 77.4%,79.3% 79.3%,73.3% 80.4%,68.3% 81.6%,63.8% 83.4%,59.5% 85.5%,54.9% 87.3%,50.0% 88.0%,45.1% 87.3%,40.5% 85.5%,36.2% 83.4%,31.7% 81.6%,26.7% 80.4%,20.7% 79.3%,14.3% 77.4%,8.4% 74.0%,4.5% 68.8%,3.5% 62.5%,5.7% 55.8%,10.0% 50.0%,15.0% 45.4%,19.2% 41.7%,21.6% 38.2%,22.3% 34.0%,22.2% 28.7%,22.7% 22.7%,24.6% 16.9%,28.3% 12.4%,33.2% 9.5%,38.8% 8.3%,44.5% 8.0%,50.0% 8.0%,55.5% 8.0%,61.2% 8.3%,66.8% 9.5%,71.7% 12.4%,75.4% 16.9%,77.3% 22.7%,77.8% 28.7%,77.7% 34.0%,78.4% 38.2%,80.8% 41.7%,85.0% 45.4%); }
@@ -509,4 +517,4 @@ body.trial-interacting-move * {
   87.5% { clip-path: polygon(89.8% 50.0%,90.5% 55.3%,89.6% 60.6%,87.7% 65.6%,85.3% 70.4%,83.0% 75.3%,80.5% 80.5%,77.4% 85.7%,73.1% 90.0%,67.6% 92.5%,61.4% 92.4%,55.2% 89.8%,50.0% 85.8%,45.8% 81.7%,42.2% 79.1%,38.2% 78.4%,33.1% 79.2%,26.7% 80.3%,19.7% 80.3%,13.3% 78.2%,8.7% 73.9%,6.5% 68.0%,6.6% 61.6%,8.0% 55.5%,9.8% 50.0%,11.2% 44.9%,12.4% 39.9%,13.8% 35.0%,16.0% 30.4%,19.5% 26.6%,24.0% 24.0%,28.7% 22.2%,33.1% 20.8%,37.0% 18.6%,40.6% 15.1%,44.8% 10.5%,50.0% 5.8%,56.3% 2.4%,62.9% 1.8%,68.8% 4.5%,73.1% 10.0%,75.4% 16.9%,76.3% 23.7%,76.8% 29.5%,78.0% 33.9%,80.4% 37.4%,83.8% 40.9%,87.3% 45.1%); }
   100.0% { clip-path: polygon(90.0% 50.0%,94.3% 55.8%,96.5% 62.5%,95.5% 68.8%,91.6% 74.0%,85.7% 77.4%,79.3% 79.3%,73.3% 80.4%,68.3% 81.6%,63.8% 83.4%,59.5% 85.5%,54.9% 87.3%,50.0% 88.0%,45.1% 87.3%,40.5% 85.5%,36.2% 83.4%,31.7% 81.6%,26.7% 80.4%,20.7% 79.3%,14.3% 77.4%,8.4% 74.0%,4.5% 68.8%,3.5% 62.5%,5.7% 55.8%,10.0% 50.0%,15.0% 45.4%,19.2% 41.7%,21.6% 38.2%,22.3% 34.0%,22.2% 28.7%,22.7% 22.7%,24.6% 16.9%,28.3% 12.4%,33.2% 9.5%,38.8% 8.3%,44.5% 8.0%,50.0% 8.0%,55.5% 8.0%,61.2% 8.3%,66.8% 9.5%,71.7% 12.4%,75.4% 16.9%,77.3% 22.7%,77.8% 28.7%,77.7% 34.0%,78.4% 38.2%,80.8% 41.7%,85.0% 45.4%); }
 }
-@media (prefers-reduced-motion: reduce) { .radial-hovered .ball { animation: none; clip-path: none; transform: none; box-shadow: 0 3px 8px color-mix(in srgb, var(--ball-color) 38%, transparent); outline: 3px solid #2E2A26; outline-offset: 4px; } .radial-choice { animation: none; } .split-particle { display: none; } }
+@media (prefers-reduced-motion: reduce) { .radial-hovered span { transform: none; } .radial-choice span { transition: none; } .radial-hovered .ball { animation: none; will-change: auto; clip-path: none; transform: none; box-shadow: 0 3px 8px color-mix(in srgb, var(--ball-color) 38%, transparent); outline: 3px solid #2E2A26; outline-offset: 4px; } .radial-choice { animation: none; } .split-particle { display: none; } }

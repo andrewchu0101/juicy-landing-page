@@ -21,7 +21,9 @@
 - **011：** 驗收報告 `docs/08-delivery-acceptance.md`；人工項目全是 Manual Pending，**不宣稱整體已驗收**；下載機器端檢查通過，M-10 人工未做。
 - **012：** 預覽保護已確認（302 導向 Vercel SSO）、憑證掃描測試；**只剩 Vercel 還原部署演練**。
 - **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（33 檔 335 通過）、`build`、`test:e2e`（Chromium 33 項）、`npm audit` 0 全數通過。
-- **待你：** 合併 #11、#12；本分支推送與開 PR；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
+- **視覺收尾（同日稍晚，impeccable）：** 見 `issues/010` 末段。球名稱對比、晃動起手、名字讓位；兩張預覽圖再重截。`tests/trialVisual.test.ts`、`vite.config.ts`（`test.css.include`）。
+- **重要：#12 沒有進到 `main`。** #11 先 merge 進 `main`（`a4cb715`），之後 #12 才 merge，但它的目標分支是已刪除前的 `feat/013-012-008-followups`，所以 #12 的 3 個 commit（TC-02 磁吸表、`e2e/trialDemo.e2e.ts` 等）不在 `main`。本分支包含它們，開 PR 到 `main` 即可補上。
+- **待你：** 本分支推送與開 PR（目標 `main`；注意本分支的 upstream 還指向 `origin/feat/005-006-009-acceptance`，推送請用新分支名）；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
 
 ### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）
 - **環境（這台，沒有 D 槽）：** Node v26.13.0、npm 11.20.0；`npm ci --ignore-scripts`；npm 快取與 Playwright 的 Chromium 都在暫存目錄（只對該次程序有效，不是 `D:/DevCache`，會被清掉）。

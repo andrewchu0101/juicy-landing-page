@@ -24,7 +24,7 @@ curl -sI https://<部署網址>/    # 人工，合併後
 - [x] 預期標頭值為字面規則，不呼叫實作計算
 - [x] 建置產物沒有 inline script／style／事件屬性（`tests/health.test.ts`），所以嚴格 CSP 不會擋掉自己的頁面
 - [x] 本機驗證：用小型 Node 伺服器套用 `vercel.json` 的標頭，Playwright 開啟建置產物，頁面正常渲染（含 SHA-256 區塊），console 無 CSP 違規（唯一錯誤是 `favicon.ico` 404，網站本來就沒有 favicon，與 CSP 無關）。這是本機模擬，不是 Vercel 實際回應
-- [ ] 合併並部署後，`curl -I` 確認五個標頭都在（人工）
+- [x] 合併並部署後，`curl -I` 確認五個標頭都在（2026-11-13：`curl -sI https://juicy-landing-page-tau.vercel.app/` 回 200，`Content-Security-Policy`、`Permissions-Policy`、`Referrer-Policy`、`X-Content-Type-Options`、`X-Frame-Options` 五個都在，另有 `Strict-Transport-Security`；只驗了首頁，其他路徑與預覽網址沒有逐一驗）
 
 ## 風險與後續
 
