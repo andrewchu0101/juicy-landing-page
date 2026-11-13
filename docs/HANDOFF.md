@@ -7,12 +7,21 @@
 
 | 項目 | 內容 |
 |---|---|
-| 更新時間 | 2026-11-11（`main` 已合併 PR #9；本輪在這台電腦（`C:/Users/student/Project/juicy-landing-page`，沒有 D 槽）完成 008～010 與 minimatch 弱點，**未 commit、未 push**） |
+| 更新時間 | 2026-11-13（見下方「2026-11-13 本輪」，先看那一段；以下是 2026-11-11 的摘要）2026-11-11（`main` 已合併 PR #9；本輪在這台電腦（`C:/Users/student/Project/juicy-landing-page`，沒有 D 槽）完成 008～010 與 minimatch 弱點，**未 commit、未 push**） |
 | 目前目標 | 網站骨架與不依賴共用模組的部分已實作並合併，網站已部署到 Vercel；試用（長按出球、拖球放置、拖移區塊）已由網站自己實作，PR #9 待審；Gate 決策已回答（2026-11-11），後續是 008～011 與人工驗收 |
 | 工作目錄 | `D:\Project\Fun\juicy-landing-page`（2026-11-11 這一輪；先前記錄的 `C:\Users\student\...` 是另一台電腦） |
 | 分支／HEAD | 分支 `feat/012-ci-workflow`；`0a28a72` 之後再加本次 HANDOFF 更新的 commit，以 `git log -1` 為準。PR #1（文件）、#2（005 partial＋014）、#3（012 partial）、#4（HANDOFF 同步與守衛修復）皆已合併；本分支的新 PR 見下方「相關 issue／PR」 |
 | 工作樹 | （以下為先前一輪的記錄）本文件更新前乾淨。`issues/001-guard-secrets-false-positives.md` 與 `.claude/hooks/test-guard-secrets.sh` 已隨 PR #4 提交。`diagrams/0*.html`（8 個）不在任何遠端分支，只在另一台電腦的工作區，依 SRS v0.2 繪製已過期；專案擁有者 2026-11-10 決定守衛票中該項為「不適用」。注意 `issues/001-skeleton.md` 與守衛票同編號 001，是兩件事 |
 | 部署 | Vercel：`https://juicy-landing-page-tau.vercel.app/`（專案擁有者 2026-11-10 陳述；同日 curl 首頁回 200、初始 HTML 含 M1 metadata）。`/LICENSE`、`/TRADEMARKS.md` 回 404（檔案本來就不存在）。專案擁有者表示網站功能尚未開放不構成問題，依其開發節奏逐步補上；預覽保護是否啟用未查證 |
+
+### 2026-11-13 本輪（分支 `feat/011-009-012-trial-two-parts`，疊在 PR #12 的分支上，**已 commit、未 push**）
+- **試用改成兩個體驗（專案擁有者）：** (1) 長按空白處叫出**六顆展示球**（Calendar 預設六顆球的名稱與色碼：`#E98B87`、`#83B9D0`、`#A9C98D`、`#9C91CE`、`#E9B96E`、`#E5A5BD`），hover 該球果凍晃動，離開只停止晃動，放開或 Escape 關閉，**不建立區塊**；(2) 側邊三顆種子球改用 Calendar 柔和色票 Sky `#83B9D0`、Sage `#A9C98D`、Peach `#E9B96E`，拖放建立區塊如常。圓形選單不再開始拖曳（契約變更，`tests/trialGestures.test.ts` 的 radial 測試依此改寫）。「六顆球選了能不能建立區塊」是我的解讀（只展示）；若你要選了也能建立，要另外決定六顆球要不要進側邊或有自己的模板。
+- **文件與預覽圖：** SRS FR-01／FR-02、測試計畫的色碼已同步；兩張預覽圖與替代文字已重截；`index.html` 的 `og:image:alt` 同步。
+- **009：** 基準端實際執行 CONF-01～10，10／10 與人工算例一致（`issues/009`、`docs/evidence/009-baseline-conformance.runner.ts.txt`）。
+- **011：** 驗收報告 `docs/08-delivery-acceptance.md`；人工項目全是 Manual Pending，**不宣稱整體已驗收**；下載機器端檢查通過，M-10 人工未做。
+- **012：** 預覽保護已確認（302 導向 Vercel SSO）、憑證掃描測試；**只剩 Vercel 還原部署演練**。
+- **驗證（2026-11-13，這台）：** `typecheck`、`lint`、`vitest`（33 檔 335 通過）、`build`、`test:e2e`（Chromium 33 項）、`npm audit` 0 全數通過。
+- **待你：** 合併 #11、#12；本分支推送與開 PR；M-10 等人工驗收；種子球名稱（OR-12）；Vercel 還原演練。
 
 ### 2026-11-11 本輪（分支 `feat/008-010-dynamic-eligibility-conformance`，切自 `main` 的 `687bd34`，**未 commit、未 push**）
 - **環境（這台，沒有 D 槽）：** Node v26.13.0、npm 11.20.0；`npm ci --ignore-scripts`；npm 快取與 Playwright 的 Chromium 都在暫存目錄（只對該次程序有效，不是 `D:/DevCache`，會被清掉）。

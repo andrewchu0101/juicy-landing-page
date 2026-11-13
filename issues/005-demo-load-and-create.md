@@ -66,3 +66,8 @@ npm run test:e2e    # TC-01a/e/f、TC-06a～6d
 - **基準交叉比對（只讀不執行）**：Calendar 固定 commit 的 `engine.test.ts` 第 283–287 行的五組 `magnetMinutes` 值，網站實作結果相同。
 - **e2e**：新增 `e2e/trialDemo.e2e.ts`（見 `issues/006` 的清單）；突變檢查：磁吸門檻 8 改 9 → 「1a boundary」失敗；在 `createEventFromTemplate` 偷塞 `localStorage.setItem` → 「6a」失敗；還原後 `git status` 確認 `src/` 乾淨，全部 e2e 通過。
 - 限制：Chromium 單一引擎；觸控、其他瀏覽器、日光節約與跨午夜未測；M-1～M-10 仍 Manual Pending。
+
+## 2026-11-13 變更（專案擁有者）
+- 試用拆成兩個體驗：長按叫出**六顆展示球**（只展示 hover 果凍晃動，不建立區塊），以及側邊三顆球拖放建立區塊。圓形選單不再開始拖曳。
+- 種子球色碼改為 Calendar 色票 Sky `#83B9D0`、Sage `#A9C98D`、Peach `#E9B96E`。
+- 驗證：`tests/radialBalls.test.ts`、`tests/trialGestures.test.ts`（radial 區塊改寫）、`e2e/trialRadial.e2e.ts`（5 項）；先紅後綠（單元），e2e 在功能之後寫，以突變檢查（改一個色碼）證明抓得到問題。

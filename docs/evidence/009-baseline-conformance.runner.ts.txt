@@ -1,0 +1,92 @@
+// issue 009：把 Juicy Landing Page 的 CONF-01～CONF-10（人工算例預期值，tests/conformance/cases.ts）
+// 在 Calendar 固定 commit 102ae19 的 appStore 上各執行一次，作交叉比對。
+// 預期值來自 cases.ts 的人工算例；這裡只是執行，不產生預期值。不一致時測試會失敗，記錄差異，不改預期值。
+import { afterEach, describe, expect, it } from 'vitest';
+import { DEFAULT_SETTINGS } from './services/persistence/schemas';
+import { useAppStore } from './stores/appStore';
+import { CONFORMANCE_CASES, type At, type ConformanceCase, type ExpectedState } from './conformanceCases.copy';
+
+const store = () => useAppStore.getState();
+const TEMPLATE = { id: 'coding', name: 'Coding', color: '#E98B87', defaultDuration: 120, order: 0 };
+const SEED: Record<string, string> = { 'seed-1': 'coding' };
+const at = ({ day, time }: At) => new Date(2026, 10, 11 + day, Number(time.slice(0, 2)), Number(time.slice(3)));
+
+afterEach(() => store().reset());
+
+function run(c: ConformanceCase) {
+  const ids: string[] = [];
+  const events: Record<string, unknown> = {};
+  c.preset.forEach((p, i) => {
+    const id = `p${i + 1}`;
+    ids.push(id);
+    events[id] = { id, templateId: 'coding', title: p.title, color: '#CCCCCC', startAt: at(p.start).toISOString(), endAt: at(p.end).toISOString() };
+  });
+  store().hydrate(
+    { meta: { schemaVersion: 1, name: 'Baseline', createdAt: new Date(2026, 10, 11).toISOString() }, templates: { coding: TEMPLATE }, events, settings: DEFAULT_SETTINGS, issues: [] } as never,
+    '/tmp/baseline',
+  );
+  const idOf = (ref: string) => ids[Number(ref.slice(1)) - 1]!;
+  const snapshot = (): ExpectedState => {
+    const cur = store().events;
+    return {
+      events: ids
+        .filter((id) => cur[id])
+        .map((id) => {
+          const e = cur[id]!;
+          const d = (iso: string): At => {
+            const x = new Date(iso);
+            const day = Math.round((new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime() - new Date(2026, 10, 11).getTime()) / 86400000);
+            return { day, time: `${String(x.getHours()).padStart(2, '0')}:${String(x.getMinutes()).padStart(2, '0')}` };
+          };
+          return { ref: `$${ids.indexOf(id) + 1}` as `$${number}`, title: e.title, start: d(e.startAt), end: d(e.endAt), color: e.color === '#CCCCCC' ? 'unchanged' : e.color === TEMPLATE.color ? 'template' : (e.color as 'template') };
+        }),
+      pastLength: store().past.length,
+      futureLength: store().future.length,
+    };
+  };
+  const checkpoints: Record<number, ExpectedState> = {};
+  c.steps.forEach((step, index) => {
+    if (step.op === 'create') ids.push(store().createEventFromTemplate(SEED[step.templateId]!, at(step.start))!);
+    else if (step.op === 'update') {
+      const id = idOf(step.ref);
+      const current = store().events[id]!;
+      const patch: Record<string, unknown> = {};
+      if (step.patch.title !== undefined) patch.title = step.patch.title;
+      if (step.patch.startAt || step.patch.endAt) {
+        patch.startAt = (step.patch.startAt ? at(step.patch.startAt) : new Date(current.startAt)).toISOString();
+        patch.endAt = (step.patch.endAt ? at(step.patch.endAt) : new Date(current.endAt)).toISOString();
+      }
+      store().updateEvent(id, patch);
+    } else if (step.op === 'select') store().selectMany(step.refs.map(idOf));
+    else if (step.op === 'deleteSelected') store().deleteSelected();
+    else if (step.op === 'undo') store().undo();
+    else if (step.op === 'redo') store().redo();
+    else if (step.op === 'copy') store().copySelected();
+    else if (step.op === 'paste') {
+      const before = Object.keys(store().events);
+      store().pasteCopied(at(step.at));
+      for (const id of Object.keys(store().events)) if (!before.includes(id)) ids.push(id);
+    }
+    checkpoints[index] = snapshot();
+  });
+  return { final: snapshot(), checkpoints };
+}
+
+// 把 {fromTemplate} 標題換成基準的種子球名稱（Coding）再比對；色彩已在 snapshot 正規化成 'template'／'unchanged'。
+const resolve = (s: ExpectedState): ExpectedState => ({
+  ...s,
+  events: s.events.map((e) => ({
+    ...e,
+    title: typeof e.title === 'object' ? TEMPLATE.name : e.title,
+  })),
+});
+
+describe('baseline (Calendar 102ae19) runs the website CONF cases', () => {
+  for (const c of CONFORMANCE_CASES) {
+    it(`${c.id}${c.blocked ? ' (blocked on the website side, still run here)' : ''}`, () => {
+      const { final, checkpoints } = run(c);
+      for (const cp of c.checkpoints ?? []) expect(checkpoints[cp.afterStep], `${c.id} checkpoint after step ${cp.afterStep}`).toEqual(resolve(cp.expect));
+      expect(final, c.id).toEqual(resolve(c.expect));
+    });
+  }
+});
